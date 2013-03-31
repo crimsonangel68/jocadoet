@@ -1,0 +1,12 @@
+C:\Users\Azelos\Documents\Visual Studio 2010\Projects\PS6\SpreadsheetTester\bin\Debug\SpreadsheetTester.dll
+C:\Users\Azelos\Documents\Visual Studio 2010\Projects\PS6\SpreadsheetTester\bin\Debug\SpreadsheetTester.pdb
+C:\Users\Azelos\Documents\Visual Studio 2010\Projects\PS6\SpreadsheetTester\bin\Debug\Formula.dll
+C:\Users\Azelos\Documents\Visual Studio 2010\Projects\PS6\SpreadsheetTester\bin\Debug\SpreadSheetUtilities.dll
+C:\Users\Azelos\Documents\Visual Studio 2010\Projects\PS6\SpreadsheetTester\bin\Debug\SS.dll
+C:\Users\Azelos\Documents\Visual Studio 2010\Projects\PS6\SpreadsheetTester\bin\Debug\SS.pdb
+C:\Users\Azelos\Documents\Visual Studio 2010\Projects\PS6\SpreadsheetTester\bin\Debug\SS.xml
+C:\Users\Azelos\Documents\Visual Studio 2010\Projects\PS6\SpreadsheetTester\bin\Debug\Formula.xml
+C:\Users\Azelos\Documents\Visual Studio 2010\Projects\PS6\SpreadsheetTester\bin\Debug\SpreadSheetUtilities.xml
+C:\Users\Azelos\Documents\Visual Studio 2010\Projects\PS6\SpreadsheetTester\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Azelos\Documents\Visual Studio 2010\Projects\PS6\SpreadsheetTester\obj\Debug\SpreadsheetTester.dll
+C:\Users\Azelos\Documents\Visual Studio 2010\Projects\PS6\SpreadsheetTester\obj\Debug\SpreadsheetTester.pdb
