@@ -162,7 +162,6 @@ namespace SpreadsheetGUI
                 string filepath = saveFileDialog1.FileName;
                 sheet.Save(filepath);
             }
-
         }
 
         //-----------------------------------------------------------------------------------closeToolStripMenuItem_Click
