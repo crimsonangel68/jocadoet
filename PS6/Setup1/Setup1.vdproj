@@ -15,14 +15,20 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_444B2718830757395281A097C4B7584D"
+        "MsmKey" = "8:_6D8316F2C8C5ECC38F832C2975D9592B"
         "OwnerKey" = "8:_9797A9FDC0524AE4BBFFCE0A8E1FDF90"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_444B2718830757395281A097C4B7584D"
-        "OwnerKey" = "8:_C4B8FEF85CB41FFEFD8BE25F13815D90"
+        "MsmKey" = "8:_8564B51904375FF728EC699494326DA2"
+        "OwnerKey" = "8:_9797A9FDC0524AE4BBFFCE0A8E1FDF90"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8564B51904375FF728EC699494326DA2"
+        "OwnerKey" = "8:_6D8316F2C8C5ECC38F832C2975D9592B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -33,31 +39,19 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_9A38017150314281AADF4BB770A45816"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_AAC809DE655D0B27F2C41096CD2DE8AB"
+        "MsmKey" = "8:_BA9286BA49B390D5291E8416744AF210"
         "OwnerKey" = "8:_9797A9FDC0524AE4BBFFCE0A8E1FDF90"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_AE4E0C2E7BCCFFF32EF253B24E8258D0"
-        "OwnerKey" = "8:_9797A9FDC0524AE4BBFFCE0A8E1FDF90"
+        "MsmKey" = "8:_BA9286BA49B390D5291E8416744AF210"
+        "OwnerKey" = "8:_6D8316F2C8C5ECC38F832C2975D9592B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_AE4E0C2E7BCCFFF32EF253B24E8258D0"
-        "OwnerKey" = "8:_C4B8FEF85CB41FFEFD8BE25F13815D90"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C4B8FEF85CB41FFEFD8BE25F13815D90"
+        "MsmKey" = "8:_D8B4B6B90A452A3B4B39A61D0CC94E53"
         "OwnerKey" = "8:_9797A9FDC0524AE4BBFFCE0A8E1FDF90"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -70,25 +64,25 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_AAC809DE655D0B27F2C41096CD2DE8AB"
+        "OwnerKey" = "8:_6D8316F2C8C5ECC38F832C2975D9592B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_444B2718830757395281A097C4B7584D"
+        "OwnerKey" = "8:_BA9286BA49B390D5291E8416744AF210"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_AE4E0C2E7BCCFFF32EF253B24E8258D0"
+        "OwnerKey" = "8:_8564B51904375FF728EC699494326DA2"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_C4B8FEF85CB41FFEFD8BE25F13815D90"
+        "OwnerKey" = "8:_D8B4B6B90A452A3B4B39A61D0CC94E53"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -196,13 +190,49 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_444B2718830757395281A097C4B7584D"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6D8316F2C8C5ECC38F832C2975D9592B"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:SS, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_6D8316F2C8C5ECC38F832C2975D9592B"
+                    {
+                    "Name" = "8:SS.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:SS.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_4D61D38E9A3646A2A841FB25E036A231"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8564B51904375FF728EC699494326DA2"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:Formula, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
+                    "_8564B51904375FF728EC699494326DA2"
+                    {
+                    "Name" = "8:Formula.dll"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:Formula.dll"
             "TargetName" = "8:"
@@ -222,59 +252,18 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9A38017150314281AADF4BB770A45816"
-            {
-            "SourcePath" = "8:..\\..\\..\\..\\..\\Desktop\\office-spreadsheet-x-icone-5581-48.png"
-            "TargetName" = "8:office-spreadsheet-x-icone-5581-48.png"
-            "Tag" = "8:"
-            "Folder" = "8:_4D61D38E9A3646A2A841FB25E036A231"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_AAC809DE655D0B27F2C41096CD2DE8AB"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:SpreadsheetPanel, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86"
-                "ScatterAssemblies"
-                {
-                }
-            "SourcePath" = "8:SpreadsheetPanel.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_4D61D38E9A3646A2A841FB25E036A231"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_AE4E0C2E7BCCFFF32EF253B24E8258D0"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_BA9286BA49B390D5291E8416744AF210"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:SpreadSheetUtilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
+                    "_BA9286BA49B390D5291E8416744AF210"
+                    {
+                    "Name" = "8:SpreadSheetUtilities.dll"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:SpreadSheetUtilities.dll"
             "TargetName" = "8:"
@@ -294,15 +283,20 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_C4B8FEF85CB41FFEFD8BE25F13815D90"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_D8B4B6B90A452A3B4B39A61D0CC94E53"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:SS, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:SpreadsheetPanel, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
+                    "_D8B4B6B90A452A3B4B39A61D0CC94E53"
+                    {
+                    "Name" = "8:SpreadsheetPanel.dll"
+                    "Attributes" = "3:512"
+                    }
                 }
-            "SourcePath" = "8:SS.dll"
+            "SourcePath" = "8:SpreadsheetPanel.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_4D61D38E9A3646A2A841FB25E036A231"
