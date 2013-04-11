@@ -92,7 +92,11 @@ namespace SpreadsheetGUI
             }
             else
             {
-                CellContentBox.Text = (sheet.GetCellContents(name)).ToString();
+                if (sheet.GetCellContents(name) is SpreadsheetUtilities.Formula)
+                    CellContentBox.Text = "=" + (sheet.GetCellContents(name)).ToString();
+                else
+                    CellContentBox.Text = (sheet.GetCellContents(name)).ToString();
+
                 panel.SetValue(col, row, (sheet.GetCellValue(name)).ToString());
             }
         }
@@ -291,6 +295,8 @@ namespace SpreadsheetGUI
                     int c, r;
                     c = alphabet.IndexOf(cell.Substring(0, 1));
                     r = int.Parse(cell.Substring(1)) - 1;
+
+                    // Change this to sending to server !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     panel.SetValue(c, r, sheet.GetCellValue(cell).ToString());
 
                 }
@@ -298,6 +304,7 @@ namespace SpreadsheetGUI
 
                 panel.SetValue(col, row, value);
 
+                // Make this a callback for sending the server and have it set the value for the panel as well!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 updateSelection(panel);
 
             }

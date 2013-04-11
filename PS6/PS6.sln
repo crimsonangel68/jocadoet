@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6C3D1F92-8530-4C52-87C5-A60633793B5D}"
 	ProjectSection(SolutionItems) = preProject
+		CustomNetworking.dll = CustomNetworking.dll
+		CustomNetworking.XML = CustomNetworking.XML
 		Formula.dll = Formula.dll
 		Formula.XML = Formula.XML
 		Local.testsettings = Local.testsettings
@@ -26,6 +28,10 @@ EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup1", "Setup1\Setup1.vdproj", "{F30B10A8-A33B-4CEE-B834-28CD8012B3E2}"
 EndProject
 Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = PS43.vsmdi
 	EndGlobalSection
@@ -88,9 +94,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal
