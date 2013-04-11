@@ -31,7 +31,6 @@ C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SS\bin\Debug\SS.dll
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SS\bin\Debug\SS.pdb
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SS\bin\Debug\SS.dll.CodeAnalysisLog.xml
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SS\bin\Debug\SS.dll.lastcodeanalysissucceeded
-C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SS\bin\Debug\Formula.dll
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SS\bin\Debug\SpreadsheetPanel.dll
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SS\bin\Debug\SpreadSheetUtilities.dll
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SS\bin\Debug\Formula.xml

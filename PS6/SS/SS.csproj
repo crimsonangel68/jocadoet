@@ -41,8 +41,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Formula">
-      <HintPath>..\Formula.dll</HintPath>
+    <Reference Include="Formula, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Formula.dll</HintPath>
     </Reference>
     <Reference Include="SpreadsheetPanel">
       <HintPath>..\SpreadsheetPanel.dll</HintPath>

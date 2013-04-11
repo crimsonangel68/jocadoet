@@ -119,6 +119,12 @@
             <param name="panel"></param>
             <returns></returns>
         </member>
+        <member name="M:SpreadsheetGUI.Form1.sendMessage(SS.SpreadsheetPanel)">
+            <summary>
+            
+            </summary>
+            <param name="panel"></param>
+        </member>
         <member name="M:SpreadsheetGUI.Form1.Clear_Click(System.Object,System.EventArgs)">
             <summary>
             When the clear button is clicked on the Window, the spreadsheetPanel, spreadsheet, 

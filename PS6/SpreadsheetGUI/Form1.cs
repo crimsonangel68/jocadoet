@@ -220,6 +220,7 @@ namespace SpreadsheetGUI
                 int newCol, newRow;
                 if (e.KeyCode == Keys.Enter)
                 {
+                    sendMessage(spreadsheetPanel1);
                     SetCellContents(spreadsheetPanel1);
                 }
 
@@ -288,7 +289,7 @@ namespace SpreadsheetGUI
                 string name = alphabet[col] + (row + 1).ToString();
 
                 string contents = CellContentBox.Text;
-                ISet<string> affectedCells = sheet.SetContentsOfCell(name, contents);
+                ISet<string> affectedCells = sheet.SetContentsOfCell(name, contents.ToUpper());
 
                 foreach (string cell in affectedCells)
                 {
@@ -312,6 +313,34 @@ namespace SpreadsheetGUI
             {
                 MessageBox.Show("Idiot.... (SetCellContents) \n" + f.Message);
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="panel"></param>
+        private void sendMessage(SpreadsheetPanel panel)
+        {
+            //try
+            //{
+            //    int col, row;
+            //    panel.GetSelection(out col, out row);
+            //    string name = alphabet[col] + (row + 1).ToString();
+
+            //    object oldContent = sheet.GetCellContents(name);
+                
+            //    string contents = CellContentBox.Text;
+            //    ISet<string> affectedCells = sheet.SetContentsOfCell(name, contents);
+
+            //    foreach (string cell in affectedCells)
+            //    {
+
+            //    }
+            //}
+            //catch (Exception f)
+            //{
+            //    MessageBox.Show("Idiot... (sendMessage) \n" + f.Message);
+            //}
         }
 
         //-----------------------------------------------------------------------------------Clear_Click

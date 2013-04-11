@@ -249,10 +249,12 @@ namespace SS
             {
                 sheet.Add(name, new Cell(formula));
             }
+
             else
             {
-                sheet[name].CellContent = "=" + formula;
+                sheet[name].CellContent = formula;
             }
+
             return result;
         }
 
