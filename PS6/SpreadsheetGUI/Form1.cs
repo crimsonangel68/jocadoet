@@ -20,6 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using SS;
+using CustomNetworking;
 
 namespace SpreadsheetGUI
 {
@@ -31,16 +32,21 @@ namespace SpreadsheetGUI
     {
         private Spreadsheet sheet;
         private List<string> alphabet = new List<string> { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
+        private SSModel model;
+        private StringSocket socket;
 
         //-----------------------------------------------------------------------------------Form1
         /// <summary>
         /// Opens a new Window with an empty spreadsheet.
         /// </summary>
-        public Form1()
+        public Form1(StringSocket thisSocket, String fileName, String currentVersion)
         {
             InitializeComponent();
+            socket = thisSocket;
+            model = new SSModel(socket);
 
-            sheet = new Spreadsheet(s => true, s => s.ToUpper(), "ps6");
+            sheet.FileName = fileName;
+            sheet = new Spreadsheet(s => true, s => s.ToUpper(), currentVersion);
 
             spreadsheetPanel1.SelectionChanged += updateSelection;
             spreadsheetPanel1.SetSelection(0, 0);
@@ -267,7 +273,7 @@ namespace SpreadsheetGUI
                     Close();
                 }
             }
-            catch (Exception f)
+            catch (Exception)
             {
                 MessageBox.Show("Idiot... ");
             }
@@ -290,6 +296,16 @@ namespace SpreadsheetGUI
 
                 string contents = CellContentBox.Text;
                 ISet<string> affectedCells = sheet.SetContentsOfCell(name, contents);
+
+                // Send change here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                // Change LF
+                // Name:name LF
+                // Version:version LF
+                // Cell:cell LF
+                // Length:length LF
+                // content LF
+
+                // socket.beginSend("^^\n");
 
                 foreach (string cell in affectedCells)
                 {

@@ -28,6 +28,8 @@ namespace SS
         private DependencyGraph dg;
         private bool modified;
 
+        public string FileName { get; set; }
+
         //-----------------------------------------------------------------------------------------Constructor  
         /// <summary>
         /// Creates a new Spreadsheet object.
