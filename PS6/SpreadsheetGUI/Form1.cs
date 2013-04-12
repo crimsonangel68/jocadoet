@@ -289,7 +289,7 @@ namespace SpreadsheetGUI
                 string name = alphabet[col] + (row + 1).ToString();
 
                 string contents = CellContentBox.Text;
-                ISet<string> affectedCells = sheet.SetContentsOfCell(name, contents.ToUpper());
+                ISet<string> affectedCells = sheet.SetContentsOfCell(name, contents);
 
                 foreach (string cell in affectedCells)
                 {

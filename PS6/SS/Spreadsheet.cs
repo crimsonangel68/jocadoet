@@ -527,7 +527,7 @@ namespace SS
             if (content.StartsWith("="))
             {
                 string temp = content.Substring(1);
-                tempFormula = new Formula(temp, IsValid, Normalize);
+                tempFormula = new Formula(temp.ToUpper(), IsValid, Normalize);
             }
 
             result = SetCellContents(name, tempFormula);
