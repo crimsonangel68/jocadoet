@@ -18,9 +18,10 @@ namespace SpreadsheetGUI
         public event Action<String> SaveEvent;
         public event Action<String> LeaveEvent;
 
-        public SSModel(StringSocket thisSocket)
+        //public SSModel(StringSocket thisSocket)
+        public SSModel() // until socket is implemented !!!!!!!!!!!!!!!.........
         {
-            socket = thisSocket;
+            //socket = thisSocket;
         }
 
 

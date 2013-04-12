@@ -16,3 +16,11 @@ C:\Users\FieldBaseWin\Documents\Visual Studio 2010\Projects\PS6\SpreadsheetPanel
 C:\Users\FieldBaseWin\Documents\Visual Studio 2010\Projects\PS6\SpreadsheetPanel\obj\x86\Debug\GenerateResource.write.1.tlog
 C:\Users\FieldBaseWin\Documents\Visual Studio 2010\Projects\PS6\SpreadsheetPanel\obj\x86\Debug\SpreadsheetPanel.dll
 C:\Users\FieldBaseWin\Documents\Visual Studio 2010\Projects\PS6\SpreadsheetPanel\obj\x86\Debug\SpreadsheetPanel.pdb
+C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetPanel\bin\Debug\SpreadsheetPanel.dll
+C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetPanel\bin\Debug\SpreadsheetPanel.pdb
+C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetPanel\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetPanel\obj\x86\Debug\SS.Properties.Resources.resources
+C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetPanel\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetPanel\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetPanel\obj\x86\Debug\SpreadsheetPanel.dll
+C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetPanel\obj\x86\Debug\SpreadsheetPanel.pdb

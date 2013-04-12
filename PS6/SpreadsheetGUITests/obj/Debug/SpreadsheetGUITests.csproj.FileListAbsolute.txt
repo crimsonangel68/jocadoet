@@ -8,3 +8,8 @@ C:\Users\FieldBaseWin\Documents\Visual Studio 2010\Projects\PS6\SpreadsheetGUITe
 C:\Users\FieldBaseWin\Documents\Visual Studio 2010\Projects\PS6\SpreadsheetGUITests\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\FieldBaseWin\Documents\Visual Studio 2010\Projects\PS6\SpreadsheetGUITests\obj\Debug\SpreadsheetGUITests.dll
 C:\Users\FieldBaseWin\Documents\Visual Studio 2010\Projects\PS6\SpreadsheetGUITests\obj\Debug\SpreadsheetGUITests.pdb
+C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUITests\bin\Debug\SpreadsheetGUITests.dll
+C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUITests\bin\Debug\SpreadsheetGUITests.pdb
+C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUITests\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUITests\obj\Debug\SpreadsheetGUITests.dll
+C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUITests\obj\Debug\SpreadsheetGUITests.pdb

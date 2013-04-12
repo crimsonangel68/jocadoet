@@ -57,3 +57,4 @@ C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\Gener
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\GenerateResource.write.1.tlog
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUI\bin\Debug\CustomNetworking.dll
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUI\bin\Debug\CustomNetworking.xml
+C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\SpreadsheetGUI.Startup.resources

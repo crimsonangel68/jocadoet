@@ -28,6 +28,9 @@ namespace SS
         private DependencyGraph dg;
         private bool modified;
 
+        /// <summary>
+        /// This is a property for accessing the filename of the spreadsheet
+        /// </summary>
         public string FileName { get; set; }
 
         //-----------------------------------------------------------------------------------------Constructor  
@@ -69,6 +72,9 @@ namespace SS
         public Spreadsheet(string filepath, Func<string, bool> valid, Func<string, string> norm, string vers)
             : base(valid, norm, vers)
         {
+            FileName = filepath; // ish ................................. fix in final version
+
+
             sheet = new Dictionary<string, Cell>();
             dg = new DependencyGraph();
             Changed = false;

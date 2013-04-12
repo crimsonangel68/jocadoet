@@ -68,8 +68,16 @@ namespace SpreadsheetGUI
         [STAThread]
         static void Main(string[] args)
         {
-
-
+            // New way of opening files.
+            /*
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new Startup());
+            // end of new opening method.  */
+             
+             
+            
+            // commenting out old way of opening file.
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
@@ -91,6 +99,7 @@ namespace SpreadsheetGUI
                 appContext.RunForm(new Form1(args[0]));
                 Application.Run(appContext);
             }
+            //end comment */
         }
     }
 }

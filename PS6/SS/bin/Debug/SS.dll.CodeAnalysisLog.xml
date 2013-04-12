@@ -10,14 +10,14 @@
        <Types>
         <Type Name="CircularException" Kind="Class" Accessibility="Public" ExternallyVisible="True">
          <Messages>
-          <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Active" Created="2013-04-12 20:29:58Z" FixCategory="NonBreaking">
+          <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Active" Created="2013-04-12 22:50:01Z" FixCategory="NonBreaking">
            <Issue Certainty="95" Level="Error">Add [Serializable] to 'CircularException' as this type implements ISerializable.</Issue>
           </Message>
          </Messages>
         </Type>
         <Type Name="InvalidNameException" Kind="Class" Accessibility="Public" ExternallyVisible="True">
          <Messages>
-          <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Active" Created="2013-04-12 20:29:58Z" FixCategory="NonBreaking">
+          <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Active" Created="2013-04-12 22:50:01Z" FixCategory="NonBreaking">
            <Issue Certainty="95" Level="Error">Add [Serializable] to 'InvalidNameException' as this type implements ISerializable.</Issue>
           </Message>
          </Messages>
@@ -26,23 +26,23 @@
          <Members>
           <Member Name="#.ctor()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="DoNotCallOverridableMethodsInConstructors" Category="Microsoft.Usage" CheckId="CA2214" Status="Active" Created="2013-04-12 20:29:58Z" FixCategory="NonBreaking">
-             <Issue Certainty="95" Level="CriticalWarning" Path="C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SS" File="Spreadsheet.cs" Line="35">'Spreadsheet.Spreadsheet()' contains a call chain that results in a call to a virtual method defined by the class. Review the following call stack for unintended consequences: &#xD;&#xA;&#xD;&#xA;Spreadsheet..ctor()&#xD;&#xA;AbstractSpreadsheet.set_Changed(Boolean):Void</Issue>
+            <Message TypeName="DoNotCallOverridableMethodsInConstructors" Category="Microsoft.Usage" CheckId="CA2214" Status="Active" Created="2013-04-12 22:50:01Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="CriticalWarning" Path="C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SS" File="Spreadsheet.cs" Line="40">'Spreadsheet.Spreadsheet()' contains a call chain that results in a call to a virtual method defined by the class. Review the following call stack for unintended consequences: &#xD;&#xA;&#xD;&#xA;Spreadsheet..ctor()&#xD;&#xA;AbstractSpreadsheet.set_Changed(Boolean):Void</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#.ctor(System.Func`2&lt;System.String,System.Boolean&gt;,System.Func`2&lt;System.String,System.String&gt;,System.String)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="DoNotCallOverridableMethodsInConstructors" Category="Microsoft.Usage" CheckId="CA2214" Status="Active" Created="2013-04-12 20:29:58Z" FixCategory="NonBreaking">
-             <Issue Certainty="95" Level="CriticalWarning" Path="C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SS" File="Spreadsheet.cs" Line="50">'Spreadsheet.Spreadsheet(Func&lt;string, bool&gt;, Func&lt;string, string&gt;, string)' contains a call chain that results in a call to a virtual method defined by the class. Review the following call stack for unintended consequences: &#xD;&#xA;&#xD;&#xA;Spreadsheet..ctor(Func&lt;String,Boolean&gt;, Func&lt;String,String&gt;, String)&#xD;&#xA;AbstractSpreadsheet.set_Changed(Boolean):Void</Issue>
+            <Message TypeName="DoNotCallOverridableMethodsInConstructors" Category="Microsoft.Usage" CheckId="CA2214" Status="Active" Created="2013-04-12 22:50:01Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="CriticalWarning" Path="C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SS" File="Spreadsheet.cs" Line="55">'Spreadsheet.Spreadsheet(Func&lt;string, bool&gt;, Func&lt;string, string&gt;, string)' contains a call chain that results in a call to a virtual method defined by the class. Review the following call stack for unintended consequences: &#xD;&#xA;&#xD;&#xA;Spreadsheet..ctor(Func&lt;String,Boolean&gt;, Func&lt;String,String&gt;, String)&#xD;&#xA;AbstractSpreadsheet.set_Changed(Boolean):Void</Issue>
             </Message>
            </Messages>
           </Member>
           <Member Name="#.ctor(System.String,System.Func`2&lt;System.String,System.Boolean&gt;,System.Func`2&lt;System.String,System.String&gt;,System.String)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
            <Messages>
-            <Message TypeName="DoNotCallOverridableMethodsInConstructors" Category="Microsoft.Usage" CheckId="CA2214" Status="Active" Created="2013-04-12 20:29:58Z" FixCategory="NonBreaking">
-             <Issue Certainty="95" Level="CriticalWarning" Path="C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SS" File="Spreadsheet.cs" Line="67">'Spreadsheet.Spreadsheet(string, Func&lt;string, bool&gt;, Func&lt;string, string&gt;, string)' contains a call chain that results in a call to a virtual method defined by the class. Review the following call stack for unintended consequences: &#xD;&#xA;&#xD;&#xA;Spreadsheet..ctor(String, Func&lt;String,Boolean&gt;, Func&lt;String,String&gt;, String)&#xD;&#xA;AbstractSpreadsheet.set_Changed(Boolean):Void</Issue>
-             <Issue Certainty="95" Level="CriticalWarning" Path="C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SS" File="Spreadsheet.cs" Line="67">'Spreadsheet.Spreadsheet(string, Func&lt;string, bool&gt;, Func&lt;string, string&gt;, string)' contains a call chain that results in a call to a virtual method defined by the class. Review the following call stack for unintended consequences: &#xD;&#xA;&#xD;&#xA;Spreadsheet..ctor(String, Func&lt;String,Boolean&gt;, Func&lt;String,String&gt;, String)&#xD;&#xA;AbstractSpreadsheet.set_Changed(Boolean):Void&#xD;&#xA;AbstractSpreadsheet.GetSavedVersion(String):String</Issue>
+            <Message TypeName="DoNotCallOverridableMethodsInConstructors" Category="Microsoft.Usage" CheckId="CA2214" Status="Active" Created="2013-04-12 22:50:01Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="CriticalWarning" Path="C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SS" File="Spreadsheet.cs" Line="72">'Spreadsheet.Spreadsheet(string, Func&lt;string, bool&gt;, Func&lt;string, string&gt;, string)' contains a call chain that results in a call to a virtual method defined by the class. Review the following call stack for unintended consequences: &#xD;&#xA;&#xD;&#xA;Spreadsheet..ctor(String, Func&lt;String,Boolean&gt;, Func&lt;String,String&gt;, String)&#xD;&#xA;AbstractSpreadsheet.set_Changed(Boolean):Void</Issue>
+             <Issue Certainty="95" Level="CriticalWarning" Path="C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SS" File="Spreadsheet.cs" Line="72">'Spreadsheet.Spreadsheet(string, Func&lt;string, bool&gt;, Func&lt;string, string&gt;, string)' contains a call chain that results in a call to a virtual method defined by the class. Review the following call stack for unintended consequences: &#xD;&#xA;&#xD;&#xA;Spreadsheet..ctor(String, Func&lt;String,Boolean&gt;, Func&lt;String,String&gt;, String)&#xD;&#xA;AbstractSpreadsheet.set_Changed(Boolean):Void&#xD;&#xA;AbstractSpreadsheet.GetSavedVersion(String):String</Issue>
             </Message>
            </Messages>
           </Member>
@@ -50,7 +50,7 @@
         </Type>
         <Type Name="SpreadsheetReadWriteException" Kind="Class" Accessibility="Public" ExternallyVisible="True">
          <Messages>
-          <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Active" Created="2013-04-12 20:29:58Z" FixCategory="NonBreaking">
+          <Message TypeName="MarkISerializableTypesWithSerializable" Category="Microsoft.Usage" CheckId="CA2237" Status="Active" Created="2013-04-12 22:50:01Z" FixCategory="NonBreaking">
            <Issue Certainty="95" Level="Error">Add [Serializable] to 'SpreadsheetReadWriteException' as this type implements ISerializable.</Issue>
           </Message>
          </Messages>

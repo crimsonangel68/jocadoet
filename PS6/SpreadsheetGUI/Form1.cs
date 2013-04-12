@@ -33,20 +33,27 @@ namespace SpreadsheetGUI
         private Spreadsheet sheet;
         private List<string> alphabet = new List<string> { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
         private SSModel model;
-        private StringSocket socket;
+        //private StringSocket socket;
 
         //-----------------------------------------------------------------------------------Form1
         /// <summary>
         /// Opens a new Window with an empty spreadsheet.
+        /// .
+        /// 32.
+        /// 
         /// </summary>
-        public Form1(StringSocket thisSocket, String fileName, String currentVersion)
+        //public Form1(StringSocket thisSocket, String fileName, String currentVersion)
+        public Form1()    
         {
             InitializeComponent();
-            socket = thisSocket;
-            model = new SSModel(socket);
 
-            sheet.FileName = fileName;
-            sheet = new Spreadsheet(s => true, s => s.ToUpper(), currentVersion);
+            //socket = thisSocket;
+            //model = new SSModel(socket);
+            model = new SSModel(); // until socket is implemented!!!!!!!!!!!!!!!.................
+
+            //sheet.FileName = fileName;
+            //sheet = new Spreadsheet(s => true, s => s.ToUpper(), currentVersion);
+            sheet = new Spreadsheet(s => true, s => s.ToUpper(), "ps6");
 
             spreadsheetPanel1.SelectionChanged += updateSelection;
             spreadsheetPanel1.SetSelection(0, 0);

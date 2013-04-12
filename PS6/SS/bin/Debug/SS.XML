@@ -451,6 +451,11 @@
             </summary>
             <param name="s"></param>
         </member>
+        <member name="P:SS.Spreadsheet.FileName">
+            <summary>
+            This is a property for accessing the filename of the spreadsheet
+            </summary>
+        </member>
         <member name="P:SS.Spreadsheet.Changed">
             <summary>
             Returns the true if the version has been changed and false if it has not since the last save.

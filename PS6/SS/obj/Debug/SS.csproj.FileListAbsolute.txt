@@ -26,7 +26,6 @@ C:\Users\FieldBaseWin\Documents\Visual Studio 2010\Projects\PS6\SS\obj\Debug\Res
 C:\Users\FieldBaseWin\Documents\Visual Studio 2010\Projects\PS6\SS\obj\Debug\SS.dll
 C:\Users\FieldBaseWin\Documents\Visual Studio 2010\Projects\PS6\SS\obj\Debug\SS.pdb
 C:\Users\FieldBaseWin\Documents\Visual Studio 2010\Projects\PS6\SS\bin\Debug\SS.XML
-C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SS\bin\Debug\SS.XML
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SS\bin\Debug\SS.dll
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SS\bin\Debug\SS.pdb
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SS\bin\Debug\SS.dll.CodeAnalysisLog.xml
