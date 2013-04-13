@@ -15,7 +15,17 @@ namespace SpreadsheetGUI
     /// </summary>
     public partial class Startup : Form
     {
-        private StringSocket socket;
+        /// <summary>
+        /// This property will keep track of the IP Adress that the
+        ///  user puts in.
+        /// </summary>
+        public string IPAddress { get; set; }
+        
+        /// <summary>
+        /// This property will keep track of the Port number that was entered
+        ///  by the user.
+        /// </summary>
+        public string PortNum   { get; set; }
 
         /// <summary>
         ///  This is the constructor for the startup method.
@@ -31,19 +41,42 @@ namespace SpreadsheetGUI
             InitializeComponent();
         }
 
+        /// <summary>
+        /// This method will connect the client to the server. The
+        ///  user will then be directed to the next prompt, the open
+        ///  prompt.
+        /// </summary>
         private void ConnectButton_Click(object sender, EventArgs e)
         {
             try
             {
                 if (IPTextBox.Text != "" && PortTextBox.Text != "")
                 {
-                    // connect to server with open prompt as callback.
+                    IPAddress = IPTextBox.Text;
+                    PortNum = PortTextBox.Text;
+                    
+                    // try to connect to server with open prompt method callback
+                    GoToOpenPrompt();
                 }
             }
             catch (Exception)
             {
                 DialogResult result = MessageBox.Show("Invalid IPAddress/Port or Server is currently not running.", "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
             }
+        }
+
+        /// <summary>
+        /// This method is the callback for connecting to the server.
+        ///  It will then direct the user to the next prompt to 
+        ///  open/create a file.
+        /// </summary>
+        private void GoToOpenPrompt()
+        {
+            OpenPrompt prompt = new OpenPrompt(IPAddress, PortNum);
+
+            this.Hide();
+            prompt.ShowDialog();
+            this.Close();
         }
     }
 }

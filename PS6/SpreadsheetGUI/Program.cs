@@ -69,7 +69,7 @@ namespace SpreadsheetGUI
         static void Main(string[] args)
         {
             // New way of opening files.
-            /*
+            
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Startup());
@@ -78,6 +78,7 @@ namespace SpreadsheetGUI
              
             
             // commenting out old way of opening file.
+            /*
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 

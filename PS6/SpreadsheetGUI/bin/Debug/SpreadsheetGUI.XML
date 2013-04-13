@@ -224,6 +224,20 @@
              file, or join an existing file.
             </summary>
         </member>
+        <member name="M:SpreadsheetGUI.Startup.ConnectButton_Click(System.Object,System.EventArgs)">
+            <summary>
+            This method will connect the client to the server. The
+             user will then be directed to the next prompt, the open
+             prompt.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.Startup.GoToOpenPrompt">
+            <summary>
+            This method is the callback for connecting to the server.
+             It will then direct the user to the next prompt to 
+             open/create a file.
+            </summary>
+        </member>
         <member name="F:SpreadsheetGUI.Startup.components">
             <summary>
             Required designer variable.
@@ -236,6 +250,49 @@
             <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         </member>
         <member name="M:SpreadsheetGUI.Startup.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="P:SpreadsheetGUI.Startup.IPAddress">
+            <summary>
+            This property will keep track of the IP Adress that the
+             user puts in.
+            </summary>
+        </member>
+        <member name="P:SpreadsheetGUI.Startup.PortNum">
+            <summary>
+            This property will keep track of the Port number that was entered
+             by the user.
+            </summary>
+        </member>
+        <member name="T:SpreadsheetGUI.OpenPrompt">
+            <summary>
+            Partial class for ...
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.OpenPrompt.#ctor(System.String,System.String)">
+            <summary>
+            This method will open a new prompt window, which a user
+             will be able to enter in a file to either create a new
+             spreadsheet of or join an existing file.
+            </summary>
+            <param name="IPAddress"></param>
+            <param name="PortNum"></param>
+        </member>
+        <member name="F:SpreadsheetGUI.OpenPrompt.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.OpenPrompt.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:SpreadsheetGUI.OpenPrompt.InitializeComponent">
             <summary>
             Required method for Designer support - do not modify
             the contents of this method with the code editor.
