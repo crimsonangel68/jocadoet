@@ -29,20 +29,22 @@ namespace SpreadsheetGUI
 
         private void NewButton_Click(object sender, EventArgs e)
         {
-            model.parentModel.socket.BeginSend(FileNameTextBox.Text, (f, p) => { }, 0);
-            model.parentModel.socket.BeginReceive(lineReceived, 0);
+            String message = "CREATE\n";
+            message += "Name:" + FileNameTextBox.Text + "\n";
+            message += "Password:" + PasswordTextBox.Text + "\n";
+            model.topModel.socket.BeginSend(message, (f, p) => { }, 0);
+            model.topModel.socket.BeginReceive(lineReceived, 0);
         }
 
         private void JoinButton_Click(object sender, EventArgs e)
         {
-            model.parentModel.socket.BeginSend(FileNameTextBox.Text, (f, p) => { }, 0);
-            model.parentModel.socket.BeginReceive(lineReceived, 0);
+            model.topModel.socket.BeginSend(FileNameTextBox.Text, (f, p) => { }, 0);
+            model.topModel.socket.BeginReceive(lineReceived, 0);
         }
 
         private void lineReceived(String s, Exception e, object p)
         {
 
         }
-
     }
 }

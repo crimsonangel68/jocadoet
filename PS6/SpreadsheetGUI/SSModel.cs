@@ -20,8 +20,14 @@ namespace SpreadsheetGUI
         ///  
         /// Can only be set within this class.
         /// </summary>
-        public StartupModel parentModel { get; private set;}
+        public StartupModel topModel { get; private set;}
         
+        /// <summary>
+        /// This property contains the name of the spreadsheet
+        ///  associated with this SSModel.
+        /// </summary>
+        public string name { get; set; }
+
         /*
         // Unimplemented actions 
         public event Action<String> ChangeEvent;
@@ -37,7 +43,7 @@ namespace SpreadsheetGUI
         /// <param name="thisModel"></param>
         public SSModel(StartupModel thisModel) 
         {
-          parentModel = thisModel;
+          topModel = thisModel;
         }
     }
 }

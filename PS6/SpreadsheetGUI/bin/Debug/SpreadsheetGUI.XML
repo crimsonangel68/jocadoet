@@ -220,12 +220,18 @@
             </summary>
             <param name="thisModel"></param>
         </member>
-        <member name="P:SpreadsheetGUI.SSModel.parentModel">
+        <member name="P:SpreadsheetGUI.SSModel.topModel">
             <summary>
             This property contains the parent model that the client is using to
              connect to the server.
              
             Can only be set within this class.
+            </summary>
+        </member>
+        <member name="P:SpreadsheetGUI.SSModel.name">
+            <summary>
+            This property contains the name of the spreadsheet
+             associated with this SSModel.
             </summary>
         </member>
         <member name="T:SpreadsheetGUI.Startup">
