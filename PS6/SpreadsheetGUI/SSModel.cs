@@ -9,21 +9,35 @@ using SpreadsheetGUI;
 
 namespace SpreadsheetGUI
 {
-    class SSModel
+    /// <summary>
+    /// 
+    /// </summary>
+    public class SSModel
     {
-        private StringSocket socket;
-
+        /// <summary>
+        /// This property contains the parent model that the client is using to
+        ///  connect to the server.
+        ///  
+        /// Can only be set within this class.
+        /// </summary>
+        public StartupModel parentModel { get; private set;}
+        
+        /*
+        // Unimplemented actions 
         public event Action<String> ChangeEvent;
         public event Action<String> UndoEvent;
         public event Action<String> SaveEvent;
         public event Action<String> LeaveEvent;
+         */
 
-        //public SSModel(StringSocket thisSocket)
-        public SSModel() // until socket is implemented !!!!!!!!!!!!!!!.........
+        /// <summary>
+        /// This constructor takes in a connected socket to
+        ///  take care of sending and receiving.
+        /// </summary>
+        /// <param name="thisModel"></param>
+        public SSModel(StartupModel thisModel) 
         {
-            //socket = thisSocket;
+          parentModel = thisModel;
         }
-
-
     }
 }

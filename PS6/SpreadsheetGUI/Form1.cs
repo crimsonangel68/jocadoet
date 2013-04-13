@@ -32,8 +32,9 @@ namespace SpreadsheetGUI
     {
         private Spreadsheet sheet;
         private List<string> alphabet = new List<string> { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
-        private SSModel model;
-        //private StringSocket socket;
+        
+        //private SSModel model;
+        //private StringSocket socket; // to delete? perhaps? if Form1(ss socket) is possible
 
         //-----------------------------------------------------------------------------------Form1
         /// <summary>
@@ -49,8 +50,7 @@ namespace SpreadsheetGUI
 
             //socket = thisSocket;
             //model = new SSModel(socket);
-            model = new SSModel(); // until socket is implemented!!!!!!!!!!!!!!!.................
-
+            
             //sheet.FileName = fileName;
             //sheet = new Spreadsheet(s => true, s => s.ToUpper(), currentVersion);
             sheet = new Spreadsheet(s => true, s => s.ToUpper(), "ps6");

@@ -208,6 +208,26 @@
               resource lookups using this strongly typed resource class.
             </summary>
         </member>
+        <member name="T:SpreadsheetGUI.SSModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.SSModel.#ctor(SpreadsheetGUI.StartupModel)">
+            <summary>
+            This constructor takes in a connected socket to
+             take care of sending and receiving.
+            </summary>
+            <param name="thisModel"></param>
+        </member>
+        <member name="P:SpreadsheetGUI.SSModel.parentModel">
+            <summary>
+            This property contains the parent model that the client is using to
+             connect to the server.
+             
+            Can only be set within this class.
+            </summary>
+        </member>
         <member name="T:SpreadsheetGUI.Startup">
             <summary>
             This partial class will .....
@@ -231,7 +251,7 @@
              prompt.
             </summary>
         </member>
-        <member name="M:SpreadsheetGUI.Startup.GoToOpenPrompt">
+        <member name="M:SpreadsheetGUI.Startup.GoToOpenPrompt(SpreadsheetGUI.SSModel)">
             <summary>
             This method is the callback for connecting to the server.
              It will then direct the user to the next prompt to 
@@ -272,13 +292,13 @@
             Partial class for ...
             </summary>
         </member>
-        <member name="M:SpreadsheetGUI.OpenPrompt.#ctor(SpreadsheetGUI.StartupModel)">
+        <member name="M:SpreadsheetGUI.OpenPrompt.#ctor(SpreadsheetGUI.SSModel)">
             <summary>
             This method will open a new prompt window, which a user
              will be able to enter in a file to either create a new
              spreadsheet of or join an existing file.
             </summary>
-            <param name="model" ></param>
+            <param name="newModel" ></param>
         </member>
         <member name="F:SpreadsheetGUI.OpenPrompt.components">
             <summary>
@@ -300,12 +320,18 @@
         <member name="T:SpreadsheetGUI.StartupModel">
             <summary>
             
-            Stuff goes here
+            This is the main model of the Spreadsheet connection.
+            
+            It will keep track of all of the SSModels that are open, where
+            each SSModel represents a new spreadsheet that's open.  This will
+            help to keep track of different spreadsheets open by one user.
             </summary>
         </member>
         <member name="M:SpreadsheetGUI.StartupModel.#ctor">
             <summary>
-            Constructor
+            Constructor for creating a new StartupModel.
+            
+            It will intialize the neccessary member variables.
             </summary>
         </member>
         <member name="M:SpreadsheetGUI.StartupModel.Connect(System.String,System.Int32)">
@@ -315,22 +341,15 @@
             <param name="hostname"></param>
             <param name="port"></param>
         </member>
-        <member name="M:SpreadsheetGUI.StartupModel.ConnectReceived(System.String,System.Exception,System.Object)">
+        <member name="M:SpreadsheetGUI.StartupModel.newSSModel">
             <summary>
-            Callback method to call the other callback
+            This method will be called to get a new SSModel to follow a spreadsheet.
             </summary>
-            <param name="s"></param>
-            <param name="e"></param>
-            <param name="payload"></param>
+            <returns></returns>
         </member>
-        <member name="E:SpreadsheetGUI.StartupModel.CreateEvent">
+        <member name="P:SpreadsheetGUI.StartupModel.socket">
             <summary>
-            This is an event listener for when the "New" button is pressed.
-            </summary>
-        </member>
-        <member name="E:SpreadsheetGUI.StartupModel.JoinEvent">
-            <summary>
-            Ths is an event listener for when the "Join" button is pressed.
+            
             </summary>
         </member>
     </members>

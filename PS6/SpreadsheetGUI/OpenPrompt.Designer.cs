@@ -50,6 +50,7 @@
             this.JoinButton.TabIndex = 2;
             this.JoinButton.Text = "Join";
             this.JoinButton.UseVisualStyleBackColor = true;
+            this.JoinButton.Click += new System.EventHandler(this.JoinButton_Click);
             // 
             // NewButton
             // 
@@ -60,6 +61,7 @@
             this.NewButton.TabIndex = 1;
             this.NewButton.Text = "New";
             this.NewButton.UseVisualStyleBackColor = true;
+            this.NewButton.Click += new System.EventHandler(this.NewButton_Click);
             // 
             // FileNameTextBox
             // 
@@ -127,6 +129,7 @@
             this.ClientSize = new System.Drawing.Size(378, 353);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "OpenPrompt";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "OpenPrompt";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
