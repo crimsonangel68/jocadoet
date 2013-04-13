@@ -15,6 +15,8 @@ namespace SpreadsheetGUI
     /// </summary>
     public partial class Startup : Form
     {
+        StartupModel model;
+
         /// <summary>
         /// This property will keep track of the IP Adress that the
         ///  user puts in.
@@ -25,7 +27,7 @@ namespace SpreadsheetGUI
         /// This property will keep track of the Port number that was entered
         ///  by the user.
         /// </summary>
-        public string PortNum   { get; set; }
+        public int PortNum   { get; set; }
 
         /// <summary>
         ///  This is the constructor for the startup method.
@@ -39,6 +41,7 @@ namespace SpreadsheetGUI
         public Startup()
         {
             InitializeComponent();
+            model = new StartupModel();
         }
 
         /// <summary>
@@ -53,15 +56,20 @@ namespace SpreadsheetGUI
                 if (IPTextBox.Text != "" && PortTextBox.Text != "")
                 {
                     IPAddress = IPTextBox.Text;
-                    PortNum = PortTextBox.Text;
                     
+                    int pNum = 0;
+                    Int32.TryParse(PortTextBox.Text, out pNum);
+                    PortNum = pNum;
+
+                    model.Connect(IPAddress, PortNum, new Action(GoToOpenPrompt));
                     // try to connect to server with open prompt method callback
-                    GoToOpenPrompt();
                 }
             }
             catch (Exception)
             {
                 DialogResult result = MessageBox.Show("Invalid IPAddress/Port or Server is currently not running.", "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+                if (result == DialogResult.Cancel)
+                    this.Close();
             }
         }
 
@@ -70,9 +78,9 @@ namespace SpreadsheetGUI
         ///  It will then direct the user to the next prompt to 
         ///  open/create a file.
         /// </summary>
-        private void GoToOpenPrompt()
+        public void GoToOpenPrompt()
         {
-            OpenPrompt prompt = new OpenPrompt(IPAddress, PortNum);
+            OpenPrompt prompt = new OpenPrompt(IPAddress, PortNum, model);
 
             this.Hide();
             prompt.ShowDialog();

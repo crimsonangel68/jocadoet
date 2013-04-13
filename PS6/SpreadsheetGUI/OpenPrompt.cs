@@ -21,7 +21,8 @@ namespace SpreadsheetGUI
         /// </summary>
         /// <param name="IPAddress"></param>
         /// <param name="PortNum"></param>
-        public OpenPrompt(String IPAddress, String PortNum)
+        /// <param name="model" ></param>
+        public OpenPrompt(String IPAddress, int PortNum, StartupModel model)
         {
             InitializeComponent();
         }

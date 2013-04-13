@@ -272,7 +272,7 @@
             Partial class for ...
             </summary>
         </member>
-        <member name="M:SpreadsheetGUI.OpenPrompt.#ctor(System.String,System.String)">
+        <member name="M:SpreadsheetGUI.OpenPrompt.#ctor(System.String,System.Int32,SpreadsheetGUI.StartupModel)">
             <summary>
             This method will open a new prompt window, which a user
              will be able to enter in a file to either create a new
@@ -280,6 +280,7 @@
             </summary>
             <param name="IPAddress"></param>
             <param name="PortNum"></param>
+            <param name="model" ></param>
         </member>
         <member name="F:SpreadsheetGUI.OpenPrompt.components">
             <summary>
@@ -297,6 +298,39 @@
             Required method for Designer support - do not modify
             the contents of this method with the code editor.
             </summary>
+        </member>
+        <member name="T:SpreadsheetGUI.StartupModel">
+            <summary>
+            
+            Stuff goes here
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.StartupModel.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.StartupModel.Connect(System.String,System.Int32,System.Action)">
+            <summary>
+            Used to connect the client to the server
+            </summary>
+            <param name="hostname"></param>
+            <param name="port"></param>
+            <param name="callback"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.StartupModel.ConnectReceived(System.String,System.Exception,System.Object)">
+            <summary>
+            Callback method to call the other callback
+            </summary>
+            <param name="s"></param>
+            <param name="e"></param>
+            <param name="payload"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.StartupModel.Receiver(System.String)">
+            <summary>
+            ...
+            </summary>
+            <param name="name"></param>
         </member>
     </members>
 </doc>
