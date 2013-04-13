@@ -19,10 +19,8 @@ namespace SpreadsheetGUI
         ///  will be able to enter in a file to either create a new
         ///  spreadsheet of or join an existing file.
         /// </summary>
-        /// <param name="IPAddress"></param>
-        /// <param name="PortNum"></param>
         /// <param name="model" ></param>
-        public OpenPrompt(String IPAddress, int PortNum, StartupModel model)
+        public OpenPrompt(StartupModel model)
         {
             InitializeComponent();
         }

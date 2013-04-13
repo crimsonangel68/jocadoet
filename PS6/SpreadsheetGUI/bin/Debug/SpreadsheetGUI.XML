@@ -272,14 +272,12 @@
             Partial class for ...
             </summary>
         </member>
-        <member name="M:SpreadsheetGUI.OpenPrompt.#ctor(System.String,System.Int32,SpreadsheetGUI.StartupModel)">
+        <member name="M:SpreadsheetGUI.OpenPrompt.#ctor(SpreadsheetGUI.StartupModel)">
             <summary>
             This method will open a new prompt window, which a user
              will be able to enter in a file to either create a new
              spreadsheet of or join an existing file.
             </summary>
-            <param name="IPAddress"></param>
-            <param name="PortNum"></param>
             <param name="model" ></param>
         </member>
         <member name="F:SpreadsheetGUI.OpenPrompt.components">
@@ -310,13 +308,12 @@
             Constructor
             </summary>
         </member>
-        <member name="M:SpreadsheetGUI.StartupModel.Connect(System.String,System.Int32,System.Action)">
+        <member name="M:SpreadsheetGUI.StartupModel.Connect(System.String,System.Int32)">
             <summary>
             Used to connect the client to the server
             </summary>
             <param name="hostname"></param>
             <param name="port"></param>
-            <param name="callback"></param>
         </member>
         <member name="M:SpreadsheetGUI.StartupModel.ConnectReceived(System.String,System.Exception,System.Object)">
             <summary>
@@ -326,11 +323,15 @@
             <param name="e"></param>
             <param name="payload"></param>
         </member>
-        <member name="M:SpreadsheetGUI.StartupModel.Receiver(System.String)">
+        <member name="E:SpreadsheetGUI.StartupModel.CreateEvent">
             <summary>
-            ...
+            This is an event listener for when the "New" button is pressed.
             </summary>
-            <param name="name"></param>
+        </member>
+        <member name="E:SpreadsheetGUI.StartupModel.JoinEvent">
+            <summary>
+            Ths is an event listener for when the "Join" button is pressed.
+            </summary>
         </member>
     </members>
 </doc>

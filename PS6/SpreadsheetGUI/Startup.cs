@@ -61,8 +61,9 @@ namespace SpreadsheetGUI
                     Int32.TryParse(PortTextBox.Text, out pNum);
                     PortNum = pNum;
 
-                    model.Connect(IPAddress, PortNum, new Action(GoToOpenPrompt));
+                    model.Connect(IPAddress, PortNum);
                     // try to connect to server with open prompt method callback
+                    GoToOpenPrompt();
                 }
             }
             catch (Exception)
@@ -80,7 +81,7 @@ namespace SpreadsheetGUI
         /// </summary>
         public void GoToOpenPrompt()
         {
-            OpenPrompt prompt = new OpenPrompt(IPAddress, PortNum, model);
+            OpenPrompt prompt = new OpenPrompt(model);
 
             this.Hide();
             prompt.ShowDialog();

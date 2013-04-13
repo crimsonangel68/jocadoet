@@ -16,7 +16,15 @@ namespace SpreadsheetGUI
     {
         StringSocket socket;
 
+
+        /// <summary>
+        /// This is an event listener for when the "New" button is pressed.
+        /// </summary>
         public event Action<String> CreateEvent;
+        
+        /// <summary>
+        /// Ths is an event listener for when the "Join" button is pressed.
+        /// </summary>
         public event Action<String> JoinEvent;
 
         /// <summary>
@@ -32,15 +40,14 @@ namespace SpreadsheetGUI
         /// </summary>
         /// <param name="hostname"></param>
         /// <param name="port"></param>
-        /// <param name="callback"></param>
-        public void Connect(String hostname, int port, Action callback)
+        public void Connect(String hostname, int port)
         {
             if (socket == null)
             {
                 // Try to connect to the server.
                 TcpClient client = new TcpClient(hostname, port);
-                socket = new StringSocket(client.Client, UTF8Encoding.Default);
-                socket.BeginReceive(ConnectReceived, callback);
+                socket = new StringSocket(client.Client, UTF8Encoding.UTF8);
+                socket.BeginReceive(ConnectReceived, null);
             }
         }
 
@@ -52,17 +59,7 @@ namespace SpreadsheetGUI
         /// <param name="payload"></param>
         public void ConnectReceived(String s, Exception e, object payload)
         {
-            OpenPrompt p = new OpenPrompt(null, 5, null);
-            ((Action)payload)();
-        }
 
-        /// <summary>
-        /// ...
-        /// </summary>
-        /// <param name="name"></param>
-        public void Receiver(String name)
-        {
-            
         }
     }
 }
