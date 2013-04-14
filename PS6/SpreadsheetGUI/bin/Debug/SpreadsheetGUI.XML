@@ -306,6 +306,36 @@
             </summary>
             <param name="newModel" ></param>
         </member>
+        <member name="M:SpreadsheetGUI.OpenPrompt.NewButton_Click(System.Object,System.EventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.OpenPrompt.JoinButton_Click(System.Object,System.EventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.OpenPrompt.createReceived(System.String,System.Exception,System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="s"></param>
+            <param name="e"></param>
+            <param name="p"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.OpenPrompt.joinReceived(System.String,System.Exception,System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="s"></param>
+            <param name="e"></param>
+            <param name="p"></param>
+        </member>
         <member name="F:SpreadsheetGUI.OpenPrompt.components">
             <summary>
             Required designer variable.
