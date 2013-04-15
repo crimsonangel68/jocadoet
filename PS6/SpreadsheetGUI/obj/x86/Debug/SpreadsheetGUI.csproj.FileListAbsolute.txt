@@ -36,7 +36,6 @@ C:\Users\FieldBaseWin\Documents\Visual Studio 2010\Projects\PS6\SpreadsheetGUI\o
 C:\Users\FieldBaseWin\Documents\Visual Studio 2010\Projects\PS6\SpreadsheetGUI\obj\x86\Debug\GenerateResource.read.1.tlog
 C:\Users\FieldBaseWin\Documents\Visual Studio 2010\Projects\PS6\SpreadsheetGUI\obj\x86\Debug\GenerateResource.write.1.tlog
 C:\Users\FieldBaseWin\Documents\Visual Studio 2010\Projects\PS6\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.XML
-C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.XML
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\SpreadsheetGUI.exe
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\SpreadsheetGUI.pdb
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe
@@ -59,3 +58,4 @@ C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUI\bin\Debug\CustomNet
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUI\bin\Debug\CustomNetworking.xml
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\SpreadsheetGUI.Startup.resources
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\SpreadsheetGUI.OpenPrompt.resources
+C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.XML

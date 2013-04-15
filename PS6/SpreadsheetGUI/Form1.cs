@@ -39,8 +39,6 @@ namespace SpreadsheetGUI
         //-----------------------------------------------------------------------------------Form1
         /// <summary>
         /// Opens a new Window with an empty spreadsheet.
-        /// .
-        /// 32.
         /// 
         /// </summary>
         //public Form1(StringSocket thisSocket, String fileName, String currentVersion)
@@ -454,7 +452,7 @@ namespace SpreadsheetGUI
             updateSelection(spreadsheetPanel1);
         }
 
-        //-----------------------------------------------------------------------------------Form1_Load
+        //-----------------------------------------------------------------------------------Form1_Load <empty>
         /// <summary>
         /// Empty
         /// </summary>
@@ -464,7 +462,7 @@ namespace SpreadsheetGUI
         {
         }
 
-        //-----------------------------------------------------------------------------------spreadsheetspreadsheetpanel11_Load
+        //-----------------------------------------------------------------------------------spreadsheetspreadsheetpanel11_Load <empty>
         /// <summary>
         /// Empty
         /// </summary>
@@ -474,7 +472,7 @@ namespace SpreadsheetGUI
         {
         }
 
-        //-----------------------------------------------------------------------------------openFileDialog_FileOk
+        //-----------------------------------------------------------------------------------openFileDialog_FileOk <empty>
         /// <summary>
         /// Empty
         /// </summary>
@@ -482,11 +480,10 @@ namespace SpreadsheetGUI
         /// <param name="e"></param>
         private void openFileDialog_FileOk(object sender, CancelEventArgs e)
         {
-
         }
 
 
-        //-----------------------------------------------------------------------------------openFileDialog_FileOk
+        //-----------------------------------------------------------------------------------openFileDialog_FileOk <empty>
         /// <summary>
         /// Empty
         /// </summary>

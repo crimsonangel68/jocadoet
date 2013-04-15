@@ -52,8 +52,6 @@
         <member name="M:SpreadsheetGUI.Form1.#ctor">
             <summary>
             Opens a new Window with an empty spreadsheet.
-            .
-            32.
             
             </summary>
         </member>
@@ -192,51 +190,26 @@
             <param name="sender"></param>
             <param name="e"></param>
         </member>
-        <member name="T:SpreadsheetGUI.Properties.Resources">
-            <summary>
-              A strongly-typed resource class, for looking up localized strings, etc.
-            </summary>
-        </member>
-        <member name="P:SpreadsheetGUI.Properties.Resources.ResourceManager">
-            <summary>
-              Returns the cached ResourceManager instance used by this class.
-            </summary>
-        </member>
-        <member name="P:SpreadsheetGUI.Properties.Resources.Culture">
-            <summary>
-              Overrides the current thread's CurrentUICulture property for all
-              resource lookups using this strongly typed resource class.
-            </summary>
-        </member>
-        <member name="T:SpreadsheetGUI.SSModel">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.SSModel.#ctor(SpreadsheetGUI.StartupModel)">
-            <summary>
-            This constructor takes in a connected socket to
-             take care of sending and receiving.
-            </summary>
-            <param name="thisModel"></param>
-        </member>
-        <member name="P:SpreadsheetGUI.SSModel.topModel">
-            <summary>
-            This property contains the parent model that the client is using to
-             connect to the server.
-             
-            Can only be set within this class.
-            </summary>
-        </member>
-        <member name="P:SpreadsheetGUI.SSModel.name">
-            <summary>
-            This property contains the name of the spreadsheet
-             associated with this SSModel.
-            </summary>
-        </member>
         <member name="T:SpreadsheetGUI.Startup">
             <summary>
             This partial class will .....
+            </summary>
+        </member>
+        <member name="F:SpreadsheetGUI.Startup.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.Startup.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:SpreadsheetGUI.Startup.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
             </summary>
         </member>
         <member name="M:SpreadsheetGUI.Startup.#ctor">
@@ -264,23 +237,6 @@
              open/create a file.
             </summary>
         </member>
-        <member name="F:SpreadsheetGUI.Startup.components">
-            <summary>
-            Required designer variable.
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.Startup.Dispose(System.Boolean)">
-            <summary>
-            Clean up any resources being used.
-            </summary>
-            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        </member>
-        <member name="M:SpreadsheetGUI.Startup.InitializeComponent">
-            <summary>
-            Required method for Designer support - do not modify
-            the contents of this method with the code editor.
-            </summary>
-        </member>
         <member name="P:SpreadsheetGUI.Startup.IPAddress">
             <summary>
             This property will keep track of the IP Adress that the
@@ -291,66 +247,6 @@
             <summary>
             This property will keep track of the Port number that was entered
              by the user.
-            </summary>
-        </member>
-        <member name="T:SpreadsheetGUI.OpenPrompt">
-            <summary>
-            Partial class for ...
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.OpenPrompt.#ctor(SpreadsheetGUI.SSModel)">
-            <summary>
-            This method will open a new prompt window, which a user
-             will be able to enter in a file to either create a new
-             spreadsheet of or join an existing file.
-            </summary>
-            <param name="newModel" ></param>
-        </member>
-        <member name="M:SpreadsheetGUI.OpenPrompt.NewButton_Click(System.Object,System.EventArgs)">
-            <summary>
-            
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.OpenPrompt.JoinButton_Click(System.Object,System.EventArgs)">
-            <summary>
-            
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.OpenPrompt.createReceived(System.String,System.Exception,System.Object)">
-            <summary>
-            
-            </summary>
-            <param name="s"></param>
-            <param name="e"></param>
-            <param name="p"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.OpenPrompt.joinReceived(System.String,System.Exception,System.Object)">
-            <summary>
-            
-            </summary>
-            <param name="s"></param>
-            <param name="e"></param>
-            <param name="p"></param>
-        </member>
-        <member name="F:SpreadsheetGUI.OpenPrompt.components">
-            <summary>
-            Required designer variable.
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.OpenPrompt.Dispose(System.Boolean)">
-            <summary>
-            Clean up any resources being used.
-            </summary>
-            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        </member>
-        <member name="M:SpreadsheetGUI.OpenPrompt.InitializeComponent">
-            <summary>
-            Required method for Designer support - do not modify
-            the contents of this method with the code editor.
             </summary>
         </member>
         <member name="T:SpreadsheetGUI.StartupModel">
@@ -385,7 +281,132 @@
         </member>
         <member name="P:SpreadsheetGUI.StartupModel.socket">
             <summary>
+            This property keeps track of the underlying socket that connects
+             the client to the server.
+            </summary>
+        </member>
+        <member name="T:SpreadsheetGUI.SSModel">
+            <summary>
             
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.SSModel.#ctor(SpreadsheetGUI.StartupModel)">
+            <summary>
+            This constructor takes in a connected socket to
+             take care of sending and receiving.
+            </summary>
+            <param name="thisModel"></param>
+        </member>
+        <member name="P:SpreadsheetGUI.SSModel.topModel">
+            <summary>
+            This property contains the parent model that the client is using to
+             connect to the server.
+             
+            Can only be set within this class.
+            </summary>
+        </member>
+        <member name="P:SpreadsheetGUI.SSModel.name">
+            <summary>
+            This property contains the name of the spreadsheet
+             associated with this SSModel.
+            </summary>
+        </member>
+        <member name="T:SpreadsheetGUI.OpenPrompt">
+            <summary>
+            Partial class for dealing with an open prompt window.
+            </summary>
+        </member>
+        <member name="F:SpreadsheetGUI.OpenPrompt.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.OpenPrompt.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:SpreadsheetGUI.OpenPrompt.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.OpenPrompt.#ctor(SpreadsheetGUI.SSModel)">
+            <summary>
+            This method will open a new prompt window, which a user
+             will be able to enter in a file to either create a new
+             spreadsheet of or join an existing file.
+            </summary>
+            <param name="newModel" ></param>
+        </member>
+        <member name="M:SpreadsheetGUI.OpenPrompt.NewButton_Click(System.Object,System.EventArgs)">
+            <summary>
+            This method is for when the "New" button is clicked in the GUI.
+            
+            It will send the appropiate message to the client, and begin receiving
+             with the correct callback method.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.OpenPrompt.JoinButton_Click(System.Object,System.EventArgs)">
+            <summary>
+            This method is for when the "Join" button is clicked in the GUI.
+            
+            It will send the appropiate message to the server and begin receiving
+             with the correct callback.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.OpenPrompt.createReceived(System.String,System.Exception,System.Object)">
+            <summary>
+            This is the callback method for the "Create" message.
+            
+            This will report to the user whether they will be able to
+             create a new spreadsheet, or if there's an error that
+             occurred.
+             
+            If there was an error it reports the error to the user, if
+             the connection was successful it will report to the user the 
+             name and spreadsheet.
+            </summary>
+            <param name="s"></param>
+            <param name="e"></param>
+            <param name="p"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.OpenPrompt.joinReceived(System.String,System.Exception,System.Object)">
+            <summary>
+            This method is the callback for the "Join" message.
+            
+            This will report to the user whether they will be able to
+             join a spreadsheet, or if there's an error that
+             occurred.
+             
+            If there was an error it reports the error to the user, if
+             the connection was successful it will report to the user the 
+             name and spreadsheet.
+            </summary>
+            <param name="s"></param>
+            <param name="e"></param>
+            <param name="p"></param>
+        </member>
+        <member name="T:SpreadsheetGUI.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:SpreadsheetGUI.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:SpreadsheetGUI.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
             </summary>
         </member>
     </members>

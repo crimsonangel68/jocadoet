@@ -26,21 +26,10 @@ namespace SpreadsheetGUI
     public class StartupModel
     {
         /// <summary>
-        /// 
+        /// This property keeps track of the underlying socket that connects
+        ///  the client to the server.
         /// </summary>
         public StringSocket socket { get; private set; }
-
-        /* // maybe uneccessary stuff....
-        /// <summary>
-        /// This is an event listener for when the "New" button is pressed.
-        /// </summary>
-        public event Action<String> CreateEvent;
-        
-        /// <summary>
-        /// Ths is an event listener for when the "Join" button is pressed.
-        /// </summary>
-        public event Action<String> JoinEvent;
-        */
 
         private List<SSModel> modelList;
         
