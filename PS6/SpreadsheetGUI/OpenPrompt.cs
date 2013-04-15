@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace SpreadsheetGUI
 {
@@ -93,6 +94,9 @@ namespace SpreadsheetGUI
             // CREATE SP OK/FAIL LF
             // Name:name LF
             // (Passowrd:password LF) / (message LF)
+
+            string pattern = @"^[:-\n] $";
+            string[] tokens = Regex.Split(s, @"^");
             
             // Check to see if the message sent back failed
             if (s.Contains("FAIL"))
