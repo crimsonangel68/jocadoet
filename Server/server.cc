@@ -33,10 +33,22 @@ class tcp_connection
 
 		void start()
 		{
-			message_ = make_daytime_string();
+			message_ = "You have connected the socket.";
+			std::cout << "Starting read from socket" << std::endl;
+
+			boost::asio::async_read_until(socket_, buffer, ' ',
+				boost::bind(&tcp_connection::handle_read, this,
+					boost::asio::placeholders::error,
+					boost::asio::placeholders::bytes_transferred));
 
 			boost::asio::async_write(socket_, boost::asio::buffer(message_),
 					boost::bind(&tcp_connection::handle_write, shared_from_this()));
+		}
+
+		void handle_read(const boost::system::error_code& error,
+			size_t bytes_transferred)
+		{
+			std::cout <<"hello billy"<<std::endl;
 		}
 
 	private:
@@ -49,10 +61,10 @@ class tcp_connection
 		void handle_write()
 		{
 			std::cout << "inside handle write" << std::endl;
-						
 		}
 
 		tcp::socket socket_;
+		boost::asio::streambuf buffer;
 		std::string message_;
 };
 
