@@ -1,8 +1,8 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <string.h>
+#include <string>
+#include <iostream>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -43,13 +43,22 @@ int main(int argc, char *argv[])
 	if (connect(sockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0) 
 		error("ERROR connecting");
  	
-	int count = 5;
 	while(1)
 	{
 
 		printf("Please enter the message: ");
 		bzero(buffer,256);
 		fgets(buffer,255,stdin);
+		std::string cmd(buffer);
+		std::cout << cmd << std::endl;
+		if(cmd == "close\n")
+		{
+			n = write(sockfd,buffer,strlen(buffer));
+			if(n<0)
+				error("ERROR writing to socket");
+			close(sockfd);
+			return 0;
+		}
 		n = write(sockfd,buffer,strlen(buffer));
 		if (n < 0) 
 			error("ERROR writing to socket");
@@ -58,7 +67,6 @@ int main(int argc, char *argv[])
 		if (n < 0) 
 			error("ERROR reading from socket");
 		printf("%s\n",buffer);
-		//count--;
 	}
 
 	close(sockfd);
