@@ -29,6 +29,11 @@ namespace SpreadsheetGUI
             model = newModel;
         } // End of "OpenPrompt" method .......................................................................................
 
+        private void OpenPrompt_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            model.topModel.socket.CloseSocket();
+        }
+
         /// <summary>
         /// This method is for when the "New" button is clicked in the GUI.
         /// 

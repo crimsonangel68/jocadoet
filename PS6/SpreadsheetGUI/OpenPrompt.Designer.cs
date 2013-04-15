@@ -202,6 +202,7 @@
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Open a File";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OpenPrompt_FormClosing);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
