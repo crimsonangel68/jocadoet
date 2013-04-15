@@ -43,10 +43,13 @@ class tcp_connection
 		tcp_connection(boost::asio::io_service& io_service)
 			: socket_(io_service)
 		{
+			std::cout << "inside tcp_connection" << std::endl;
 		}
 
 		void handle_write()
 		{
+			std::cout << "inside handle write" << std::endl;
+						
 		}
 
 		tcp::socket socket_;
