@@ -30,6 +30,7 @@ namespace SpreadsheetGUI
         ///  the client to the server.
         /// </summary>
         public StringSocket socket { get; private set; }
+        
 
         private List<SSModel> modelList;
         

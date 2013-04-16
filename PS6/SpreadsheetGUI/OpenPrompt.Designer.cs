@@ -97,7 +97,7 @@
             this.textBox2.Size = new System.Drawing.Size(262, 49);
             this.textBox2.TabIndex = 0;
             this.textBox2.TabStop = false;
-            this.textBox2.Text = "Please provide a file name to create  a new sheet or to join an existing sheet";
+            this.textBox2.Text = "Please provide a file name \r\n";
             this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // tableLayoutPanel1
@@ -181,7 +181,7 @@
             this.textBox3.Size = new System.Drawing.Size(262, 44);
             this.textBox3.TabIndex = 0;
             this.textBox3.TabStop = false;
-            this.textBox3.Text = "Please provide the password that is/will be associated with this file name";
+            this.textBox3.Text = "Please provide a password\r\n";
             this.textBox3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // PasswordTextBox

@@ -20,7 +20,7 @@ namespace SpreadsheetGUI
         ///  
         /// Can only be set within this class.
         /// </summary>
-        public StartupModel topModel { get; private set;}
+        public StartupModel startupModel { get; private set;}
         
         /// <summary>
         /// This property contains the name of the spreadsheet
@@ -43,7 +43,7 @@ namespace SpreadsheetGUI
         /// <param name="thisModel"></param>
         public SSModel(StartupModel thisModel) 
         {
-          topModel = thisModel;
+          startupModel = thisModel;
         }
     }
 }

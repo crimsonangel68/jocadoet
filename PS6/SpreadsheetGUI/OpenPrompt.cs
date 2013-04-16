@@ -16,6 +16,7 @@ namespace SpreadsheetGUI
     public partial class OpenPrompt : Form
     {
         SSModel model;
+        bool FAILmessage;
         
         /// <summary>
         /// This method will open a new prompt window, which a user
@@ -28,11 +29,12 @@ namespace SpreadsheetGUI
             // Initialize the window and store the model that was passed in.
             InitializeComponent();
             model = newModel;
+            FAILmessage = false;
         } // End of "OpenPrompt" method .......................................................................................
 
         private void OpenPrompt_FormClosing(object sender, FormClosingEventArgs e)
         {
-            model.topModel.socket.CloseSocket();
+            model.startupModel.socket.CloseSocket();
         }
 
         /// <summary>
@@ -51,8 +53,8 @@ namespace SpreadsheetGUI
             message += "Password:" + PasswordTextBox.Text + "\n";
             
             // Send the message and then begin receiving
-            model.topModel.socket.BeginSend(message, (f, p) => { }, 0);
-            model.topModel.socket.BeginReceive(createReceived, 0);
+            model.startupModel.socket.BeginSend(message, (f, p) => { }, 0);
+            model.startupModel.socket.BeginReceive(createReceived, 0);
         } // End of "NewButton_Click" method .............................................................................
 
         /// <summary>
@@ -71,8 +73,8 @@ namespace SpreadsheetGUI
             message += "Password:" + PasswordTextBox.Text + "\n";
 
             // Send the message to the server and then begin receiving
-            model.topModel.socket.BeginSend(message, (f, p) => { }, 0);
-            model.topModel.socket.BeginReceive(joinReceived, 0);
+            model.startupModel.socket.BeginSend(message, (f, p) => { }, 0);
+            model.startupModel.socket.BeginReceive(joinReceived, 0);
         } // End of "JoinButton_Click" method .....................................................................................................
 
         /// <summary>
@@ -93,33 +95,48 @@ namespace SpreadsheetGUI
         {
             // CREATE SP OK/FAIL LF
             // Name:name LF
-            // (Passowrd:password LF) / (message LF)
+            // (Password:password LF) / (message LF)
 
-            string pattern = @"^[:-\n] $";
-            string[] tokens = Regex.Split(s, @"^");
+            //string pattern = @"^[:-\n] $";
+            //string[] tokens = Regex.Split(s, @"^");
             
+            string password;
+            //MessageBox.Show(s);
+
+            if (s.Contains("CREATE"))
+            {
+                if (s.Contains("FAIL"))
+                {
+                    FAILmessage = true;
+                }
+                // Continue receiving on the socket
+                model.startupModel.socket.BeginReceive(createReceived, null);
+            }
+            else if (s.Contains("Name:"))
+            {
+                model.name = s.Substring(5);
+                // Continue receiving on the socket
+                model.startupModel.socket.BeginReceive(createReceived, null);
+            }
             // Check to see if the message sent back failed
-            if (s.Contains("FAIL"))
+            else if (FAILmessage)
             {
                 // Report to the user the message sent from the server
                 DialogResult result = MessageBox.Show(s, "ERROR", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
-                
+
                 // If the user decides to cancel, disconnect the socket and close the prompts
                 if (result == DialogResult.Cancel)
                 {
-                    model.topModel.socket.CloseSocket();
-                    this.Close();
+                    model.startupModel.socket.CloseSocket();
                 }
             }
-            // If the the spreadsheet can be created show a dialog box to display
-            //  the name of the spreadsheet as well as the password associated with it.
-            else
+            else if (s.Contains("Password:"))
             {
-                // Display information
-                MessageBox.Show(s, "Confirmation");
-                
-                // Go open the file
+                password = s.Substring(9);
+                MessageBox.Show("Spreadsheet name: " + model.name + "\nSpreadsheet password: " + password);
+                // OPEN FILE
             }
+
         } // End of "createReceived" method ............................................................................................................
 
         /// <summary>
@@ -144,40 +161,49 @@ namespace SpreadsheetGUI
             // (Length:length LF) / 
             // (xml LF) / 
 
-            // Check to see if the message was a fail
-            if (s.Contains("FAIL"))
+            int length;
+            if (s.Contains("JOIN"))
             {
-                // Display the error message to the user
+                if (s.Contains("FAIL"))
+                {
+                    FAILmessage = true;
+                }
+                // Continue receiving on the socket
+                model.startupModel.socket.BeginReceive(joinReceived, null);
+            }
+            else if (s.Contains("Name:"))
+            {
+                model.name = s.Substring(5);
+                // Continue receiving on the socket
+                model.startupModel.socket.BeginReceive(joinReceived, null);
+            }
+            // Check to see if the message sent back failed
+            else if (FAILmessage)
+            {
+                // Report to the user the message sent from the server
                 DialogResult result = MessageBox.Show(s, "ERROR", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
-                
-                // If the user clicks cancel, disconnect the socket and close the prompts
+
+                // If the user decides to cancel, disconnect the socket and close the prompts
                 if (result == DialogResult.Cancel)
                 {
-                    model.topModel.socket.CloseSocket();
-                    this.Close();
+                    model.startupModel.socket.CloseSocket();
                 }
             }
-
-            // If the message was successful, display the name of the spreadsheet
+            else if (s.Contains("Version:"))
+            {
+                // FIGURE OUT HOW TO SET/GET VERSION
+                // Continue receiving on the socket
+                model.startupModel.socket.BeginReceive(joinReceived, null);
+            }
+            else if (s.Contains("Length:"))
+            {
+                Int32.TryParse(s.Substring(7), out length);
+                // Continue receiving on the socket
+                model.startupModel.socket.BeginReceive(joinReceived, null);
+            }
             else
             {
-                // Display message and ask user to confirm opening the file
-                DialogResult result = MessageBox.Show(s, "Confirmation", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-                
-                // If the user clicked cancel, disconnect the socket and close the prompts
-                if (result == DialogResult.Cancel)
-                {
-                    model.topModel.socket.CloseSocket();
-                    this.Close();
-                }
-
-                // If the user clicked yes, display the file and close this window
-                else if (result == DialogResult.Yes)
-                {
-                    // open a spreadsheet
-                    // fill the spreadsheet with the saved data
-                    // close this prompt
-                }
+                // OPEN XML FILE
             }
         } // End of "JoinReceived" method ..........................................................................................
     }

@@ -313,7 +313,7 @@
             </summary>
             <param name="thisModel"></param>
         </member>
-        <member name="P:SpreadsheetGUI.SSModel.topModel">
+        <member name="P:SpreadsheetGUI.SSModel.startupModel">
             <summary>
             This property contains the parent model that the client is using to
              connect to the server.
