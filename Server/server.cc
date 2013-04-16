@@ -1,118 +1,68 @@
-#include <ctime>
 #include <iostream>
-#include <string>
-#include <boost/bind.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/enable_shared_from_this.hpp>
-#include <boost/asio.hpp>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h> 
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <boost/thread.hpp>
+#include <boost/date_time.hpp>
 
-using boost::asio::ip::tcp;
-
-std::string make_daytime_string()
+void error(const char *msg)
 {
-	using namespace std; // For time_t, time and ctime;
-	time_t now = time(0);
-	return ctime(&now);
+	perror(msg);
+	exit(1);
 }
 
-class tcp_connection
-: public boost::enable_shared_from_this<tcp_connection>
+void connection()
 {
-	public:
-		typedef boost::shared_ptr<tcp_connection> pointer;
+	boost::posix_time::seconds workTime(3);
 
-		static pointer create(boost::asio::io_service& io_service)
-		{
-			return pointer(new tcp_connection(io_service));
-		}
+	std::cout << "Worker: running" << std::endl;
 
-		tcp::socket& socket()
-		{
-			return socket_;
-		}
+	boost::this_thread::sleep(workTime);
 
-		void start()
-		{
-			message_ = "You have connected the socket.";
-			std::cout << "Starting read from socket" << std::endl;
-
-			boost::asio::async_read_until(socket_, buffer, ' ',
-				boost::bind(&tcp_connection::handle_read, this,
-					boost::asio::placeholders::error,
-					boost::asio::placeholders::bytes_transferred));
-
-			boost::asio::async_write(socket_, boost::asio::buffer(message_),
-					boost::bind(&tcp_connection::handle_write, shared_from_this()));
-		}
-
-		void handle_read(const boost::system::error_code& error,
-			size_t bytes_transferred)
-		{
-			std::cout <<"hello billy"<<std::endl;
-		}
-
-	private:
-		tcp_connection(boost::asio::io_service& io_service)
-			: socket_(io_service)
-		{
-			std::cout << "inside tcp_connection" << std::endl;
-		}
-
-		void handle_write()
-		{
-			std::cout << "inside handle write" << std::endl;
-		}
-
-		tcp::socket socket_;
-		boost::asio::streambuf buffer;
-		std::string message_;
-};
-
-class tcp_server
-{
-	public:
-		tcp_server(boost::asio::io_service& io_service)
-			: acceptor_(io_service, tcp::endpoint(tcp::v4(), 1984))
-		{
-			start_accept();
-		}
-
-	private:
-		void start_accept()
-		{
-			tcp_connection::pointer new_connection =
-				tcp_connection::create(acceptor_.io_service());
-
-			acceptor_.async_accept(new_connection->socket(),
-					boost::bind(&tcp_server::handle_accept, this, new_connection,
-						boost::asio::placeholders::error));
-		}
-
-		void handle_accept(tcp_connection::pointer new_connection,
-				const boost::system::error_code& error)
-		{
-			if (!error)
-			{
-				new_connection->start();
-				start_accept();
-			}
-		}
-
-		tcp::acceptor acceptor_;
-};
+	std::cout << "worker: finished" << std::endl;
+}
 
 int main()
 {
-	try
+	int sockfd, newsockfd, portno;
+	socklen_t clilen;
+	char buffer[256];
+	struct sockaddr_in serv_addr, cli_addr;
+	int n;
+	sockfd = socket(AF_INET, SOCK_STREAM, 0);
+	if (sockfd < 0) 
+		error("ERROR opening socket");
+	bzero((char *) &serv_addr, sizeof(serv_addr));
+	portno = 1984; 
+	serv_addr.sin_family = AF_INET;
+	serv_addr.sin_addr.s_addr = INADDR_ANY;
+	serv_addr.sin_port = htons(portno);
+	if (bind(sockfd, (struct sockaddr *) &serv_addr,
+				sizeof(serv_addr)) < 0) 
+		error("ERROR on binding");
+	//here we should be listening continuously
+	while(1)
 	{
-		boost::asio::io_service io_service;
-		tcp_server server(io_service);
-		io_service.run();
-	}
-	catch (std::exception& e)
-	{
-		std::cerr << e.what() << std::endl;
-	}
+		listen(sockfd,5);
 
+		clilen = sizeof(cli_addr);
+		newsockfd = accept(sockfd, 
+				(struct sockaddr *) &cli_addr, 
+				&clilen);
+		if (newsockfd < 0) 
+			error("ERROR on accept");
+		bzero(buffer,256);
+		n = read(newsockfd,buffer,255);
+		if (n < 0) error("ERROR reading from socket");
+		printf("Here is the message: %s\n",buffer);
+		n = write(newsockfd,"I got your message",18);
+		if (n < 0) error("ERROR writing to socket");
+	}
+	close(newsockfd);
+	close(sockfd);
 	return 0;
 }
