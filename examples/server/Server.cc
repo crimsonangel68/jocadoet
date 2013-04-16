@@ -111,10 +111,10 @@ int main(int argc, char *argv[])
 				&clilen);
 		if (newsockfd < 0) 
 			error("ERROR on accept");
-
+		
 		while(1)
 		{
-
+		  
 		/* Note that we would only get to this point 
 		 * after a client has successfully connected to our server.  
 		 * This code initializes the buffer using the bzero() function, 
