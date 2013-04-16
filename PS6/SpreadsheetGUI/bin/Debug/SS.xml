@@ -4,19 +4,9 @@
         <name>SS</name>
     </assembly>
     <members>
-        <member name="T:SS.CircularException">
+        <member name="T:SS.Spreadsheet">
             <summary>
-            Thrown to indicate that a change to a cell will cause a circular dependency.
-            </summary>
-        </member>
-        <member name="T:SS.InvalidNameException">
-            <summary>
-            Thrown to indicate that a name parameter was either null or invalid.
-            </summary>
-        </member>
-        <member name="T:SS.SpreadsheetReadWriteException">
-            <summary>
-            Thrown to indicate that a read or write attempt has failed.
+            A representation of a Spreadsheet.
             </summary>
         </member>
         <member name="T:SS.AbstractSpreadsheet">
@@ -285,11 +275,6 @@
             Version information
             </summary>
         </member>
-        <member name="T:SS.Spreadsheet">
-            <summary>
-            A representation of a Spreadsheet.
-            </summary>
-        </member>
         <member name="M:SS.Spreadsheet.#ctor">
             <summary>
             Creates a new Spreadsheet object.
@@ -510,6 +495,21 @@
         <member name="P:SS.Cell.CellValue">
             <summary>
             Value of the cell
+            </summary>
+        </member>
+        <member name="T:SS.CircularException">
+            <summary>
+            Thrown to indicate that a change to a cell will cause a circular dependency.
+            </summary>
+        </member>
+        <member name="T:SS.InvalidNameException">
+            <summary>
+            Thrown to indicate that a name parameter was either null or invalid.
+            </summary>
+        </member>
+        <member name="T:SS.SpreadsheetReadWriteException">
+            <summary>
+            Thrown to indicate that a read or write attempt has failed.
             </summary>
         </member>
     </members>

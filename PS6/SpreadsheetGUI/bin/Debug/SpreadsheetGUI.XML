@@ -4,101 +4,6 @@
         <name>SpreadsheetGUI</name>
     </assembly>
     <members>
-        <member name="T:SpreadsheetGUI.Startup">
-            <summary>
-            This partial class will .....
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.Startup.#ctor">
-            <summary>
-             This is the constructor for the startup method.
-             
-            It will create a new socket to connect to the provided
-             IP address on the specified port #.  It will then pass
-             along the socket to the OPEN prompt, where the user will
-             specify the file name and whether they will create a new
-             file, or join an existing file.
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.Startup.ConnectButton_Click(System.Object,System.EventArgs)">
-            <summary>
-            This method will connect the client to the server. The
-             user will then be directed to the next prompt, the open
-             prompt.
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.Startup.GoToOpenPrompt(SpreadsheetGUI.SSModel)">
-            <summary>
-            This method is the callback for connecting to the server.
-             It will then direct the user to the next prompt to 
-             open/create a file.
-            </summary>
-        </member>
-        <member name="F:SpreadsheetGUI.Startup.components">
-            <summary>
-            Required designer variable.
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.Startup.Dispose(System.Boolean)">
-            <summary>
-            Clean up any resources being used.
-            </summary>
-            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        </member>
-        <member name="M:SpreadsheetGUI.Startup.InitializeComponent">
-            <summary>
-            Required method for Designer support - do not modify
-            the contents of this method with the code editor.
-            </summary>
-        </member>
-        <member name="P:SpreadsheetGUI.Startup.IPAddress">
-            <summary>
-            This property will keep track of the IP Adress that the
-             user puts in.
-            </summary>
-        </member>
-        <member name="P:SpreadsheetGUI.Startup.PortNum">
-            <summary>
-            This property will keep track of the Port number that was entered
-             by the user.
-            </summary>
-        </member>
-        <member name="T:SpreadsheetGUI.StartupModel">
-            <summary>
-            
-            This is the main model of the Spreadsheet connection.
-            
-            It will keep track of all of the SSModels that are open, where
-            each SSModel represents a new spreadsheet that's open.  This will
-            help to keep track of different spreadsheets open by one user.
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.StartupModel.#ctor">
-            <summary>
-            Constructor for creating a new StartupModel.
-            
-            It will intialize the neccessary member variables.
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.StartupModel.Connect(System.String,System.Int32)">
-            <summary>
-            Used to connect the client to the server
-            </summary>
-            <param name="hostname"></param>
-            <param name="port"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.StartupModel.newSSModel">
-            <summary>
-            This method will be called to get a new SSModel to follow a spreadsheet.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="P:SpreadsheetGUI.StartupModel.socket">
-            <summary>
-            This property keeps track of the underlying socket that connects
-             the client to the server.
-            </summary>
-        </member>
         <member name="M:SpreadsheetGUI.SpreadsheetApplicationContext.#ctor">
             <summary>
             Private constructor for singleton pattern.
@@ -119,22 +24,6 @@
         <member name="M:SpreadsheetGUI.Program.Main(System.String[])">
             <summary>
             The main entry point for the application.
-            </summary>
-        </member>
-        <member name="T:SpreadsheetGUI.Properties.Resources">
-            <summary>
-              A strongly-typed resource class, for looking up localized strings, etc.
-            </summary>
-        </member>
-        <member name="P:SpreadsheetGUI.Properties.Resources.ResourceManager">
-            <summary>
-              Returns the cached ResourceManager instance used by this class.
-            </summary>
-        </member>
-        <member name="P:SpreadsheetGUI.Properties.Resources.Culture">
-            <summary>
-              Overrides the current thread's CurrentUICulture property for all
-              resource lookups using this strongly typed resource class.
             </summary>
         </member>
         <member name="T:SpreadsheetGUI.Form1">
@@ -301,6 +190,101 @@
             <param name="sender"></param>
             <param name="e"></param>
         </member>
+        <member name="T:SpreadsheetGUI.Startup">
+            <summary>
+            This partial class will .....
+            </summary>
+        </member>
+        <member name="F:SpreadsheetGUI.Startup.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.Startup.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:SpreadsheetGUI.Startup.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.Startup.#ctor">
+            <summary>
+             This is the constructor for the startup method.
+             
+            It will create a new socket to connect to the provided
+             IP address on the specified port #.  It will then pass
+             along the socket to the OPEN prompt, where the user will
+             specify the file name and whether they will create a new
+             file, or join an existing file.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.Startup.ConnectButton_Click(System.Object,System.EventArgs)">
+            <summary>
+            This method will connect the client to the server. The
+             user will then be directed to the next prompt, the open
+             prompt.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.Startup.GoToOpenPrompt(SpreadsheetGUI.SSModel)">
+            <summary>
+            This method is the callback for connecting to the server.
+             It will then direct the user to the next prompt to 
+             open/create a file.
+            </summary>
+        </member>
+        <member name="P:SpreadsheetGUI.Startup.IPAddress">
+            <summary>
+            This property will keep track of the IP Adress that the
+             user puts in.
+            </summary>
+        </member>
+        <member name="P:SpreadsheetGUI.Startup.PortNum">
+            <summary>
+            This property will keep track of the Port number that was entered
+             by the user.
+            </summary>
+        </member>
+        <member name="T:SpreadsheetGUI.StartupModel">
+            <summary>
+            
+            This is the main model of the Spreadsheet connection.
+            
+            It will keep track of all of the SSModels that are open, where
+            each SSModel represents a new spreadsheet that's open.  This will
+            help to keep track of different spreadsheets open by one user.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.StartupModel.#ctor">
+            <summary>
+            Constructor for creating a new StartupModel.
+            
+            It will intialize the neccessary member variables.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.StartupModel.Connect(System.String,System.Int32)">
+            <summary>
+            Used to connect the client to the server
+            </summary>
+            <param name="hostname"></param>
+            <param name="port"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.StartupModel.newSSModel">
+            <summary>
+            This method will be called to get a new SSModel to follow a spreadsheet.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:SpreadsheetGUI.StartupModel.socket">
+            <summary>
+            This property keeps track of the underlying socket that connects
+             the client to the server.
+            </summary>
+        </member>
         <member name="T:SpreadsheetGUI.SSModel">
             <summary>
             
@@ -330,6 +314,23 @@
         <member name="T:SpreadsheetGUI.OpenPrompt">
             <summary>
             Partial class for dealing with an open prompt window.
+            </summary>
+        </member>
+        <member name="F:SpreadsheetGUI.OpenPrompt.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.OpenPrompt.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:SpreadsheetGUI.OpenPrompt.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
             </summary>
         </member>
         <member name="M:SpreadsheetGUI.OpenPrompt.#ctor(SpreadsheetGUI.SSModel)">
@@ -392,21 +393,20 @@
             <param name="e"></param>
             <param name="p"></param>
         </member>
-        <member name="F:SpreadsheetGUI.OpenPrompt.components">
+        <member name="T:SpreadsheetGUI.Properties.Resources">
             <summary>
-            Required designer variable.
+              A strongly-typed resource class, for looking up localized strings, etc.
             </summary>
         </member>
-        <member name="M:SpreadsheetGUI.OpenPrompt.Dispose(System.Boolean)">
+        <member name="P:SpreadsheetGUI.Properties.Resources.ResourceManager">
             <summary>
-            Clean up any resources being used.
+              Returns the cached ResourceManager instance used by this class.
             </summary>
-            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         </member>
-        <member name="M:SpreadsheetGUI.OpenPrompt.InitializeComponent">
+        <member name="P:SpreadsheetGUI.Properties.Resources.Culture">
             <summary>
-            Required method for Designer support - do not modify
-            the contents of this method with the code editor.
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
             </summary>
         </member>
     </members>

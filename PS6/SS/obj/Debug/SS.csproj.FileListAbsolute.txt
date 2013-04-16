@@ -51,3 +51,4 @@ C:\msysgit\jocadoet\jocadoet\PS6\SS\bin\Debug\SpreadSheetUtilities.xml
 C:\msysgit\jocadoet\jocadoet\PS6\SS\obj\Debug\ResolveAssemblyReference.cache
 C:\msysgit\jocadoet\jocadoet\PS6\SS\obj\Debug\SS.dll
 C:\msysgit\jocadoet\jocadoet\PS6\SS\obj\Debug\SS.pdb
+C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SS\bin\Debug\SS.XML
