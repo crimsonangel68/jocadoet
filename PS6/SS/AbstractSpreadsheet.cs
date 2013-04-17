@@ -126,7 +126,7 @@ namespace SS
         /// <summary>
         /// Version information
         /// </summary>
-        public string Version { get; protected set; }
+        public string Version { get; set; }
 
         // ADDED FOR PS5
         /// <summary>

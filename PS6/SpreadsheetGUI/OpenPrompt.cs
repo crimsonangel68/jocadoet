@@ -7,6 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using CustomNetworking;
+using System.Net;
+using System.Net.Sockets;
 
 namespace SpreadsheetGUI
 {
@@ -15,26 +18,49 @@ namespace SpreadsheetGUI
     /// </summary>
     public partial class OpenPrompt : Form
     {
-        SSModel model;
-        bool FAILmessage;
-        
+        private String name;
+        private bool FAILmessage;
+        StringSocket socket;
+        private String IPAddress;
+
         /// <summary>
         /// This method will open a new prompt window, which a user
         ///  will be able to enter in a file to either create a new
         ///  spreadsheet of or join an existing file.
         /// </summary>
-        /// <param name="newModel" ></param>
-        public OpenPrompt(SSModel newModel)
+        public OpenPrompt()
         {
             // Initialize the window and store the model that was passed in.
             InitializeComponent();
-            model = newModel;
             FAILmessage = false;
+            socket = null;
         } // End of "OpenPrompt" method .......................................................................................
 
+        /// <summary>
+        /// Used to connect the client to the server
+        /// </summary>
+        /// <param name="hostname"></param>
+        /// <param name="port"></param>
+        public void Connect(String hostname)
+        {
+            // If the socket has been initialized, create a connection
+            if (socket == null)
+            {
+                // Try to connect to the server.
+                TcpClient client = new TcpClient(hostname, 1984);
+                socket = new StringSocket(client.Client, UTF8Encoding.UTF8);
+                IPAddress = hostname;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OpenPrompt_FormClosing(object sender, FormClosingEventArgs e)
         {
-            model.startupModel.socket.CloseSocket();
+            socket.CloseSocket();
         }
 
         /// <summary>
@@ -53,8 +79,8 @@ namespace SpreadsheetGUI
             message += "Password:" + PasswordTextBox.Text + "\n";
             
             // Send the message and then begin receiving
-            model.startupModel.socket.BeginSend(message, (f, p) => { }, 0);
-            model.startupModel.socket.BeginReceive(createReceived, 0);
+            socket.BeginSend(message, (f, p) => { }, 0);
+            socket.BeginReceive(createReceived, 0);
         } // End of "NewButton_Click" method .............................................................................
 
         /// <summary>
@@ -73,8 +99,8 @@ namespace SpreadsheetGUI
             message += "Password:" + PasswordTextBox.Text + "\n";
 
             // Send the message to the server and then begin receiving
-            model.startupModel.socket.BeginSend(message, (f, p) => { }, 0);
-            model.startupModel.socket.BeginReceive(joinReceived, 0);
+            socket.BeginSend(message, (f, p) => { }, 0);
+            socket.BeginReceive(joinReceived, 0);
         } // End of "JoinButton_Click" method .....................................................................................................
 
         /// <summary>
@@ -101,8 +127,7 @@ namespace SpreadsheetGUI
             //string[] tokens = Regex.Split(s, @"^");
             
             string password;
-            //MessageBox.Show(s);
-
+            
             if (s.Contains("CREATE"))
             {
                 if (s.Contains("FAIL"))
@@ -110,13 +135,13 @@ namespace SpreadsheetGUI
                     FAILmessage = true;
                 }
                 // Continue receiving on the socket
-                model.startupModel.socket.BeginReceive(createReceived, null);
+                socket.BeginReceive(createReceived, null);
             }
             else if (s.Contains("Name:"))
             {
-                model.name = s.Substring(5);
+                name = s.Substring(5);
                 // Continue receiving on the socket
-                model.startupModel.socket.BeginReceive(createReceived, null);
+                socket.BeginReceive(createReceived, null);
             }
             // Check to see if the message sent back failed
             else if (FAILmessage)
@@ -127,14 +152,29 @@ namespace SpreadsheetGUI
                 // If the user decides to cancel, disconnect the socket and close the prompts
                 if (result == DialogResult.Cancel)
                 {
-                    model.startupModel.socket.CloseSocket();
+                    socket.CloseSocket();
                 }
             }
+            // If the string contains Password:, we know that we have completed a successful transmission
             else if (s.Contains("Password:"))
             {
+                // We show the password returned from the server, along with the name of the spreadsheet returned from the server.
+                //  We then ask for confirmation on whether or not they want to join the specified spreadsheet.
                 password = s.Substring(9);
-                MessageBox.Show("Spreadsheet name: " + model.name + "\nSpreadsheet password: " + password);
-                // OPEN FILE
+                DialogResult result = MessageBox.Show("Spreadsheet name: " + name + "\nSpreadsheet password: " + password, "Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+
+                // If the user wants to proceed, send a join request
+                if (result == DialogResult.OK)
+                {
+                    // Crreate the correct message according to protocol
+                    String message = "JOIN\n";
+                    message += "Name:" + FileNameTextBox.Text + "\n";
+                    message += "Password:" + PasswordTextBox.Text + "\n";
+
+                    // Send the message to the server and then begin receiving
+                    socket.BeginSend(message, (f, q) => { }, 0);
+                    socket.BeginReceive(joinReceived, 0);
+                }
             }
 
         } // End of "createReceived" method ............................................................................................................
@@ -169,13 +209,13 @@ namespace SpreadsheetGUI
                     FAILmessage = true;
                 }
                 // Continue receiving on the socket
-                model.startupModel.socket.BeginReceive(joinReceived, null);
+                socket.BeginReceive(joinReceived, null);
             }
             else if (s.Contains("Name:"))
             {
-                model.name = s.Substring(5);
+                name = s.Substring(5);
                 // Continue receiving on the socket
-                model.startupModel.socket.BeginReceive(joinReceived, null);
+                socket.BeginReceive(joinReceived, null);
             }
             // Check to see if the message sent back failed
             else if (FAILmessage)
@@ -186,24 +226,26 @@ namespace SpreadsheetGUI
                 // If the user decides to cancel, disconnect the socket and close the prompts
                 if (result == DialogResult.Cancel)
                 {
-                    model.startupModel.socket.CloseSocket();
+                    socket.CloseSocket();
                 }
             }
             else if (s.Contains("Version:"))
             {
                 // FIGURE OUT HOW TO SET/GET VERSION
                 // Continue receiving on the socket
-                model.startupModel.socket.BeginReceive(joinReceived, null);
+                socket.BeginReceive(joinReceived, null);
             }
             else if (s.Contains("Length:"))
             {
                 Int32.TryParse(s.Substring(7), out length);
                 // Continue receiving on the socket
-                model.startupModel.socket.BeginReceive(joinReceived, null);
+                socket.BeginReceive(joinReceived, null);
             }
             else
             {
-                // OPEN XML FILE
+                //Form1 spreadsheet = new Form1(xml);
+
+                // OPEN XML FILE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             }
         } // End of "JoinReceived" method ..........................................................................................
     }

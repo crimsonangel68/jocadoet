@@ -14,21 +14,7 @@ namespace SpreadsheetGUI
     /// This partial class will .....
     /// </summary>
     public partial class Startup : Form
-    {
-        StartupModel model;
-
-        /// <summary>
-        /// This property will keep track of the IP Adress that the
-        ///  user puts in.
-        /// </summary>
-        public string IPAddress { get; set; }
-        
-        /// <summary>
-        /// This property will keep track of the Port number that was entered
-        ///  by the user.
-        /// </summary>
-        public int PortNum   { get; set; }
-
+    {   
         /// <summary>
         ///  This is the constructor for the startup method.
         ///  
@@ -42,7 +28,6 @@ namespace SpreadsheetGUI
         {
             // Initialize this prompt and create a new model
             InitializeComponent();
-            model = new StartupModel();
         }
 
         /// <summary>
@@ -52,38 +37,13 @@ namespace SpreadsheetGUI
         /// </summary>
         private void ConnectButton_Click(object sender, EventArgs e)
         {
-            // Try to connect to the server, if unsuccessful, then show
-            //  dialog box reporting the error to the user
-            try
+            // If both of the fields in the window contain elements
+            if (IPTextBox.Text != "")
             {
-                // If both of the fields in the window contain elements
-                if (IPTextBox.Text != "" && PortTextBox.Text != "")
-                {
-                    // Store the IP address
-                    IPAddress = IPTextBox.Text;
-                    
-                    // create a variable to store the value of the port number
-                    int pNum = 0;
+                // Store the IP address
+                String IPAddress = IPTextBox.Text;
 
-                    // Try to parse out the number of the portTextBox, if unseccesful, throw an error.
-                    if (!Int32.TryParse(PortTextBox.Text, out pNum))
-                        throw new Exception();
-
-                    // Put the port number into the property
-                    PortNum = pNum;
-
-                    // Connect to the server and open the next prompt
-                    SSModel connectedModel = model.Connect(IPAddress, PortNum);
-                    GoToOpenPrompt(connectedModel);
-                }
-            }
-            // Catch any exception to report to the user
-            catch (Exception)
-            {
-                // Display a message informing the user that the inputs were invalid or the server is off
-                DialogResult result = MessageBox.Show("Invalid IPAddress/Port or Server is currently not running.", "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
-                if (result == DialogResult.Cancel)
-                    this.Close();
+                GoToOpenPrompt(IPAddress);
             }
         }
         
@@ -92,15 +52,26 @@ namespace SpreadsheetGUI
         ///  It will then direct the user to the next prompt to 
         ///  open/create a file.
         /// </summary>
-        public void GoToOpenPrompt(SSModel spreadsheetModel)
+        public void GoToOpenPrompt(String IPAddress)
         {
-            // Create the next prompt window
-            OpenPrompt prompt = new OpenPrompt(spreadsheetModel);
+            try
+            {
+                // Create the next prompt window
+                OpenPrompt prompt = new OpenPrompt();
 
-            // Show the next prompt and close this window
-            this.Hide();
-            prompt.ShowDialog();
-            this.Close();
+                prompt.Connect(IPAddress);
+                // Show the next prompt and close this window
+                this.Hide();
+                prompt.ShowDialog();
+                this.Close();
+            }
+            catch (Exception)
+            {
+                // Display a message informing the user that the inputs were invalid or the server is off
+                DialogResult result = MessageBox.Show("Invalid IPAddress/Port or Server is currently not running.", "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+                if (result == DialogResult.Cancel)
+                    this.Close();
+            }
         }
 
     }

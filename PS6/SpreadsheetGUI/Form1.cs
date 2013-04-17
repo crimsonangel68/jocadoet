@@ -33,8 +33,14 @@ namespace SpreadsheetGUI
         private Spreadsheet sheet;
         private List<string> alphabet = new List<string> { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
         
-        //private SSModel model;
-        //private StringSocket socket; // to delete? perhaps? if Form1(ss socket) is possible
+        private bool FAILmessage;
+        private bool endWait;
+
+        private String modifyingCell;
+        private String lengthCell;
+
+        private String IPAddress;
+        private StringSocket socket;
 
         //-----------------------------------------------------------------------------------Form1
         /// <summary>
@@ -42,9 +48,12 @@ namespace SpreadsheetGUI
         /// 
         /// </summary>
         //public Form1(StringSocket thisSocket, String fileName, String currentVersion)
-        public Form1()    
+        public Form1(String IP, String name)    
         {
             InitializeComponent();
+            this.IPAddress = IP;
+            endWait = false;
+            FAILmessage = false;
 
             //socket = thisSocket;
             //model = new SSModel(socket);
@@ -64,7 +73,7 @@ namespace SpreadsheetGUI
         /// Opens a new Window when a file with a .ss extension is opened.  The Window will contain
         /// the contents of the file opened.
         /// </summary>
-        public Form1(string pathname)
+        public Form1(string pathname, Object p)
         {
             InitializeComponent();
 
@@ -112,17 +121,6 @@ namespace SpreadsheetGUI
             }
         }
 
-        //-----------------------------------------------------------------------------------newToolStripMenuItem_Click
-        /// <summary>
-        /// Creates a new Window and new spreadsheet.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void newToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SpreadsheetApplicationContext.getAppContext().RunForm(new Form1());
-        }
-
         //-----------------------------------------------------------------------------------openToolStripMenuItem_Click
         /// <summary>
         /// Open a saved spreadsheet file.
@@ -131,32 +129,41 @@ namespace SpreadsheetGUI
         /// <param name="e"></param>
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            openFileDialog.Filter = "Spreadsheet Files (.ss)|*.ss|All Files (*.*)|*.*";
-            openFileDialog.Title = "Open Spreadsheet";
-            openFileDialog.InitialDirectory = @"C:\";
-            openFileDialog.RestoreDirectory = false;
+            // Create the next prompt window
+            OpenPrompt prompt = new OpenPrompt();
 
-            DialogResult userClickedOK = openFileDialog.ShowDialog();
-            if (userClickedOK == DialogResult.OK)
-            {
-                string filepath = openFileDialog.FileName;
+            prompt.Connect(IPAddress);
 
-                Form1 openForm = new Form1();
+            // open the Open window
+            prompt.ShowDialog();
 
-                SpreadsheetApplicationContext.getAppContext().RunForm(openForm);
-                openForm.sheet = new Spreadsheet(filepath, s => true, s => s.ToUpper(), "ps6");
 
-                IEnumerable<string> cellNames = openForm.sheet.GetNamesOfAllNonemptyCells();
-                foreach (string name in cellNames)
-                {
-                    int col, row;
-                    col = alphabet.IndexOf(name.Substring(0, 1));
-                    row = int.Parse(name.Substring(1)) - 1;
+            //openFileDialog.Filter = "Spreadsheet Files (.ss)|*.ss|All Files (*.*)|*.*";
+            //openFileDialog.Title = "Open Spreadsheet";
+            //openFileDialog.InitialDirectory = @"C:\";
+            //openFileDialog.RestoreDirectory = false;
 
-                    openForm.spreadsheetPanel1.SetValue(col, row, openForm.sheet.GetCellValue(name).ToString());
-                    openForm.updateCell(openForm.spreadsheetPanel1, col, row);
-                }
-            }
+            //DialogResult userClickedOK = openFileDialog.ShowDialog();
+            //if (userClickedOK == DialogResult.OK)
+            //{
+            //    string filepath = openFileDialog.FileName;
+
+            //    Form1 openForm = new Form1(model);
+
+            //    SpreadsheetApplicationContext.getAppContext().RunForm(openForm);
+            //    openForm.sheet = new Spreadsheet(filepath, s => true, s => s.ToUpper(), "ps6");
+
+            //    IEnumerable<string> cellNames = openForm.sheet.GetNamesOfAllNonemptyCells();
+            //    foreach (string name in cellNames)
+            //    {
+            //        int col, row;
+            //        col = alphabet.IndexOf(name.Substring(0, 1));
+            //        row = int.Parse(name.Substring(1)) - 1;
+
+            //        openForm.spreadsheetPanel1.SetValue(col, row, openForm.sheet.GetCellValue(name).ToString());
+            //        openForm.updateCell(openForm.spreadsheetPanel1, col, row);
+            //    }
+            //}
         }
 
         //-----------------------------------------------------------------------------------saveToolStripMenuItem_Click
@@ -191,10 +198,32 @@ namespace SpreadsheetGUI
         {
             if (sheet.Changed && (MessageBox.Show("Do you want to exit without saving?", "SpreadsheetProgram", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes))
             {
+                // Create the next prompt window
+                OpenPrompt prompt = new OpenPrompt();
+
+                prompt.Connect(IPAddress);
+
+                // Hide the window, leave this session, and open the Open window
+                this.Hide();
+                LeaveSession();
+                prompt.ShowDialog();
+
                 Close();
             }
             if (!sheet.Changed)
+            {
+                // Create the next prompt window
+                OpenPrompt prompt = new OpenPrompt();
+
+                prompt.Connect(IPAddress);
+
+                // Hide the window, leave this session, and open the Open window
+                this.Hide();
+                LeaveSession();
+                prompt.ShowDialog();
+
                 Close();
+            }
         }
 
         //-----------------------------------------------------------------------------------Help_Click
@@ -342,46 +371,32 @@ namespace SpreadsheetGUI
         /// <param name="panel"></param>
         private void sendMessage(SpreadsheetPanel panel)
         {
-            //try
-            //{
-            //    int col, row;
-            //    panel.GetSelection(out col, out row);
-            //    string name = alphabet[col] + (row + 1).ToString();
+            try
+            {
+                int col, row;
+                panel.GetSelection(out col, out row);
+                string name = alphabet[col] + (row + 1).ToString();
 
-            //    object oldContent = sheet.GetCellContents(name);
-                
-            //    string contents = CellContentBox.Text;
-            //    ISet<string> affectedCells = sheet.SetContentsOfCell(name, contents);
+                object oldContent = sheet.GetCellContents(name);
 
-            //    foreach (string cell in affectedCells)
-            //    {
+                string contents = CellContentBox.Text;
+                ISet<string> affectedCells = sheet.SetContentsOfCell(name, contents);
 
-            //    }
-            //}
-            //catch (Exception f)
-            //{
-            //    MessageBox.Show("Idiot... (sendMessage) \n" + f.Message);
-            //}
-        }
+                foreach (string cell in affectedCells)
+                {
 
-        //-----------------------------------------------------------------------------------Clear_Click
-        /// <summary>
-        /// When the clear button is clicked on the Window, the spreadsheetPanel, spreadsheet, 
-        /// CellContentBox and CellValueBox will be cleared.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Clear_Click(object sender, EventArgs e)
-        {
-            CellContentBox.Text = "";
-            CellValueBox.Text = "";
-            spreadsheetPanel1.Clear();
-            IEnumerable<string> list = sheet.GetNamesOfAllNonemptyCells();
-            HashSet<string> billy = new HashSet<string>();
-            foreach (string s in list)
-                billy.Add(s);
-            foreach (string name in billy)
-                sheet.SetContentsOfCell(name, "");
+                    int c, r;
+                    c = alphabet.IndexOf(cell.Substring(0, 1));
+                    r = int.Parse(cell.Substring(1)) - 1;
+
+                    // Change this to sending to server !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    panel.SetValue(c, r, sheet.GetCellValue(cell).ToString());
+                }
+            }
+            catch (Exception f)
+            {
+                MessageBox.Show("Idiot... (sendMessage) \n" + f.Message);
+            }
         }
 
         //-----------------------------------------------------------------------------------Form1_FormClosing
@@ -393,11 +408,35 @@ namespace SpreadsheetGUI
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (sheet.Changed && (MessageBox.Show("Do you want to exit without saving?", "SpreadsheetProgram", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes))
+            {
                 e.Cancel = false;
+
+                // Create the next prompt window
+                OpenPrompt prompt = new OpenPrompt();
+
+                prompt.Connect(IPAddress);
+
+                // Hide the window, leave this session, and open the Open window
+                this.Hide();
+                LeaveSession();
+                prompt.ShowDialog();
+            }
             else
                 e.Cancel = true;
             if (!sheet.Changed)
+            {
                 e.Cancel = false;
+
+                // Create the next prompt window
+                OpenPrompt prompt = new OpenPrompt();
+
+                prompt.Connect(IPAddress);
+
+                // Hide the window, leave this session, and open the Open window
+                this.Hide();
+                LeaveSession();
+                prompt.ShowDialog();
+            }
         }
 
         //-----------------------------------------------------------------------------------updateCell
@@ -451,46 +490,224 @@ namespace SpreadsheetGUI
                 CellContentBox.Clear();
             updateSelection(spreadsheetPanel1);
         }
+        
+        // ----------------------------------------------------------------------------------------New stuff
 
-        //-----------------------------------------------------------------------------------Form1_Load <empty>
         /// <summary>
-        /// Empty
+        /// 
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Form1_Load(object sender, EventArgs e)
+        /// <param name="cellName"></param>
+        /// <param name="version"></param>
+        /// <param name="content"></param>
+        public void Change(String cellName, String version, String content)
         {
+            // CHANGE LF   
+            // Name:name LF
+            // Version:version LF
+            // Cell:cell LF
+            // Length:length LF
+            // content LF
+
+            String message = "CHANGE\n";
+            message += "Name:" + sheet.FileName + "\n";
+            message += "Version:" + version + "\n";
+            message += "Cell:" + cellName + "\n";
+            message += "Length:" + content.Length + "\n";
+            message += content + "\n";
+
+            // send change to server
+            socket.BeginSend(message, (e, p) => { }, 0);
+            socket.BeginReceive(ChangeReceived, 0);
         }
 
-        //-----------------------------------------------------------------------------------spreadsheetspreadsheetpanel11_Load <empty>
         /// <summary>
-        /// Empty
+        /// 
         /// </summary>
-        /// <param name="sender"></param>
+        /// <param name="message"></param>
         /// <param name="e"></param>
-        private void spreadsheetspreadsheetpanel1_Load(object sender, EventArgs e)
+        /// <param name="p"></param>
+        public void ChangeReceived(String message, Exception e, Object p)
         {
+            if (message.Contains("OK"))
+            {
+                socket.BeginReceive(ChangeReceived, 0);
+            }
+            else if (message.Contains("WAIT"))
+            {
+                socket.BeginReceive(ChangeReceived, 0);
+            }
+            else if (message.Contains("FAIL"))
+            {
+                FAILmessage = true;
+                socket.BeginReceive(ChangeReceived, 0);
+            }
+            if (message.Contains("Name:"))
+            {
+                //sheet.FileName = message.Substring(5);
+                socket.BeginReceive(ChangeReceived, 0);
+            }
+            else if (FAILmessage)
+            {
+                // Report to the user the message sent from the server
+                DialogResult result = MessageBox.Show(message, "ERROR", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+
+                // If the user decides to cancel, disconnect the socket and close the prompts
+                if (result == DialogResult.Cancel)
+                {
+                    socket.CloseSocket();
+                }
+            }
+            if (message.Contains("Version:"))
+            {
+                sheet.Version = message.Substring(8);
+            }
         }
 
-        //-----------------------------------------------------------------------------------openFileDialog_FileOk <empty>
         /// <summary>
-        /// Empty
+        /// 
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void openFileDialog_FileOk(object sender, CancelEventArgs e)
+        /// <param name="version"></param>
+        public void Undo(String version)
         {
+            // Send undo request
+            String message = "UNDO\n";
+            message += "Name:" + sheet.FileName + "\n";
+            message += "Version:" + version + "\n";
+            // Receive more
+            socket.BeginReceive(UndoReceived, 0);
         }
 
-
-        //-----------------------------------------------------------------------------------openFileDialog_FileOk <empty>
         /// <summary>
-        /// Empty
+        /// 
         /// </summary>
-        /// <param name="sender"></param>
+        /// <param name="message"></param>
         /// <param name="e"></param>
-        private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
+        /// <param name="p"></param>
+        public void UndoReceived(String message, Exception e, Object p)
         {
+            // If the message contains "OK", or "END", or "WAIT", proceed as normal.
+            if (message.Contains("OK"))
+            {
+                socket.BeginReceive(UndoReceived, 0);
+            }
+            else if (message.Contains("END") || message.Contains("WAIT"))
+            {
+                endWait = true;
+                socket.BeginReceive(UndoReceived, 0);
+            }
+            // If the message contains "FAIL", 
+            else if (message.Contains("FAIL"))
+            {
+                FAILmessage = true;
+                socket.BeginReceive(UndoReceived, 0);
+            }
+            else if (message.Contains("Name:"))
+            {
+                //sheet.FileName = message.Substring(5);
+                socket.BeginReceive(UndoReceived, 0);
+            }
+            else if (FAILmessage)
+            {
+                // Report to the user the message sent from the server
+                DialogResult result = MessageBox.Show(message, "ERROR", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+
+                // If the user decides to cancel, disconnect the socket and close the prompts
+                if (result == DialogResult.Cancel)
+                {
+                    socket.CloseSocket();
+                }
+            }
+            else if (message.Contains("Version:"))
+            {
+                sheet.Version = message.Substring(8);
+                if (!endWait)
+                {
+                    socket.BeginReceive(UndoReceived, 0);   
+                }
+            }
+            else if (message.Contains("Cell:"))
+            {
+                modifyingCell = message.Substring(5);
+            }
+            else if (message.Contains("Length:"))
+            {
+                lengthCell = message.Substring(7);
+            }
+            //Content
+            else
+            {
+                // change the content
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Save()
+        {
+            // Send save request
+
+            String message = "SAVE\n";
+            message += "Name:" + sheet.FileName + "\n";
+            // Receive more
+            // send change to server
+            socket.BeginSend(message, (e, p) => { }, 0);
+            socket.BeginReceive(SaveReceived, 0);
+        }
+
+        public void SaveReceived(String message, Exception e, Object p)
+        {
+            if (message.Contains("OK"))
+            {
+                socket.BeginReceive(SaveReceived, 0);
+            }
+            else if (message.Contains("FAIL"))
+            {
+                FAILmessage = true;
+                socket.BeginReceive(SaveReceived, 0);
+            }
+            else if (message.Contains("Name:"))
+            {
+                //sheet.FileName = message.Substring(5);
+                if (FAILmessage)
+                    socket.BeginReceive(SaveReceived, 0);
+            }
+            else if (FAILmessage)
+            {
+                // Report to the user the message sent from the server
+                DialogResult result = MessageBox.Show(message, "ERROR", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+
+                // If the user decides to cancel, disconnect the socket and close the prompts
+                if (result == DialogResult.Cancel)
+                {
+                    socket.CloseSocket();
+                }
+            }
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void LeaveSession()
+        {
+            // Send leave message to server
+            String message = "LEAVE\n";
+            message += "Name:" + sheet.FileName + "\n";
+            // Receive more
+            // send change to server
+            socket.BeginSend(message, (e, p) => { socket.CloseSocket(); }, 0);
+        }
+
+        public void UpdateReceived(String message, Exception e, Object p)
+        {
+            if (message.Contains("UPDATE"))
+            {
+                socket.BeginReceive(UpdateReceived, 0);
+            }
+            else if (message.Contains("Name:"))
+            {
+                
+            }
         }
     }
 }
