@@ -31,7 +31,11 @@ namespace SS
         /// <summary>
         /// This is a property for accessing the filename of the spreadsheet
         /// </summary>
-        public string FileName { get; set; }
+        private string FilePath { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public String FileName { get; set; }
 
         //-----------------------------------------------------------------------------------------Constructor  
         /// <summary>
@@ -72,7 +76,7 @@ namespace SS
         public Spreadsheet(string filepath, Func<string, bool> valid, Func<string, string> norm, string vers)
             : base(valid, norm, vers)
         {
-            FileName = filepath; // ish ................................. fix in final version
+            FilePath = filepath; // ish ................................. fix in final version
 
 
             sheet = new Dictionary<string, Cell>();

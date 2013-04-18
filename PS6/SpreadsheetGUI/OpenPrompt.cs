@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using CustomNetworking;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 
 namespace SpreadsheetGUI
 {
@@ -20,6 +21,7 @@ namespace SpreadsheetGUI
     {
         private String name;        // This will store the name of the file inputed to the screen
         private String IPAddress;   // This will store the IP address inputed to the screen
+        private String version;
 
         private bool FAILmessage;   // This flag will be used in the callback methods
         private int length;         // This value will store the length of the xml that will be received
@@ -133,6 +135,7 @@ namespace SpreadsheetGUI
         /// <param name="p"></param>
         private void createReceived(String s, Exception e, object p)
         {
+            MessageBox.Show(s);
             // CREATE SP OK/FAIL LF
             // Name:name LF
             // (Password:password LF) / (message LF)
@@ -202,6 +205,7 @@ namespace SpreadsheetGUI
         /// <param name="p"></param>
         private void joinReceived(String s, Exception e, object p)
         {
+            MessageBox.Show(s);
             // JOIN SP OK/FAIL LF
             // Name:name LF
             // (Version:version LF) / (message LF)
@@ -237,21 +241,21 @@ namespace SpreadsheetGUI
             }
             else if (s.Contains("Version:"))
             {
-                // FIGURE OUT HOW TO SET/GET VERSION
+                version = s.Substring(8);
+
                 // Continue receiving on the socket
                 socket.BeginReceive(joinReceived, null);
             }
             else if (s.Contains("Length:"))
             {
                 Int32.TryParse(s.Substring(7), out length);
+
                 // Continue receiving on the socket
                 socket.BeginReceive(joinReceived, null);
             }
             else
             {
-                //Form1 spreadsheet = new Form1(xml);
-
-                // OPEN XML FILE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                ThreadPool.QueueUserWorkItem(x => new Form1(IPAddress, name, version, s, socket));
             }
         } // End of "JoinReceived" method ..........................................................................................
     }

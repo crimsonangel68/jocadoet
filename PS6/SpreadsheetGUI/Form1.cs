@@ -32,9 +32,6 @@ namespace SpreadsheetGUI
     {
         private Spreadsheet sheet;
         private List<string> alphabet = new List<string> { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
-        
-        //private bool FAILmessage;
-        //private bool endWait;
 
         private String modifyingCell;
         private String lengthCell;
@@ -43,42 +40,23 @@ namespace SpreadsheetGUI
         private String IPAddress;
         private StringSocket socket;
 
-        //-----------------------------------------------------------------------------------Form1
-        /// <summary>
-        /// Opens a new Window with an empty spreadsheet.
-        /// 
-        /// </summary>
-        //public Form1(StringSocket thisSocket, String fileName, String currentVersion)
-        public Form1(String IP, String name, StringSocket newSocket)    
-        {
-            InitializeComponent();
-            this.IPAddress = IP;
-            //endWait = false;
-            //FAILmessage = false;
-            messagesToReceive = 0;
-            socket = newSocket;
-            // begin receiving on socket
-            
-            //sheet.FileName = fileName;
-            //sheet = new Spreadsheet(s => true, s => s.ToUpper(), currentVersion);
-            sheet = new Spreadsheet(s => true, s => s.ToUpper(), "ps6");
-
-            spreadsheetPanel1.SelectionChanged += updateSelection;
-            spreadsheetPanel1.SetSelection(0, 0);
-            updateSelection(spreadsheetPanel1);
-
-        }
-
         //-----------------------------------------------------------------------------------Form1(pathname)
         /// <summary>
         /// Opens a new Window when a file with a .ss extension is opened.  The Window will contain
         /// the contents of the file opened.
         /// </summary>
-        public Form1(string pathname, Object p)
+        public Form1(String IP, String fileName, String version, String xml, StringSocket newSocket)
         {
             InitializeComponent();
 
-            sheet = new Spreadsheet(pathname, s => true, s => s.ToUpper(), "ps6");
+            this.IPAddress = IP;
+            socket = newSocket;
+            messagesToReceive = 0;
+
+            sheet = new Spreadsheet(@"C:\Windows\Temp\jocadoetSpreadsheet", s => true, s => s.ToUpper(), version);
+
+            sheet.FileName = fileName;
+            sheet.Version = version;
 
             IEnumerable<string> cellNames = sheet.GetNamesOfAllNonemptyCells();
             foreach (string name in cellNames)
@@ -90,6 +68,8 @@ namespace SpreadsheetGUI
                 spreadsheetPanel1.SetValue(col, row, sheet.GetCellValue(name).ToString());
                 updateCell(spreadsheetPanel1, col, row);
             }
+            spreadsheetPanel1.SetSelection(0, 0);
+            updateSelection(spreadsheetPanel1);
         }
 
         //-----------------------------------------------------------------------------------updateSelection
@@ -134,7 +114,7 @@ namespace SpreadsheetGUI
             OpenPrompt prompt = new OpenPrompt(IPAddress);
 
             // open the Open window
-            prompt.ShowDialog(); // NEED ON NEW THREAD!
+            prompt.ShowDialog();
 
 
             //openFileDialog.Filter = "Spreadsheet Files (.ss)|*.ss|All Files (*.*)|*.*";
@@ -173,6 +153,8 @@ namespace SpreadsheetGUI
         /// <param name="e"></param>
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // NEED TO SEND TO SERVER
+
             saveFileDialog1.Filter = "Spreadsheet Files (.ss)|*.ss|All Files (*.*)|*.*";
             saveFileDialog1.Title = "Save";
             saveFileDialog1.InitialDirectory = @"C:\";
@@ -185,6 +167,17 @@ namespace SpreadsheetGUI
                 string filepath = saveFileDialog1.FileName;
                 sheet.Save(filepath);
             }
+        }
+
+        //-----------------------------------------------------------------------------------undoToolStripMenuItem_Click
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void undoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Undo();
         }
 
         //-----------------------------------------------------------------------------------closeToolStripMenuItem_Click
@@ -413,9 +406,11 @@ namespace SpreadsheetGUI
                 this.Hide();
                 LeaveSession();
                 prompt.ShowDialog();
+                this.Close();
             }
             else
                 e.Cancel = true;
+            
             if (!sheet.Changed)
             {
                 e.Cancel = false;
@@ -427,6 +422,7 @@ namespace SpreadsheetGUI
                 this.Hide();
                 LeaveSession();
                 prompt.ShowDialog();
+                this.Close();
             }
         }
 

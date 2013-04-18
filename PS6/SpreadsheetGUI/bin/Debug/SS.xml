@@ -451,9 +451,14 @@
             </summary>
             <param name="s"></param>
         </member>
-        <member name="P:SS.Spreadsheet.FileName">
+        <member name="P:SS.Spreadsheet.FilePath">
             <summary>
             This is a property for accessing the filename of the spreadsheet
+            </summary>
+        </member>
+        <member name="P:SS.Spreadsheet.FileName">
+            <summary>
+            
             </summary>
         </member>
         <member name="P:SS.Spreadsheet.Changed">

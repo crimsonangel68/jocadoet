@@ -30,9 +30,7 @@
         {
             this.ConnectButton = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.PortTextBox = new System.Windows.Forms.TextBox();
             this.IPTextBox = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -51,9 +49,7 @@
             // 
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.PortTextBox, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.IPTextBox, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.textBox4, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.textBox3, 0, 0);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(42, 50);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -65,16 +61,6 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(200, 100);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
-            // PortTextBox
-            // 
-            this.PortTextBox.AcceptsReturn = true;
-            this.PortTextBox.AcceptsTab = true;
-            this.PortTextBox.BackColor = System.Drawing.Color.White;
-            this.PortTextBox.Location = new System.Drawing.Point(3, 78);
-            this.PortTextBox.Name = "PortTextBox";
-            this.PortTextBox.Size = new System.Drawing.Size(194, 20);
-            this.PortTextBox.TabIndex = 2;
-            // 
             // IPTextBox
             // 
             this.IPTextBox.AcceptsReturn = true;
@@ -84,19 +70,6 @@
             this.IPTextBox.Name = "IPTextBox";
             this.IPTextBox.Size = new System.Drawing.Size(194, 20);
             this.IPTextBox.TabIndex = 1;
-            // 
-            // textBox4
-            // 
-            this.textBox4.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.textBox4.Location = new System.Drawing.Point(3, 53);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.ReadOnly = true;
-            this.textBox4.ShortcutsEnabled = false;
-            this.textBox4.Size = new System.Drawing.Size(194, 20);
-            this.textBox4.TabIndex = 0;
-            this.textBox4.TabStop = false;
-            this.textBox4.Text = "Port Address";
-            this.textBox4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // textBox3
             // 
@@ -135,9 +108,7 @@
 
         private System.Windows.Forms.Button ConnectButton;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.TextBox PortTextBox;
         private System.Windows.Forms.TextBox IPTextBox;
-        private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.TextBox textBox3;
 
     }

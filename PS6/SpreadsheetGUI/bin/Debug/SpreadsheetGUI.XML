@@ -49,13 +49,7 @@
             the contents of this method with the code editor.
             </summary>
         </member>
-        <member name="M:SpreadsheetGUI.Form1.#ctor(System.String,System.String,CustomNetworking.StringSocket)">
-            <summary>
-            Opens a new Window with an empty spreadsheet.
-            
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.#ctor(System.String,System.Object)">
+        <member name="M:SpreadsheetGUI.Form1.#ctor(System.String,System.String,System.String,System.String,CustomNetworking.StringSocket)">
             <summary>
             Opens a new Window when a file with a .ss extension is opened.  The Window will contain
             the contents of the file opened.
