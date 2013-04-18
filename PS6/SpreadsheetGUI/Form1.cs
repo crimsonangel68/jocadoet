@@ -33,11 +33,12 @@ namespace SpreadsheetGUI
         private Spreadsheet sheet;
         private List<string> alphabet = new List<string> { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
         
-        private bool FAILmessage;
-        private bool endWait;
+        //private bool FAILmessage;
+        //private bool endWait;
 
         private String modifyingCell;
         private String lengthCell;
+        private int messagesToReceive;
 
         private String IPAddress;
         private StringSocket socket;
@@ -48,13 +49,15 @@ namespace SpreadsheetGUI
         /// 
         /// </summary>
         //public Form1(StringSocket thisSocket, String fileName, String currentVersion)
-        public Form1(String IP, String name)    
+        public Form1(String IP, String name, StringSocket newSocket)    
         {
             InitializeComponent();
             this.IPAddress = IP;
-            endWait = false;
-            FAILmessage = false;
-            //socket = newSocket;
+            //endWait = false;
+            //FAILmessage = false;
+            messagesToReceive = 0;
+            socket = newSocket;
+            // begin receiving on socket
             
             //sheet.FileName = fileName;
             //sheet = new Spreadsheet(s => true, s => s.ToUpper(), currentVersion);
@@ -500,7 +503,7 @@ namespace SpreadsheetGUI
 
             // send change to server
             socket.BeginSend(message, (e, p) => { }, 0);
-            socket.BeginReceive(MessageReceived, 0);
+            //socket.BeginReceive(MessageReceived, 0);
         }
 
         /// <summary>
@@ -515,7 +518,7 @@ namespace SpreadsheetGUI
             
             // Send message and receive more
             socket.BeginSend(message, (e, f) => { }, 0);
-            socket.BeginReceive(MessageReceived, 0);
+            //socket.BeginReceive(MessageReceived, 0);
         }
 
         /// <summary>
@@ -529,7 +532,7 @@ namespace SpreadsheetGUI
 
             // send change to server
             socket.BeginSend(message, (e, p) => { }, 0);
-            socket.BeginReceive(MessageReceived, 0);
+            //socket.BeginReceive(MessageReceived, 0);
         }
 
         /// <summary>
@@ -554,38 +557,63 @@ namespace SpreadsheetGUI
         /// <param name="p"></param>
         public void MessageReceived(String message, Exception e, Object p)
         {
-            // Call the appropriate callback methods 
-            if (message.Contains("CHANGE SP OK"))
-                socket.BeginReceive(ChangeReceived, 0);
-
-            else if (message.Contains("UNDO SP OK") || message.Contains("UPDATE"))
-                socket.BeginReceive(UpdateReceived, 0);
-
-            // If the save was successful, show a message
-            else if (message.Contains("SAVE SP OK"))
-                MessageBox.Show("Save successful", "Congratulations");
-
-            // If the undo reached an end, inform the user
-            else if (message.Contains("UNDO SP END"))
-                MessageBox.Show("No unsaved changes to undo.", "Undo");
-
-            // If we received a wait, inform the user
-            else if (message.Contains("WAIT"))
+            if (++messagesToReceive == 1)
             {
-                // Create a string to report back to the user
-                String report = "Waiting for current version:\n";
+                // Call the appropriate callback methods 
+                if (message.Contains("CHANGE SP OK"))
+                {
+                    messagesToReceive = 2;
+                    socket.BeginReceive(VersionReceived, "Version");
+                }
+                else if (message.Contains("UNDO SP OK") || message.Contains("UPDATE"))
+                {
+                    messagesToReceive = 5;
+                    socket.BeginReceive(UpdateReceived, 0);
+                }
+                // If the save was successful, show a message
+                else if (message.Contains("SAVE SP OK"))
+                {
+                    MessageBox.Show("Save successful", "Congratulations");
 
-                // Append to the string with the appropriate message
-                if (message.Contains("CHANGE"))
-                    report += "Change was not sent to server.\n";
-                else if (message.Contains("UNDO"))
-                    report += "Undo was not sent to server.\n";
+                    socket.BeginReceive(BlankReceived, 0);
+                }
+                // If the undo reached an end, inform the user
+                else if (message.Contains("UNDO SP END"))
+                {
+                    MessageBox.Show("No unsaved changes to undo.", "Undo");
 
-                // Report the user of the wait
-                MessageBox.Show(report + "Please wait for updates to arrive.", "Wait Error");
+                    messagesToReceive = 2;
+                    socket.BeginReceive(BlankReceived, 0);
+                }
+                // If we received a wait, inform the user
+                else if (message.Contains("WAIT"))
+                {
+                    // Create a string to report back to the user
+                    String report = "Waiting for current version:\n";
+
+                    // Append to the string with the appropriate message
+                    if (message.Contains("CHANGE"))
+                        report += "Change was not sent to server.\n";
+                    else if (message.Contains("UNDO"))
+                        report += "Undo was not sent to server.\n";
+
+                    // Report the user of the wait
+                    MessageBox.Show(report + "Please exit this session and rejoin.", "Wait Error");
+
+                    messagesToReceive = 2;
+                    socket.BeginReceive(BlankReceived, 0);
+                }
+                else if (message.Contains("FAIL"))
+                {
+                    messagesToReceive = 2;
+                    socket.BeginReceive(FailReceived, 0);
+                }
             }
-            else if (message.Contains("FAIL"))
-                socket.BeginReceive(FailReceived, 0);
+            else
+            {
+                // add to queue
+                // call this method
+            }
         }
 
         /// <summary>
@@ -595,44 +623,22 @@ namespace SpreadsheetGUI
         /// <param name="message"></param>
         /// <param name="e"></param>
         /// <param name="p"></param>
-        public void ChangeReceived(String message, Exception e, Object p)
+        public void VersionReceived(String message, Exception e, Object p)
         {
-            //if (message.Contains("OK"))
-            //{
-            //    socket.BeginReceive(ChangeReceived, 0);
-            //}
-            //else if (message.Contains("WAIT"))
-            //{
-            //    socket.BeginReceive(ChangeReceived, 0);
-            //}
-            //else if (message.Contains("FAIL"))
-            //{
-            //    FAILmessage = true;
-            //    socket.BeginReceive(ChangeReceived, 0);
-            //}
-            //else if (message.Contains("Name:"))
-            //{
-            //    //sheet.FileName = message.Substring(5);
-            //    socket.BeginReceive(ChangeReceived, 0);
-            //}
-            //else if (FAILmessage)
-            //{
-            //    // Report to the user the message sent from the server
-            //    DialogResult result = MessageBox.Show(message, "ERROR", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
-
-            //    // If the user decides to cancel, disconnect the socket and close the prompts
-            //    if (result == DialogResult.Cancel)
-            //    {
-            //        socket.CloseSocket();
-            //    }
-            //}
             if (message.Contains("Version:"))
             {
                 sheet.Version = message.Substring(8);
+
+                messagesToReceive--;
+                socket.BeginReceive(VersionReceived, 0);
+            }
+            else
+            {
+                messagesToReceive--;
+                socket.BeginReceive(MessageReceived, 0);
             }
         }
 
-        // -------------------------------------------------------VERY UNNECESSARY!!!
         /// <summary>
         /// 
         /// </summary>
@@ -641,108 +647,32 @@ namespace SpreadsheetGUI
         /// <param name="p"></param>
         public void UndoReceived(String message, Exception e, Object p)
         {
-            // If the message contains "OK", or "END", or "WAIT", proceed as normal.
-            //if (message.Contains("OK"))
-            //{
-            //    socket.BeginReceive(UndoReceived, 0);
-            //}
-            //else if (message.Contains("END") || message.Contains("WAIT"))
-            //{
-            //    endWait = true;
-            //    socket.BeginReceive(UndoReceived, 0);
-            //}
-            //// If the message contains "FAIL", 
-            //else if (message.Contains("FAIL"))
-            //{
-            //    FAILmessage = true;
-            //    socket.BeginReceive(UndoReceived, 0);
-            //}
-            //
-            //else if
-            if (message.Contains("Name:"))
-            {
-                //sheet.FileName = message.Substring(5);
-                socket.BeginReceive(UndoReceived, 0);
-            }
-            //else if (FAILmessage)
-            //{
-            //    // Report to the user the message sent from the server
-            //    DialogResult result = MessageBox.Show(message, "ERROR", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
-
-            //    // If the user decides to cancel, disconnect the socket and close the prompts
-            //    if (result == DialogResult.Cancel)
-            //    {
-            //        socket.CloseSocket();
-            //    }
-            //}
-            else if (message.Contains("Version:"))
+            if (message.Contains("Version:"))
             {
                 sheet.Version = message.Substring(8);
-                //if (!endWait)
-                //{
-                //    socket.BeginReceive(UndoReceived, 0);
-                //}
             }
 
             // Cell name
             else if (message.Contains("Cell:"))
                 modifyingCell = message.Substring(5);
-            
-                // Length of the content to 
+
+            // Length of the content to 
             else if (message.Contains("Length:"))
-            {
                 lengthCell = message.Substring(7);
-            }
 
             //Content
-            else
+            else if (!message.Contains("Name:"))
             {
                 // change the content
 
                 // break out of the method so as to not receive more in this method
+                messagesToReceive--;
                 socket.BeginReceive(MessageReceived, 0);
                 return;
             }
-        }
 
-        // -------------------------------------------------------UNNECESSARY SAVE?
-        /// <summary>
-        /// This callback method will handle dealing with save requests
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="e"></param>
-        /// <param name="p"></param>
-        public void SaveReceived(String message, Exception e, Object p)
-        {
-            //if (message.Contains("OK"))
-            //{
-            //    socket.BeginReceive(SaveReceived, 0);
-            //}
-            //
-            //else if (message.Contains("FAIL"))
-            //{
-            //    FAILmessage = true;
-            //    socket.BeginReceive(SaveReceived, 0);
-            //}
-            //
-            //else if
-            //if (message.Contains("Name:"))
-            //{
-                //sheet.FileName = message.Substring(5);
-                //if (FAILmessage)
-                //    socket.BeginReceive(SaveReceived, 0);
-            //}
-            //else if (FAILmessage)
-            //{
-            //    // Report to the user the message sent from the server
-            //    DialogResult result = MessageBox.Show(message, "ERROR", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
-
-            //    // If the user decides to cancel, disconnect the socket and close the prompts
-            //    if (result == DialogResult.Cancel)
-            //    {
-            //        socket.CloseSocket();
-            //    }
-            //}
+            messagesToReceive--;
+            socket.BeginReceive(MessageReceived, 0);
         }
 
         /// <summary>
@@ -755,12 +685,6 @@ namespace SpreadsheetGUI
         /// <param name="p"></param>
         public void UpdateReceived(String message, Exception e, Object p)
         {
-            //if (message.Contains("Name:"))
-            //{
-            //    socket.BeginReceive(UpdateReceived, 0);
-            //}
-            //else if
-            
             // If the message contians the version, save it
             if (message.Contains("Version:"))
                 sheet.Version = message.Substring(8);
@@ -775,16 +699,18 @@ namespace SpreadsheetGUI
             
             // If we've reached here, and the message doesn't contain name,
             //  we know it's the message that's been received
-            else if (message.Contains("Name:"))
+            else if (!message.Contains("Name:"))
             {
                 // Set cell contents here!
 
                 // Break out of the method so as not to receive more in this method
+                messagesToReceive--;
                 socket.BeginReceive(MessageReceived, 0);
                 return;
             }
 
             // Continue reading from the socket
+            messagesToReceive--;
             socket.BeginReceive(UpdateReceived, 0);
         }
 
@@ -804,11 +730,35 @@ namespace SpreadsheetGUI
             {
                 // display the error to the user
                 MessageBox.Show(message, "Error");
+                messagesToReceive--;
                 socket.BeginReceive(MessageReceived, 0);
             }
             // If it does contain name, we need the next line being sent
             else
+            {
+                messagesToReceive--;
                 socket.BeginReceive(FailReceived, 0);
+            }
+        }
+
+        /// <summary>
+        /// This callback method will handle dealing with save requests
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="e"></param>
+        /// <param name="p"></param>
+        public void BlankReceived(String message, Exception e, Object p)
+        {
+            if (messagesToReceive == 1)
+            {
+                messagesToReceive--;
+                socket.BeginReceive(MessageReceived, 0);
+            }
+            else
+            {
+                messagesToReceive--;
+                socket.BeginReceive(BlankReceived, 0);
+            }
         }
     }
 }
