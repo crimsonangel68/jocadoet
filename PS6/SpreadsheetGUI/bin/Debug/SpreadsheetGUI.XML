@@ -178,7 +178,7 @@
             <param name="e"></param>
             <param name="p"></param>
         </member>
-        <member name="M:SpreadsheetGUI.Form1.ChangeReceived(System.String,System.Exception,System.Object)">
+        <member name="M:SpreadsheetGUI.Form1.VersionReceived(System.String,System.Exception,System.Object)">
             <summary>
             This callback method will deal with handling change messages
              being sent from the server.
@@ -190,14 +190,6 @@
         <member name="M:SpreadsheetGUI.Form1.UndoReceived(System.String,System.Exception,System.Object)">
             <summary>
             
-            </summary>
-            <param name="message"></param>
-            <param name="e"></param>
-            <param name="p"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.SaveReceived(System.String,System.Exception,System.Object)">
-            <summary>
-            This callback method will handle dealing with save requests
             </summary>
             <param name="message"></param>
             <param name="e"></param>
@@ -219,6 +211,14 @@
             
             It will display the message to the user containing the error of
              why they received a fail.
+            </summary>
+            <param name="message"></param>
+            <param name="e"></param>
+            <param name="p"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.BlankReceived(System.String,System.Exception,System.Object)">
+            <summary>
+            This callback method will handle dealing with save requests
             </summary>
             <param name="message"></param>
             <param name="e"></param>
