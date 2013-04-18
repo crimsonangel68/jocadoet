@@ -49,7 +49,7 @@
             the contents of this method with the code editor.
             </summary>
         </member>
-        <member name="M:SpreadsheetGUI.Form1.#ctor(System.String)">
+        <member name="M:SpreadsheetGUI.Form1.#ctor(System.String,System.String)">
             <summary>
             Opens a new Window with an empty spreadsheet.
             
@@ -149,11 +149,34 @@
         </member>
         <member name="M:SpreadsheetGUI.Form1.Change(System.String,System.String,System.String)">
             <summary>
-            
+            This method will send a change to the server.
             </summary>
             <param name="cellName"></param>
             <param name="version"></param>
             <param name="content"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.Undo">
+            <summary>
+            This method will send an undo request to the server
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.Save">
+            <summary>
+            This method will send a save request to the server
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.LeaveSession">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.MessageReceived(System.String,System.Exception,System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+            <param name="e"></param>
+            <param name="p"></param>
         </member>
         <member name="M:SpreadsheetGUI.Form1.ChangeReceived(System.String,System.Exception,System.Object)">
             <summary>
@@ -163,12 +186,6 @@
             <param name="e"></param>
             <param name="p"></param>
         </member>
-        <member name="M:SpreadsheetGUI.Form1.Undo(System.String)">
-            <summary>
-            
-            </summary>
-            <param name="version"></param>
-        </member>
         <member name="M:SpreadsheetGUI.Form1.UndoReceived(System.String,System.Exception,System.Object)">
             <summary>
             
@@ -177,15 +194,34 @@
             <param name="e"></param>
             <param name="p"></param>
         </member>
-        <member name="M:SpreadsheetGUI.Form1.Save">
+        <member name="M:SpreadsheetGUI.Form1.SaveReceived(System.String,System.Exception,System.Object)">
             <summary>
             
             </summary>
+            <param name="message"></param>
+            <param name="e"></param>
+            <param name="p"></param>
         </member>
-        <member name="M:SpreadsheetGUI.Form1.LeaveSession">
+        <member name="M:SpreadsheetGUI.Form1.UpdateReceived(System.String,System.Exception,System.Object)">
             <summary>
-            
+            This callback method will receive an update from the server,
+             and change the specified cell on the spreadsheet with the
+             update.
             </summary>
+            <param name="message"></param>
+            <param name="e"></param>
+            <param name="p"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.FailReceived(System.String,System.Exception,System.Object)">
+            <summary>
+            This is the callback method for when a "FAIL" is received.
+            
+            It will display the message to the user containing the error of
+             why they received a fail.
+            </summary>
+            <param name="message"></param>
+            <param name="e"></param>
+            <param name="p"></param>
         </member>
         <member name="T:SpreadsheetGUI.Startup">
             <summary>
@@ -234,102 +270,6 @@
              open/create a file.
             </summary>
         </member>
-        <member name="T:SpreadsheetGUI.StartupModel">
-            <summary>
-            
-            This is the main model of the Spreadsheet connection.
-            
-            It will keep track of all of the SSModels that are open, where
-            each SSModel represents a new spreadsheet that's open.  This will
-            help to keep track of different spreadsheets open by one user.
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.StartupModel.#ctor">
-            <summary>
-            Constructor for creating a new StartupModel.
-            
-            It will intialize the neccessary member variables.
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.StartupModel.Connect(System.String,System.Int32)">
-            <summary>
-            Used to connect the client to the server
-            </summary>
-            <param name="hostname"></param>
-            <param name="port"></param>
-        </member>
-        <member name="P:SpreadsheetGUI.StartupModel.socket">
-            <summary>
-            This property keeps track of the underlying socket that connects
-             the client to the server.
-            </summary>
-        </member>
-        <member name="T:SpreadsheetGUI.SSModel">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.SSModel.#ctor(SpreadsheetGUI.StartupModel)">
-            <summary>
-            This constructor takes in a connected socket to
-             take care of sending and receiving.
-            </summary>
-            <param name="thisModel"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.SSModel.Change(System.String,System.String,System.String)">
-            <summary>
-            
-            </summary>
-            <param name="cellName"></param>
-            <param name="version"></param>
-            <param name="content"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.SSModel.ChangeReceived(System.String,System.Exception,System.Object)">
-            <summary>
-            
-            </summary>
-            <param name="message"></param>
-            <param name="e"></param>
-            <param name="p"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.SSModel.Undo(System.String)">
-            <summary>
-            
-            </summary>
-            <param name="version"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.SSModel.UndoReceived(System.String,System.Exception,System.Object)">
-            <summary>
-            
-            </summary>
-            <param name="message"></param>
-            <param name="e"></param>
-            <param name="p"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.SSModel.Save">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.SSModel.Leave">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:SpreadsheetGUI.SSModel.startupModel">
-            <summary>
-            This property contains the parent model that the client is using to
-             connect to the server.
-             
-            Can only be set within this class.
-            </summary>
-        </member>
-        <member name="P:SpreadsheetGUI.SSModel.name">
-            <summary>
-            This property contains the name of the spreadsheet
-             associated with this SSModel.
-            </summary>
-        </member>
         <member name="T:SpreadsheetGUI.OpenPrompt">
             <summary>
             Partial class for dealing with an open prompt window.
@@ -358,14 +298,25 @@
              will be able to enter in a file to either create a new
              spreadsheet of or join an existing file.
             </summary>
-            <param name="newModel" ></param>
+            <param name="IP"></param>
         </member>
-        <member name="M:SpreadsheetGUI.OpenPrompt.Connect(System.String,System.Int32)">
+        <member name="M:SpreadsheetGUI.OpenPrompt.Connect(System.String)">
             <summary>
-            Used to connect the client to the server
+            This method is used to try and connect the client to the server, provided
+             an IP address to connect to.
+             
+            The caller method will need to catch any exceptions thrown by an error
+             connecting.
             </summary>
             <param name="hostname"></param>
-            <param name="port"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.OpenPrompt.OpenPrompt_FormClosing(System.Object,System.Windows.Forms.FormClosingEventArgs)">
+            <summary>
+            This method is called when the user tries to close the window, after a connection 
+             has been made.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
         </member>
         <member name="M:SpreadsheetGUI.OpenPrompt.NewButton_Click(System.Object,System.EventArgs)">
             <summary>

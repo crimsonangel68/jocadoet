@@ -18,29 +18,39 @@ namespace SpreadsheetGUI
     /// </summary>
     public partial class OpenPrompt : Form
     {
-        private String name;
-        private bool FAILmessage;
-        StringSocket socket;
-        private String IPAddress;
+        private String name;        // This will store the name of the file inputed to the screen
+        private String IPAddress;   // This will store the IP address inputed to the screen
+
+        private bool FAILmessage;   // This flag will be used in the callback methods
+        private int length;         // This value will store the length of the xml that will be received
+        
+        StringSocket socket;        // This socket will be used to communicate to the server
 
         /// <summary>
         /// This method will open a new prompt window, which a user
         ///  will be able to enter in a file to either create a new
         ///  spreadsheet of or join an existing file.
         /// </summary>
-        public OpenPrompt()
+        /// <param name="IP"></param>
+        public OpenPrompt(String IP)
         {
-            // Initialize the window and store the model that was passed in.
+            // Initialize the window and set up the member variables.
             InitializeComponent();
             FAILmessage = false;
             socket = null;
+
+            // Connect to the provided IP address
+            Connect(IP);
         } // End of "OpenPrompt" method .......................................................................................
 
         /// <summary>
-        /// Used to connect the client to the server
+        /// This method is used to try and connect the client to the server, provided
+        ///  an IP address to connect to.
+        ///  
+        /// The caller method will need to catch any exceptions thrown by an error
+        ///  connecting.
         /// </summary>
         /// <param name="hostname"></param>
-        /// <param name="port"></param>
         public void Connect(String hostname)
         {
             // If the socket has been initialized, create a connection
@@ -49,17 +59,21 @@ namespace SpreadsheetGUI
                 // Try to connect to the server.
                 TcpClient client = new TcpClient(hostname, 1984);
                 socket = new StringSocket(client.Client, UTF8Encoding.UTF8);
+                
+                // Store the provided host address into the IP address member variable
                 IPAddress = hostname;
             }
         }
 
         /// <summary>
-        /// 
+        /// This method is called when the user tries to close the window, after a connection 
+        ///  has been made.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void OpenPrompt_FormClosing(object sender, FormClosingEventArgs e)
         {
+            // Disconnect the socket gracefully.
             socket.CloseSocket();
         }
 
@@ -74,9 +88,9 @@ namespace SpreadsheetGUI
         private void NewButton_Click(object sender, EventArgs e)
         {
             // Create the message according to protocol
-            String message = "CREATE\n";
-            message += "Name:" + FileNameTextBox.Text + "\n";
-            message += "Password:" + PasswordTextBox.Text + "\n";
+            String message = "CREATE \n";
+            message += "Name:" + FileNameTextBox.Text + " \n";
+            message += "Password:" + PasswordTextBox.Text + " \n";
             
             // Send the message and then begin receiving
             socket.BeginSend(message, (f, p) => { }, 0);
@@ -94,9 +108,9 @@ namespace SpreadsheetGUI
         private void JoinButton_Click(object sender, EventArgs e)
         {
             // Crreate the correct message according to protocol
-            String message = "JOIN\n";
-            message += "Name:" + FileNameTextBox.Text + "\n";
-            message += "Password:" + PasswordTextBox.Text + "\n";
+            String message = "JOIN \n";
+            message += "Name:" + FileNameTextBox.Text + " \n";
+            message += "Password:" + PasswordTextBox.Text + " \n";
 
             // Send the message to the server and then begin receiving
             socket.BeginSend(message, (f, p) => { }, 0);
@@ -122,11 +136,6 @@ namespace SpreadsheetGUI
             // CREATE SP OK/FAIL LF
             // Name:name LF
             // (Password:password LF) / (message LF)
-
-            //string pattern = @"^[:-\n] $";
-            //string[] tokens = Regex.Split(s, @"^");
-            
-            string password;
             
             if (s.Contains("CREATE"))
             {
@@ -134,6 +143,7 @@ namespace SpreadsheetGUI
                 {
                     FAILmessage = true;
                 }
+
                 // Continue receiving on the socket
                 socket.BeginReceive(createReceived, null);
             }
@@ -151,25 +161,22 @@ namespace SpreadsheetGUI
 
                 // If the user decides to cancel, disconnect the socket and close the prompts
                 if (result == DialogResult.Cancel)
-                {
                     socket.CloseSocket();
-                }
             }
             // If the string contains Password:, we know that we have completed a successful transmission
             else if (s.Contains("Password:"))
             {
                 // We show the password returned from the server, along with the name of the spreadsheet returned from the server.
                 //  We then ask for confirmation on whether or not they want to join the specified spreadsheet.
-                password = s.Substring(9);
-                DialogResult result = MessageBox.Show("Spreadsheet name: " + name + "\nSpreadsheet password: " + password, "Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                DialogResult result = MessageBox.Show("Spreadsheet name: " + name + "\nSpreadsheet password: " + s.Substring(9), "Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
 
                 // If the user wants to proceed, send a join request
                 if (result == DialogResult.OK)
                 {
                     // Crreate the correct message according to protocol
-                    String message = "JOIN\n";
-                    message += "Name:" + FileNameTextBox.Text + "\n";
-                    message += "Password:" + PasswordTextBox.Text + "\n";
+                    String message = "JOIN \n";
+                    message += "Name:" + FileNameTextBox.Text + " \n";
+                    message += "Password:" + PasswordTextBox.Text + " \n";
 
                     // Send the message to the server and then begin receiving
                     socket.BeginSend(message, (f, q) => { }, 0);
@@ -201,7 +208,6 @@ namespace SpreadsheetGUI
             // (Length:length LF) / 
             // (xml LF) / 
 
-            int length;
             if (s.Contains("JOIN"))
             {
                 if (s.Contains("FAIL"))

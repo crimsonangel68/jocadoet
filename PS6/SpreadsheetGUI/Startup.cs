@@ -57,9 +57,8 @@ namespace SpreadsheetGUI
             try
             {
                 // Create the next prompt window
-                OpenPrompt prompt = new OpenPrompt();
+                OpenPrompt prompt = new OpenPrompt(IPAddress);
 
-                prompt.Connect(IPAddress);
                 // Show the next prompt and close this window
                 this.Hide();
                 prompt.ShowDialog();
