@@ -21,6 +21,7 @@ using System.Text;
 using System.Windows.Forms;
 using SS;
 using CustomNetworking;
+using System.IO;
 
 namespace SpreadsheetGUI
 {
@@ -40,6 +41,8 @@ namespace SpreadsheetGUI
         private String IPAddress;
         private StringSocket socket;
 
+        private File newFile;
+
         //-----------------------------------------------------------------------------------Form1(pathname)
         /// <summary>
         /// Opens a new Window when a file with a .ss extension is opened.  The Window will contain
@@ -53,7 +56,13 @@ namespace SpreadsheetGUI
             socket = newSocket;
             messagesToReceive = 0;
 
-            sheet = new Spreadsheet(@"C:\Windows\Temp\jocadoetSpreadsheet", s => true, s => s.ToUpper(), version);
+            String filePath = @"C:\Windows\Temp\jocadoetSpreadsheet.ss";
+
+            FileInfo newF = new FileInfo(filePath);
+            
+            using (StreamReader sr = newF.OpenText())
+
+            sheet = new Spreadsheet(filePath, s => true, s => s.ToUpper(), version);
 
             sheet.FileName = fileName;
             sheet.Version = version;
@@ -186,7 +195,7 @@ namespace SpreadsheetGUI
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
+        private void leaveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (sheet.Changed && (MessageBox.Show("Do you want to exit without saving?", "SpreadsheetProgram", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes))
             {

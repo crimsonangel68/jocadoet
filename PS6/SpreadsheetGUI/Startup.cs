@@ -11,7 +11,12 @@ using CustomNetworking;
 namespace SpreadsheetGUI
 {
     /// <summary>
-    /// This partial class will .....
+    /// This partial class will run when the program is executed.
+    /// 
+    /// It will show a window that allows the user to input an IP address
+    ///  to attempt to connect to.
+    ///  
+    /// If the connection was unsuccessful, it will inform the user.
     /// </summary>
     public partial class Startup : Form
     {   

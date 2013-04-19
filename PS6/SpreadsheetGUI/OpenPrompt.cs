@@ -135,7 +135,6 @@ namespace SpreadsheetGUI
         /// <param name="p"></param>
         private void createReceived(String s, Exception e, object p)
         {
-            MessageBox.Show(s);
             // CREATE SP OK/FAIL LF
             // Name:name LF
             // (Password:password LF) / (message LF)
@@ -205,7 +204,6 @@ namespace SpreadsheetGUI
         /// <param name="p"></param>
         private void joinReceived(String s, Exception e, object p)
         {
-            MessageBox.Show(s);
             // JOIN SP OK/FAIL LF
             // Name:name LF
             // (Version:version LF) / (message LF)
@@ -215,9 +213,8 @@ namespace SpreadsheetGUI
             if (s.Contains("JOIN"))
             {
                 if (s.Contains("FAIL"))
-                {
                     FAILmessage = true;
-                }
+
                 // Continue receiving on the socket
                 socket.BeginReceive(joinReceived, null);
             }
@@ -254,9 +251,7 @@ namespace SpreadsheetGUI
                 socket.BeginReceive(joinReceived, null);
             }
             else
-            {
                 ThreadPool.QueueUserWorkItem(x => new Form1(IPAddress, name, version, s, socket));
-            }
         } // End of "JoinReceived" method ..........................................................................................
     }
 }

@@ -82,7 +82,7 @@
             <param name="sender"></param>
             <param name="e"></param>
         </member>
-        <member name="M:SpreadsheetGUI.Form1.closeToolStripMenuItem_Click(System.Object,System.EventArgs)">
+        <member name="M:SpreadsheetGUI.Form1.leaveToolStripMenuItem_Click(System.Object,System.EventArgs)">
             <summary>
             Closes the current Form.
             </summary>
@@ -227,7 +227,12 @@
         </member>
         <member name="T:SpreadsheetGUI.Startup">
             <summary>
-            This partial class will .....
+            This partial class will run when the program is executed.
+            
+            It will show a window that allows the user to input an IP address
+             to attempt to connect to.
+             
+            If the connection was unsuccessful, it will inform the user.
             </summary>
         </member>
         <member name="F:SpreadsheetGUI.Startup.components">

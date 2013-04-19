@@ -33,16 +33,11 @@
             this.FileNameTextBox = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.PasswordTextBox = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
@@ -55,10 +50,10 @@
             // 
             // JoinButton
             // 
-            this.JoinButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.JoinButton.Location = new System.Drawing.Point(3, 4);
+            this.JoinButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.JoinButton.Location = new System.Drawing.Point(248, 254);
             this.JoinButton.Name = "JoinButton";
-            this.JoinButton.Size = new System.Drawing.Size(125, 70);
+            this.JoinButton.Size = new System.Drawing.Size(75, 23);
             this.JoinButton.TabIndex = 2;
             this.JoinButton.Text = "Join";
             this.JoinButton.UseVisualStyleBackColor = true;
@@ -66,10 +61,10 @@
             // 
             // NewButton
             // 
-            this.NewButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.NewButton.Location = new System.Drawing.Point(3, 3);
+            this.NewButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NewButton.Location = new System.Drawing.Point(61, 254);
             this.NewButton.Name = "NewButton";
-            this.NewButton.Size = new System.Drawing.Size(125, 71);
+            this.NewButton.Size = new System.Drawing.Size(75, 23);
             this.NewButton.TabIndex = 1;
             this.NewButton.Text = "New";
             this.NewButton.UseVisualStyleBackColor = true;
@@ -104,34 +99,15 @@
             // 
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.splitContainer1, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.splitContainer2, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.splitContainer3, 0, 1);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(54, 28);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 3;
+            this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(275, 273);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(275, 187);
             this.tableLayoutPanel1.TabIndex = 6;
-            // 
-            // splitContainer1
-            // 
-            this.splitContainer1.Location = new System.Drawing.Point(3, 185);
-            this.splitContainer1.Name = "splitContainer1";
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Controls.Add(this.NewButton);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.JoinButton);
-            this.splitContainer1.Size = new System.Drawing.Size(269, 80);
-            this.splitContainer1.SplitterDistance = 134;
-            this.splitContainer1.TabIndex = 0;
-            this.splitContainer1.TabStop = false;
             // 
             // splitContainer2
             // 
@@ -147,15 +123,15 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.FileNameTextBox);
-            this.splitContainer2.Size = new System.Drawing.Size(269, 85);
-            this.splitContainer2.SplitterDistance = 55;
+            this.splitContainer2.Size = new System.Drawing.Size(269, 87);
+            this.splitContainer2.SplitterDistance = 56;
             this.splitContainer2.TabIndex = 0;
             this.splitContainer2.TabStop = false;
             // 
             // splitContainer3
             // 
             this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer3.Location = new System.Drawing.Point(3, 94);
+            this.splitContainer3.Location = new System.Drawing.Point(3, 96);
             this.splitContainer3.Name = "splitContainer3";
             this.splitContainer3.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -166,8 +142,8 @@
             // splitContainer3.Panel2
             // 
             this.splitContainer3.Panel2.Controls.Add(this.PasswordTextBox);
-            this.splitContainer3.Size = new System.Drawing.Size(269, 85);
-            this.splitContainer3.SplitterDistance = 51;
+            this.splitContainer3.Size = new System.Drawing.Size(269, 88);
+            this.splitContainer3.SplitterDistance = 52;
             this.splitContainer3.TabIndex = 0;
             this.splitContainer3.TabStop = false;
             // 
@@ -196,7 +172,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.CadetBlue;
-            this.ClientSize = new System.Drawing.Size(378, 353);
+            this.ClientSize = new System.Drawing.Size(383, 315);
+            this.Controls.Add(this.JoinButton);
+            this.Controls.Add(this.NewButton);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "OpenPrompt";
             this.ShowIcon = false;
@@ -204,10 +182,6 @@
             this.Text = "Open a File";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OpenPrompt_FormClosing);
             this.tableLayoutPanel1.ResumeLayout(false);
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel1.PerformLayout();
             this.splitContainer2.Panel2.ResumeLayout(false);
@@ -231,7 +205,6 @@
         private System.Windows.Forms.TextBox FileNameTextBox;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.SplitContainer splitContainer3;
         private System.Windows.Forms.TextBox textBox3;
