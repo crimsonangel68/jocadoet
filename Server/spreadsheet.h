@@ -14,6 +14,7 @@
 #include <set>
 #include <cstdlib>
 #include <list>
+#include <deque>
 
 
 class spreadsheet
@@ -41,9 +42,13 @@ class spreadsheet
   std::list<int> get_clients() const;
   void add_client(int c);
   void write_file();
+  std::deque<std::pair<std::string, std::string> > get_undoQUE() const;
+  void add_undo(std::string cellName, std::string cellContent);
+  std::string get_undo();
 
   // Member Variables
  private:
+  std::deque<std::pair<std::string, std::string> > undoQUE;
   std::string name;
   std::string password;
   int SSVersion;

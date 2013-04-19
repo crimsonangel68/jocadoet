@@ -12,6 +12,10 @@
 #include <fstream>
 
 
+// global dequee for UNDO function
+// Deque of pair<string, string> representing <cell name, cell content> 
+deque<std::pair<string,string> > undoQUE;
+
 std::map<std::string, std::string> initializeCellMap();
 
 // Base Constructor
@@ -138,33 +142,18 @@ void spreadsheet::add_undo(std::string cellName, std::string cellContent)
 
 std::string spreadsheet::get_undo()
 { 
-  std::pair<std::string, std::string> undoPAIR = this->undoQUE.back();
-  this->undoQUE.pop_back();
+  std::pair<std::string, std::string> undoPAIR = this->undoQUE.pop_back();
   std::string cellName = undoPAIR.first;
   std::string cellContent = undoPAIR.second;
 
-  std::stringstream convert;
-  convert << cellContent.size();
-  std::string result = convert.str();
+  std::string undoMessage = "UNDO SP OK \n";
+  undoMessage += "Name:" + this->name + " \n";
+  undoMessage += "Version" + std::atoi(this->SSversion) + " \n";
+  undoMessage += "Cell" + cellName + " \n";
+  undoMessage += "Length:" + std::atoi(cellContent.length()) + " \n";
+  ondoMessage +=  cellContent + " \n";
 
-  std::stringstream convert2;
-  convert2 << this->get_version();
-  std::string result2 = convert2.str();
-
-  std::stringstream undoMessage;
-
-  undoMessage << "UNDO SP OK \n";
-  undoMessage << "Name:" + this->name + " \n";
-  undoMessage << "Version:";
-  undoMessage << convert2;
-  undoMessage << " \n";
-  undoMessage <<"Cell:" + cellName + " \n";
-  undoMessage << "Length:";
-  undoMessage << convert;
-  undoMessage <<" \n";
-  undoMessage <<  cellContent + " \n";
-
-  return undoMessage.str();
+  return undoMessage;
 }
 
 std::map<std::string, std::string> initializeCellMap()
@@ -190,20 +179,20 @@ std::map<std::string, std::string> initializeCellMap()
   return tempCells;
 }
 
-// int main()
-// {
-//   std::cout << "Is it working yet?" << std::endl;
-//   std::cout << "Is the map working?" << std::endl;
-//   std::map<std::string, std::string> tempCells = initializeCellMap();
-//   std::map<std::string, std::string>::iterator it;
-//   spreadsheet tempSS("Calvin", "poop", 1);
-//   for(it = tempCells.begin(); it != tempCells.end(); ++it)
-//     {
-//       std::cout << (*it).first << " " << (*it).second <<std::endl;
-//     }
-//   tempSS.write_file();
-//   return 0;
-// }
+int main()
+{
+  std::cout << "Is it working yet?" << std::endl;
+  std::cout << "Is the map working?" << std::endl;
+  std::map<std::string, std::string> tempCells = initializeCellMap();
+  std::map<std::string, std::string>::iterator it;
+  spreadsheet tempSS("Calvin", "poop", 1);
+  for(it = tempCells.begin(); it != tempCells.end(); ++it)
+    {
+      std::cout << (*it).first << " " << (*it).second <<std::endl;
+    }
+  tempSS.write_file();
+  return 0;
+}
 
 
 
