@@ -39,358 +39,378 @@ void error(const char *msg)
 	exit(1);
 }
 
-//unexpected client disconnect
-void bad_disc(int newsockfd)
-{
-	close(newsockfd);
-}
-
 
 //=======================parser
 
 vector<string> changeCommand(string change)
 {
-  vector<string> info;
-  stringstream ss(change);
-  string item;
-  while(getline(ss, item))
-    {
-      info.push_back(item);
-    }
-
-    std::cout << info[1] << "\n" << info[2] << std::endl;
-    stringstream tempSS(info[2]);
-    vector<string> versionInfo;
-    string temp1;
-    while(getline(tempSS, temp1, ':' ))
-      {
-	versionInfo.push_back(temp1);
-      }
-    unsigned pos = temp1.find(" ");
-    temp1 = temp1.substr(0, pos);
-    int testVersion = atoi(temp1.c_str());
-    std::cout << "temp1 is: " << temp1 << std::endl << std::endl << testVersion << std::endl;
-    bool testVersionEqualsSpreadsheetVersion = true;
-
-    if(testVersionEqualsSpreadsheetVersion)
-      {
-      	// increment spreadsheet version
-      	int SSversion = testVersion +1;
-      	stringstream serverResponseSS;
-      	serverResponseSS << "CHANGE SP OK \n";
-      	serverResponseSS << info[1];
-      	serverResponseSS << " \n";
-      	serverResponseSS << "Version:";
-      	serverResponseSS << SSversion;
-      	serverResponseSS << " \n";
-      	string serverResponse = serverResponseSS.str();
+	vector<string> info;
+	stringstream ss(change);
+	string item;
+	while(getline(ss, item))
 	{
-	  // Loop through all clients
-      	std::cout << serverResponse << std::endl;
+		info.push_back(item);
 	}
-      }
-      else if(testVersionEqualsSpreadsheetVersion)
+
+	std::cout << info[1] << "\n" << info[2] << std::endl;
+	stringstream tempSS(info[2]);
+	vector<string> versionInfo;
+	string temp1;
+	while(getline(tempSS, temp1, ':' ))
 	{
-	  stringstream serverResponseSS;
-	  int SSversion = testVersion;
-	  serverResponseSS << "CHANGE WAIT OK \n";
-	  serverResponseSS << info[1];
-	  serverResponseSS << " \n";
-	  serverResponseSS << "Version:";
-	  serverResponseSS << SSversion;
-	  serverResponseSS << " \n";
-	  string serverResponse = serverResponseSS.str();
-	  std::cout << serverResponse << std::endl;
+		versionInfo.push_back(temp1);
+	}
+	unsigned pos = temp1.find(" ");
+	temp1 = temp1.substr(0, pos);
+	int testVersion = atoi(temp1.c_str());
+	std::cout << "temp1 is: " << temp1 << std::endl << std::endl << testVersion << std::endl;
+	bool testVersionEqualsSpreadsheetVersion = true;
+
+	if(testVersionEqualsSpreadsheetVersion)
+	{
+		// increment spreadsheet version
+		int SSversion = testVersion +1;
+		stringstream serverResponseSS;
+		serverResponseSS << "CHANGE SP OK \n";
+		serverResponseSS << info[1];
+		serverResponseSS << " \n";
+		serverResponseSS << "Version:";
+		serverResponseSS << SSversion;
+		serverResponseSS << " \n";
+		string serverResponse = serverResponseSS.str();
+		{
+			// Loop through all clients
+			std::cout << serverResponse << std::endl;
+		}
+	}
+	else if(testVersionEqualsSpreadsheetVersion)
+	{
+		stringstream serverResponseSS;
+		int SSversion = testVersion;
+		serverResponseSS << "CHANGE WAIT OK \n";
+		serverResponseSS << info[1];
+		serverResponseSS << " \n";
+		serverResponseSS << "Version:";
+		serverResponseSS << SSversion;
+		serverResponseSS << " \n";
+		string serverResponse = serverResponseSS.str();
+		std::cout << serverResponse << std::endl;
 	}
 	if(true)
-       	{
-	  stringstream serverResponseSS;
-	  int SSversion = testVersion;
-	  serverResponseSS << "CHANGE WAIT OK \n";
-	  serverResponseSS << info[1];
-	  serverResponseSS << "\n";
-	  serverResponseSS << "MESSAGE REGARDING FAIL\n";
-	  string serverResponse = serverResponseSS.str();
-	  std::cout << serverResponse << std::endl;
+	{
+		stringstream serverResponseSS;
+		int SSversion = testVersion;
+		serverResponseSS << "CHANGE WAIT OK \n";
+		serverResponseSS << info[1];
+		serverResponseSS << "\n";
+		serverResponseSS << "MESSAGE REGARDING FAIL\n";
+		string serverResponse = serverResponseSS.str();
+		std::cout << serverResponse << std::endl;
 	}
 
 
-    return info;
-    
+	return info;
+
 }
 
 vector<string> undoCommand(string undo)
 {
-  vector<string> info;
-  stringstream ss(undo);
-  string item;
-  while(getline(ss, item))
-    {
-      info.push_back(item);
-    }
-
-    std::cout << info[1] << "\n" << info[2] << std::endl;
-    stringstream tempSS(info[2]);
-    vector<string> versionInfo;
-    string temp1;
-    while(getline(tempSS, temp1, ':' ))
-      {
-	versionInfo.push_back(temp1);
-      }
-    unsigned pos = temp1.find(" ");
-    temp1 = temp1.substr(0, pos);
-    int testVersion = atoi(temp1.c_str());
-    std::cout << "temp1 is: " << temp1 << std::endl << std::endl << testVersion << std::endl;
-
-    //if(testVersion == "spreadsheet version")  // --------------------- Need to integrate with server -----------
-     {
-      	      	// increment spreadsheet version
-      	int SSversion = testVersion +1;
-      	stringstream serverResponseSS;
-      	serverResponseSS << "UNDO SP OK \n";
-      	serverResponseSS << info[1];
-      	serverResponseSS << " \n";
-      	serverResponseSS << "Version:";
-      	serverResponseSS << SSversion;  // --------------------- Need to integrate with server -----------
-      	serverResponseSS << " \n";
-      	serverResponseSS << "Cell:";
-      	serverResponseSS << "CELL TO BE REPLACED";  // --------------------- Need to integrate with server -----------
-      	serverResponseSS << "\n";
-      	serverResponseSS << "Length:";
-      	serverResponseSS << "Length of content"; // --------------------- Need to integrate with server -----------
-      	serverResponseSS << "\n";
-      	serverResponseSS << "OLD CONTENT OF CELL";  // --------------------- Need to integrate with server -----------
-      	serverResponseSS << "\n";
-	
-      	string serverResponse = serverResponseSS.str();
-	 {
-	   // Loop through all clients connected to spreadsheet and send response
-	   std::cout << serverResponse << std::endl;
-	 }
-   }
-    //else if (undoStack.size() == 0) // no undo to perform
-    {
-	      
-      	int SSversion = testVersion;
-      	stringstream serverResponseSS;
-      	serverResponseSS << "UNDO SP END \n";
-      	serverResponseSS << info[1];
-      	serverResponseSS << " \n";
-      	serverResponseSS << "Version:";
-      	serverResponseSS << SSversion;  // --------------------- Need to integrate with server -----------
-      	serverResponseSS << " \n";
-	
-      	string serverResponse = serverResponseSS.str();
+	vector<string> info;
+	stringstream ss(undo);
+	string item;
+	while(getline(ss, item))
 	{
-	  // Send message to initial client
-      	std::cout << serverResponse << std::endl;
+		info.push_back(item);
 	}
-    }
-    // else if(testVersion != SSversion)
-     {
-	      
-      	int SSversion = testVersion;
-      	stringstream serverResponseSS;
-      	serverResponseSS << "UNDO SP WAIT \n";
-      	serverResponseSS << info[1];
-      	serverResponseSS << " \n";
-      	serverResponseSS << "Version:";
-      	serverResponseSS << SSversion;  // --------------------- Need to integrate with server -----------
-      	serverResponseSS << " \n";
-	
-      	string serverResponse = serverResponseSS.str();
+
+	std::cout << info[1] << "\n" << info[2] << std::endl;
+	stringstream tempSS(info[2]);
+	vector<string> versionInfo;
+	string temp1;
+	while(getline(tempSS, temp1, ':' ))
 	{
-	  // Send message to initial client
-      	std::cout << serverResponse << std::endl;
+		versionInfo.push_back(temp1);
 	}
-    }
-     //else //Some other error
-     {
-	      
-      	int SSversion = testVersion;
-      	stringstream serverResponseSS;
-      	serverResponseSS << "UNDO SP FAIL \n";
-      	serverResponseSS << info[1];
-      	serverResponseSS << " \n";
-      	serverResponseSS << "UNDO failed for reason:"; // Message for reason for fail
-      	serverResponseSS << " \n";
-	
-      	string serverResponse = serverResponseSS.str();
+	unsigned pos = temp1.find(" ");
+	temp1 = temp1.substr(0, pos);
+	int testVersion = atoi(temp1.c_str());
+	std::cout << "temp1 is: " << temp1 << std::endl << std::endl << testVersion << std::endl;
 
-      	std::cout << serverResponse << std::endl;
-     }
+	//if(testVersion == "spreadsheet version")  // - Need to integrate with server 
+	{
+		// increment spreadsheet version
+		int SSversion = testVersion +1;
+		stringstream serverResponseSS;
+		serverResponseSS << "UNDO SP OK \n";
+		serverResponseSS << info[1];
+		serverResponseSS << " \n";
+		serverResponseSS << "Version:";
+		serverResponseSS << SSversion;  // Need to integrate with server --
+		serverResponseSS << " \n";
+		serverResponseSS << "Cell:";
+		serverResponseSS << "CELL TO BE REPLACED";  // Need to integrate with server
+		serverResponseSS << "\n";
+		serverResponseSS << "Length:";
+		serverResponseSS << "Length of content"; //  Need to integrate with server
+		serverResponseSS << "\n";
+		serverResponseSS << "OLD CONTENT OF CELL";  // - Need to integrate with server
+		serverResponseSS << "\n";
 
-    
-    return info;
+		string serverResponse = serverResponseSS.str();
+		{
+			// Loop through all clients connected to spreadsheet and send response
+			std::cout << serverResponse << std::endl;
+		}
+	}
+	//else if (undoStack.size() == 0) // no undo to perform
+	{
+
+		int SSversion = testVersion;
+		stringstream serverResponseSS;
+		serverResponseSS << "UNDO SP END \n";
+		serverResponseSS << info[1];
+		serverResponseSS << " \n";
+		serverResponseSS << "Version:";
+		serverResponseSS << SSversion;  // -Need to integrate with server --
+		serverResponseSS << " \n";
+
+		string serverResponse = serverResponseSS.str();
+		{
+			// Send message to initial client
+			std::cout << serverResponse << std::endl;
+		}
+	}
+	// else if(testVersion != SSversion)
+	{
+
+		int SSversion = testVersion;
+		stringstream serverResponseSS;
+		serverResponseSS << "UNDO SP WAIT \n";
+		serverResponseSS << info[1];
+		serverResponseSS << " \n";
+		serverResponseSS << "Version:";
+		serverResponseSS << SSversion;  // - Need to integrate with server ----
+		serverResponseSS << " \n";
+
+		string serverResponse = serverResponseSS.str();
+		{
+			// Send message to initial client
+			std::cout << serverResponse << std::endl;
+		}
+	}
+	//else //Some other error
+	{
+
+		int SSversion = testVersion;
+		stringstream serverResponseSS;
+		serverResponseSS << "UNDO SP FAIL \n";
+		serverResponseSS << info[1];
+		serverResponseSS << " \n";
+		serverResponseSS << "UNDO failed for reason:"; // Message for reason for fail
+		serverResponseSS << " \n";
+
+		string serverResponse = serverResponseSS.str();
+
+		std::cout << serverResponse << std::endl;
+	}
+
+
+	return info;
 }
 
 vector<string> createCommand(string create)
 {
 
-  vector<string> info;
-  stringstream ss(create);
-  string item;
-  while(getline(ss, item))
-    {
-      info.push_back(item);
-    }
+	vector<string> info;
+	stringstream ss(create);
+	string item;
+	while(getline(ss, item))
+	{
+		info.push_back(item);
+	}
 
-  std::cout << info[1] << "\n" << info[2] << std::endl;
-    stringstream tempSS(info[1]);
-    vector<string> nameInfo;
-    string tempName;
-    while(getline(tempSS, tempName, ':' ))
-      {
-	nameInfo.push_back(tempName);
-      }
-    unsigned pos = tempName.find(" ");
-    tempName = tempName.substr(0, pos);
-    stringstream tempSS2(info[2]);
-    vector<string> passwordInfo;
-    string tempPassword;
-    while(getline(tempSS2, tempPassword, ':' ))
-      {
-	nameInfo.push_back(tempPassword);
-      }
-    pos = tempPassword.find(" ");
-    tempPassword = tempPassword.substr(0, pos);
-    std::cout << "tempName is: " << tempName << std::endl << "tempPassword is: " << tempPassword << std::endl << std::endl;
-    bool testNameNotTaken = false; // Test if file name exists already
-    
+	std::cout << info[1] << "\n" << info[2] << std::endl;
+	stringstream tempSS(info[1]);
+	vector<string> nameInfo;
+	string tempName;
+	while(getline(tempSS, tempName, ':' ))
+	{
+		nameInfo.push_back(tempName);
+	}
+	unsigned pos = tempName.find(" ");
+	tempName = tempName.substr(0, pos);
+	stringstream tempSS2(info[2]);
+	vector<string> passwordInfo;
+	string tempPassword;
+	while(getline(tempSS2, tempPassword, ':' ))
+	{
+		nameInfo.push_back(tempPassword);
+	}
+	pos = tempPassword.find(" ");
+	tempPassword = tempPassword.substr(0, pos);
+	std::cout << "tempName is: " << tempName << std::endl << "tempPassword is: " << tempPassword << std::endl << std::endl;
+	bool testNameNotTaken = false; // Test if file name exists already
 
-    if(testNameNotTaken) // Name is not taken
-      {
-	// Create spreadsheet with name and password (Use hashmaps to keep track of spreadsheets?)    
-      	stringstream serverResponseSS;
-      	serverResponseSS << "CREATE SP OK \n";
-      	serverResponseSS << "Name:";
-	serverResponseSS << tempName;
-      	serverResponseSS << " \n";
-      	serverResponseSS << "Password:";
-	serverResponseSS << tempPassword;
-      	serverResponseSS << " \n";
-	
-      	string serverResponse = serverResponseSS.str();
 
-      	std::cout << serverResponse << std::endl;
-      }
-    else
-      {
-	stringstream serverResponseSS;
-      	serverResponseSS << "CREATE SP FAIL \n";
-      	serverResponseSS << "Name:";
-	serverResponseSS << tempName;
-      	serverResponseSS << " \n";
-      	serverResponseSS << "MESSAGE REGARDING FAIL";
-      	serverResponseSS << " \n";
-	
-      	string serverResponse = serverResponseSS.str();
+	if(testNameNotTaken) // Name is not taken
+	{
+		// Create spreadsheet with name and password (Use hashmaps to keep track of spreadsheets?)    
+		stringstream serverResponseSS;
+		serverResponseSS << "CREATE SP OK \n";
+		serverResponseSS << "Name:";
+		serverResponseSS << tempName;
+		serverResponseSS << " \n";
+		serverResponseSS << "Password:";
+		serverResponseSS << tempPassword;
+		serverResponseSS << " \n";
 
-      	std::cout << serverResponse << std::endl;
-      }
-    
-    return info;
+		string serverResponse = serverResponseSS.str();
+
+		std::cout << serverResponse << std::endl;
+	}
+	else
+	{
+		stringstream serverResponseSS;
+		serverResponseSS << "CREATE SP FAIL \n";
+		serverResponseSS << "Name:";
+		serverResponseSS << tempName;
+		serverResponseSS << " \n";
+		serverResponseSS << "MESSAGE REGARDING FAIL";
+		serverResponseSS << " \n";
+
+		string serverResponse = serverResponseSS.str();
+
+		std::cout << serverResponse << std::endl;
+	}
+
+	return info;
 }
 
 vector<string> joinCommand(string join)
 {
-  
-  vector<string> info;
-  stringstream ss(join);
-  string item;
-  while(getline(ss, item))
-    {
-      info.push_back(item);
-    }
 
-  std::cout << info[1] << "\n" << info[2] << std::endl;
+	vector<string> info;
+	stringstream ss(join);
+	string item;
+	while(getline(ss, item))
+	{
+		info.push_back(item);
+	}
 
-   stringstream tempSS(info[1]);
-    vector<string> nameInfo;
-    string tempName;
-    while(getline(tempSS, tempName, ':' ))
-      {
-	nameInfo.push_back(tempName);
-      }
-    unsigned pos = tempName.find(" ");
-    tempName = tempName.substr(0, pos);
-    stringstream tempSS2(info[2]);
-    vector<string> passwordInfo;
-    string tempPassword;
-    while(getline(tempSS2, tempPassword, ':' ))
-      {
-	nameInfo.push_back(tempPassword);
-      }
-    pos = tempPassword.find(" ");
-    tempPassword = tempPassword.substr(0, pos);
-    std::cout << "tempName is: " << tempName << std::endl << "tempPassword is: " << tempPassword << std::endl << std::endl;
- 
-    bool nameExists = true; // Check to see if name exists
-    bool passwordMatches = false; // Check if password matches
-    
-    if(nameExists && passwordMatches)
-      {
+	std::cout << info[1] << "\n" << info[2] << std::endl;
 
-	// Retrieve spreadsheet information ------------------- Need to implement -------------
-	int SSversion = 1029; // Get current version number of spreadsheet
-	int lengthOfSpreadsheetXML = 1313; // lengthOfSpreadsheetXML = SpreadsheetXML.length();
-	std::string xml = ""; // xml = readtextfile(tempName);
-	stringstream serverResponseSS;
-      	serverResponseSS << "JOIN SP OK \n";
-      	serverResponseSS << "Name:";
-	serverResponseSS << tempName;
-      	serverResponseSS << " \n";
-      	serverResponseSS << "Version:";
-	serverResponseSS << SSversion;
-      	serverResponseSS << " \n";
-	serverResponseSS << "Length:";
-	serverResponseSS << lengthOfSpreadsheetXML;
-	serverResponseSS << "\n";
-	serverResponseSS << xml;
-	serverResponseSS << "\n";
+	stringstream tempSS(info[1]);
+	vector<string> nameInfo;
+	string tempName;
+	while(getline(tempSS, tempName, ':' ))
+	{
+		nameInfo.push_back(tempName);
+	}
+	unsigned pos = tempName.find(" ");
+	tempName = tempName.substr(0, pos);
+	stringstream tempSS2(info[2]);
+	vector<string> passwordInfo;
+	string tempPassword;
+	while(getline(tempSS2, tempPassword, ':' ))
+	{
+		nameInfo.push_back(tempPassword);
+	}
+	pos = tempPassword.find(" ");
+	tempPassword = tempPassword.substr(0, pos);
+	std::cout << "tempName is: " << tempName << std::endl << "tempPassword is: " << tempPassword << std::endl << std::endl;
+
+	bool nameExists = true; // Check to see if name exists
+	bool passwordMatches = false; // Check if password matches
+
+	if(nameExists && passwordMatches)
+	{
+
+		// Retrieve spreadsheet information ----- Need to implement -------------
+		int SSversion = 1029; // Get current version number of spreadsheet
+		int lengthOfSpreadsheetXML = 1313; // lengthOfSpreadsheetXML = SpreadsheetXML.length();
+		std::string xml = ""; // xml = readtextfile(tempName);
+		stringstream serverResponseSS;
+		serverResponseSS << "JOIN SP OK \n";
+		serverResponseSS << "Name:";
+		serverResponseSS << tempName;
+		serverResponseSS << " \n";
+		serverResponseSS << "Version:";
+		serverResponseSS << SSversion;
+		serverResponseSS << " \n";
+		serverResponseSS << "Length:";
+		serverResponseSS << lengthOfSpreadsheetXML;
+		serverResponseSS << "\n";
+		serverResponseSS << xml;
+		serverResponseSS << "\n";
+
+
+		string serverResponse = serverResponseSS.str();
+
+		std::cout << serverResponse << std::endl;
+	}
+	else
+	{
+		stringstream serverResponseSS;
+		serverResponseSS << "JOIN SP FAIL \n";
+		serverResponseSS << "Name:";
+		serverResponseSS << tempName;
+		serverResponseSS << " \n";
+		serverResponseSS << "MESSAGE REGARDING FAIL";
+		serverResponseSS << " \n";
+
+		string serverResponse = serverResponseSS.str();
+
+		std::cout << serverResponse << std::endl;
+	}
+
+
+
+	return info;
+}
+
+int parse(char buf[256])
+{
+  if(buf[0] == 'C')
+		if(buf[1] == 'R')
+			return CREATE;
+		else
+			return CHANGE;
+
+	if(buf[0] == 'J')
+		return JOIN;
 	
+	if(buf[0] == 'U')
+		if(buf[1] == 'N')
+			return UNDO;
+		else
+			return UPDATE;
 	
-      	string serverResponse = serverResponseSS.str();
-
-      	std::cout << serverResponse << std::endl;
-      }
-    else
-      {
-	stringstream serverResponseSS;
-      	serverResponseSS << "JOIN SP FAIL \n";
-      	serverResponseSS << "Name:";
-	serverResponseSS << tempName;
-      	serverResponseSS << " \n";
-      	serverResponseSS << "MESSAGE REGARDING FAIL";
-      	serverResponseSS << " \n";
+	if(buf[0] == 'S')
+		return SAVE;
 	
-      	string serverResponse = serverResponseSS.str();
+	if(buf[0] == 'L')
+		return LEAVE;
 
-      	std::cout << serverResponse << std::endl;
-      }
-
-
-
-  return info;
+	return ERROR;
 }
 
 
-//=======================parser=======================
-
-		//Creates a connection object that runs on it's own thread
-		//this class will have all the functionality that each 
-		//connection that is made will need
-	class Connection 
+//Creates a connection object that runs on it's own thread
+//this class will have all the functionality that each 
+//connection that is made will need
+class Connection 
 {
 	public:
 		//constructor
 		//takes in the socket file descriptor for the connection
-		Connection(int c_newsockfd) 
-			: newsockfd(c_newsockfd)
-		{
-			//in here we can put the information for the connection 
-			//in a map/list to keep track of live connections
-		}
+		Connection(int c_newsockfd, int num) 
+			: newsockfd(c_newsockfd),
+			con_num(num)
+	{
+		//in here we can put the information for the connection 
+		//in a map/list to keep track of live connections
+		//printf("%d\n", con_num);
+	}
 
 		//this method is necessary for multithreading. Starts listening
 		//on the socket for messages to come through
@@ -399,10 +419,19 @@ vector<string> joinCommand(string join)
 			start_read();
 		}
 
+		int get_sockfd()
+		{
+			return newsockfd;
+		}
+
+		int get_con_num()
+		{
+			return con_num;
+		}
+
 	private:
-		int n, newsockfd;
+		int n, newsockfd, con_num;
 		char buffer[256];
-		string name;
 
 		//listen on the socket connection for a message to come through
 		void start_read()
@@ -414,7 +443,7 @@ vector<string> joinCommand(string join)
 			n = read(newsockfd, buffer, 255);
 			if(n==0)
 			{
-				bad_disc(newsockfd);
+				close_con();
 				return;
 			}
 			if(n<0) error("ERROR reading from socket");
@@ -423,13 +452,41 @@ vector<string> joinCommand(string join)
 			//here is where we need to parse the message to determine what
 			//command has been sent by the client
 
-			
+			int cmd = parse(buffer);
 
+			string message = string(buffer);
+
+			switch(cmd)
+			{
+				case CREATE: createCommand(message);
+				break;
+				case JOIN: joinCommand(message);
+				break;
+				case CHANGE: changeCommand(message);
+				break;
+				case UNDO: undoCommand(message);
+				break;
+				case UPDATE: updateCommand(message);
+				break;
+				case SAVE: saveCommand(message);
+				break;
+				case LEAVE: leaveCommand(message);
+				break;
+				case ERROR: "";
+				break;
+
+			}
+			
+			char rspns[] = "Working on it billy";
 			//here is where we will write back to the client the correct msg
 			//we can either keep it here and pass back from the methods we call
 			//what needs to be sent to the client or just send the message from
 			//the method called and remove this call to start_write()
-			start_write(cmd);
+			n = start_write(rspns);
+			if(n==0)
+			{
+				return;
+			}
 			//clear out the buffer (idk if we need it but it was causing some
 			//issues when i wasn't
 			bzero(buffer,256);
@@ -438,13 +495,17 @@ vector<string> joinCommand(string join)
 		}
 
 		//write the message to the client on the socket connection
-		void start_write(int cmd)
+		int start_write(char response[])
 		{
 
-			n = write(newsockfd, "Got it", 18);
+			n = write(newsockfd, response, 100);
+			if(n==0)
+			{
+				close_con();
+				return 0;
+			}
 			if(n<0) error("Error writing to socket");
 		}
-
 
 		//gracefully close the connection when either the client sends a 
 		//message to disconnect or the client side just decides to close
@@ -452,8 +513,6 @@ vector<string> joinCommand(string join)
 		{
 			close(newsockfd);
 		}
-
-
 };
 
 int main(int argc, char* argv[])
@@ -482,6 +541,7 @@ int main(int argc, char* argv[])
 	//requests that can be in queue at one time if there for
 	//some reason is a problem with the socket accepting the client
 	//connection
+	int con_num = 0;
 	while(1)
 	{
 		listen(sockfd, 5);
@@ -494,9 +554,12 @@ int main(int argc, char* argv[])
 			error("ERROR on accept");
 
 		//make a new connection object
-		Connection c(newsockfd);
+		Connection c(newsockfd, con_num);
 		//send it to it's own thread
 		boost::thread conThread(c);
+
+		//increment connection count
+		con_num++;
 
 	}
 
@@ -506,7 +569,7 @@ int main(int argc, char* argv[])
 	//be closed or if it will be taken care of when we close it in the
 	//connection object
 	//close(newsockfd);	
-	
+
 	//close the server socket
 	close(sockfd);
 
