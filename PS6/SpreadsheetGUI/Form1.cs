@@ -41,8 +41,6 @@ namespace SpreadsheetGUI
         private String IPAddress;
         private StringSocket socket;
 
-        private File newFile;
-
         //-----------------------------------------------------------------------------------Form1(pathname)
         /// <summary>
         /// Opens a new Window when a file with a .ss extension is opened.  The Window will contain
@@ -56,13 +54,16 @@ namespace SpreadsheetGUI
             socket = newSocket;
             messagesToReceive = 0;
 
-            String filePath = @"C:\Windows\Temp\jocadoetSpreadsheet.ss";
+            String filePath = @"../savedfiles/jocadoetSpreadsheet.ss";
 
-            FileInfo newF = new FileInfo(filePath);
-            
-            using (StreamReader sr = newF.OpenText())
+            FileInfo newFile = new FileInfo(filePath);
 
-            sheet = new Spreadsheet(filePath, s => true, s => s.ToUpper(), version);
+            using (StreamWriter sw = newFile.CreateText())
+            {
+                sw.WriteLine(xml);
+            }
+
+            sheet = new Spreadsheet(filePath, s => true, s => s.ToUpper(), "ps6");
 
             sheet.FileName = fileName;
             sheet.Version = version;
