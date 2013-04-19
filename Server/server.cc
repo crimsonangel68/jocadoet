@@ -10,7 +10,7 @@
 #include <iterator>
 #include <map>
 #include <set>
-#include <map>
+#include <list>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -34,11 +34,11 @@ enum com_cmds{
 	ERROR = -1
 };
 
-//global hash map of spreadsheets and connects
+//global hash map of spreadsheets and connections
 map<string, int> ss_connections;
 
 //list of open/connected  spreadsheets
-
+//list<spreadsheet> connected_ss;
 //prints out an error message
 void error(const char *msg)
 {
@@ -49,7 +49,17 @@ void error(const char *msg)
 
 //=======================parser
 
-string changeCommand(string change)
+string updateCommand(string update, int connection, string SSname)
+{
+  update.erase(0, 6);
+  update.insert(0, "UPDATE");
+  // LOOP THROUGH CONNECTIONS AND SEND IT TO ALL OTHER connections except the one that sent change
+ 
+  
+  return update;
+}
+
+string changeCommand(string change, int connection)
 {
 	vector<string> info;
 	stringstream ss(change);
@@ -64,6 +74,7 @@ string changeCommand(string change)
 	stringstream tempSS(info[2]);
 	vector<string> versionInfo;
 	string temp1;
+	string tempName;
 	while(getline(tempSS, temp1, ':' ))
 	{
 		versionInfo.push_back(temp1);
@@ -86,10 +97,8 @@ string changeCommand(string change)
 		serverResponseSS << SSversion;
 		serverResponseSS << " \n";
 		serverResponse = serverResponseSS.str();
-		{
-			// Loop through all clients
-			std::cout << serverResponse << std::endl;
-		}
+		 // Change request is valid, call updateCommand to send out the update
+		updateCommand(change, connection, tempName);
 	}
 	else if(testVersionEqualsSpreadsheetVersion)
 	{
@@ -227,7 +236,164 @@ string undoCommand(string undo)
 	return serverResponse;
 }
 
-string createCommand(string create)
+string createCommand(string create, int connection)
+{
+
+	vector<string> info;
+	stringstream ss(create);
+	string serverResponse = "";
+	string item;
+	while(getline(ss, item))
+	{
+		info.push_back(item);
+	}
+
+	std::cout << info[1] << "\n" << info[2] << std::endl;
+	stringstream tempSS(info[1]);
+	vector<string> nameInfo;
+	string tempName;
+	while(getline(tempSS, tempName, ':' ))
+	{
+		nameInfo.push_back(tempName);
+	}
+	unsigned pos = tempName.find(" ");
+	tempName = tempName.substr(0, pos);
+	// Add name and Connection to the map
+	ss_connections.insert ( std::pair<std::string, int>(tempName, connection));
+	stringstream tempSS2(info[2]);
+	vector<string> passwordInfo;
+	string tempPassword;
+	while(getline(tempSS2, tempPassword, ':' ))
+	{
+		nameInfo.push_back(tempPassword);
+	}
+	pos = tempPassword.find(" ");
+	tempPassword = tempPassword.substr(0, pos);
+	std::cout << "tempName is: " << tempName << std::endl << "tempPassword is: " << tempPassword << std::endl << std::endl;
+	bool testNameNotTaken = true; // Test if file name exists already
+
+
+	if(testNameNotTaken) // Name is not taken
+	{
+		// Create spreadsheet with name and password (Use hashmaps to keep track of spreadsheets?)    
+		
+		stringstream serverResponseSS;
+		serverResponseSS << "CREATE SP OK \n";
+		serverResponseSS << "Name:";
+		serverResponseSS << tempName;
+		serverResponseSS << " \n";
+		serverResponseSS << "Password:";
+		serverResponseSS << tempPassword;
+		serverResponseSS << " \n";
+
+		serverResponse = serverResponseSS.str();
+
+		std::cout << serverResponse << std::endl;
+	}
+	else
+	{
+		stringstream serverResponseSS;
+		serverResponseSS << "CREATE SP FAIL \n";
+		serverResponseSS << "Name:";
+		serverResponseSS << tempName;
+		serverResponseSS << " \n";
+		serverResponseSS << "MESSAGE REGARDING FAIL";
+		serverResponseSS << " \n";
+
+		serverResponse = serverResponseSS.str();
+
+		std::cout << serverResponse << std::endl;
+	}
+
+	return serverResponse;
+}
+
+string joinCommand(string join, int connection)
+{
+
+	vector<string> info;
+	stringstream ss(join);
+	string serverResponse = "";
+	string item;
+	while(getline(ss, item))
+	{
+		info.push_back(item);
+	}
+
+	std::cout << info[1] << "\n" << info[2] << std::endl;
+
+	stringstream tempSS(info[1]);
+	vector<string> nameInfo;
+	string tempName;
+	while(getline(tempSS, tempName, ':' ))
+	{
+		nameInfo.push_back(tempName);
+	}
+	unsigned pos = tempName.find(" ");
+	tempName = tempName.substr(0, pos);
+	// Add name and Connection to the map
+	ss_connections.insert ( std::pair<std::string, int>(tempName, connection) );
+	stringstream tempSS2(info[2]);
+	vector<string> passwordInfo;
+	string tempPassword;
+	while(getline(tempSS2, tempPassword, ':' ))
+	{
+		nameInfo.push_back(tempPassword);
+	}
+	pos = tempPassword.find(" ");
+	tempPassword = tempPassword.substr(0, pos);
+	std::cout << "tempName is: " << tempName << std::endl << "tempPassword is: " << tempPassword << std::endl << std::endl;
+
+	bool nameExists = true; // Check to see if name exists
+	bool passwordMatches = true; // Check if password matches
+
+	if(nameExists && passwordMatches)
+	{
+
+		// Retrieve spreadsheet information ----- Need to implement -------------
+		int SSversion = 0; // Get current version number of spreadsheet
+		int lengthOfSpreadsheetXML = 1313; // lengthOfSpreadsheetXML = SpreadsheetXML.length();
+		std::string xml = "TESTXML"; // xml = readtextfile(tempName);
+		stringstream serverResponseSS;
+		serverResponseSS << "JOIN SP OK \n";
+		serverResponseSS << "Name:";
+		serverResponseSS << tempName;
+		serverResponseSS << " \n";
+		serverResponseSS << "Version:";
+		serverResponseSS << SSversion;
+		serverResponseSS << " \n";
+		serverResponseSS << "Length:";
+		serverResponseSS << lengthOfSpreadsheetXML;
+		serverResponseSS << "\n";
+		serverResponseSS << xml;
+		serverResponseSS << "\n";
+
+
+		serverResponse = serverResponseSS.str();
+
+		std::cout << serverResponse << std::endl;
+	}
+	else
+	{
+		stringstream serverResponseSS;
+		serverResponseSS << "JOIN SP FAIL \n";
+		serverResponseSS << "Name:";
+		serverResponseSS << tempName;
+		serverResponseSS << " \n";
+		serverResponseSS << "MESSAGE REGARDING FAIL";
+		serverResponseSS << " \n";
+
+		serverResponse = serverResponseSS.str();
+
+		std::cout << serverResponse << std::endl;
+	}
+
+
+
+	return serverResponse;
+}
+
+string saveCommand(string create)
 {
 
 	vector<string> info;
@@ -296,90 +462,6 @@ string createCommand(string create)
 
 	return serverResponse;
 }
-
-string joinCommand(string join)
-{
-
-	vector<string> info;
-	stringstream ss(join);
-	string serverResponse = "";
-	string item;
-	while(getline(ss, item))
-	{
-		info.push_back(item);
-	}
-
-	std::cout << info[1] << "\n" << info[2] << std::endl;
-
-	stringstream tempSS(info[1]);
-	vector<string> nameInfo;
-	string tempName;
-	while(getline(tempSS, tempName, ':' ))
-	{
-		nameInfo.push_back(tempName);
-	}
-	unsigned pos = tempName.find(" ");
-	tempName = tempName.substr(0, pos);
-	stringstream tempSS2(info[2]);
-	vector<string> passwordInfo;
-	string tempPassword;
-	while(getline(tempSS2, tempPassword, ':' ))
-	{
-		nameInfo.push_back(tempPassword);
-	}
-	pos = tempPassword.find(" ");
-	tempPassword = tempPassword.substr(0, pos);
-	std::cout << "tempName is: " << tempName << std::endl << "tempPassword is: " << tempPassword << std::endl << std::endl;
-
-	bool nameExists = true; // Check to see if name exists
-	bool passwordMatches = true; // Check if password matches
-
-	if(nameExists && passwordMatches)
-	{
-
-		// Retrieve spreadsheet information ----- Need to implement -------------
-		int SSversion = 0; // Get current version number of spreadsheet
-		int lengthOfSpreadsheetXML = 1313; // lengthOfSpreadsheetXML = SpreadsheetXML.length();
-		std::string xml = ""; // xml = readtextfile(tempName);
-		stringstream serverResponseSS;
-		serverResponseSS << "JOIN SP OK \n";
-		serverResponseSS << "Name:";
-		serverResponseSS << tempName;
-		serverResponseSS << " \n";
-		serverResponseSS << "Version:";
-		serverResponseSS << SSversion;
-		serverResponseSS << " \n";
-		serverResponseSS << "Length:";
-		serverResponseSS << lengthOfSpreadsheetXML;
-		serverResponseSS << "\n";
-		serverResponseSS << xml;
-		serverResponseSS << "\n";
-
-
-		serverResponse = serverResponseSS.str();
-
-		std::cout << serverResponse << std::endl;
-	}
-	else
-	{
-		stringstream serverResponseSS;
-		serverResponseSS << "JOIN SP FAIL \n";
-		serverResponseSS << "Name:";
-		serverResponseSS << tempName;
-		serverResponseSS << " \n";
-		serverResponseSS << "MESSAGE REGARDING FAIL";
-		serverResponseSS << " \n";
-
-		serverResponse = serverResponseSS.str();
-
-		std::cout << serverResponse << std::endl;
-	}
-
-
-
-	return serverResponse;
-}
-
 int parse(char buf[256])
 {
 	if(buf[0] == 'C')
@@ -471,11 +553,11 @@ class Connection
 			string serv_resp = "ERROR \n";
 			switch(cmd)
 			{
-				case CREATE: serv_resp = createCommand(message);
+			case CREATE: serv_resp = createCommand(message, newsockfd);
 										 break;
-				case JOIN: serv_resp = joinCommand(message);
+			case JOIN: serv_resp = joinCommand(message, newsockfd);
 									 break;
-				case CHANGE: serv_resp = changeCommand(message);
+			case CHANGE: serv_resp = changeCommand(message, newsockfd);
 										 break;
 				case UNDO: serv_resp = undoCommand(message);
 									 break;
