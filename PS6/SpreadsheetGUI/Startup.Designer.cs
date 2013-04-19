@@ -37,7 +37,7 @@
             // 
             // ConnectButton
             // 
-            this.ConnectButton.Location = new System.Drawing.Point(167, 199);
+            this.ConnectButton.Location = new System.Drawing.Point(167, 166);
             this.ConnectButton.Name = "ConnectButton";
             this.ConnectButton.Size = new System.Drawing.Size(75, 23);
             this.ConnectButton.TabIndex = 3;
@@ -49,16 +49,14 @@
             // 
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.IPTextBox, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.textBox3, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.IPTextBox, 0, 1);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(42, 50);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 4;
+            this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(200, 100);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(200, 73);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // IPTextBox
@@ -66,19 +64,21 @@
             this.IPTextBox.AcceptsReturn = true;
             this.IPTextBox.AcceptsTab = true;
             this.IPTextBox.BackColor = System.Drawing.Color.White;
-            this.IPTextBox.Location = new System.Drawing.Point(3, 28);
+            this.IPTextBox.Location = new System.Drawing.Point(3, 39);
+            this.IPTextBox.Multiline = true;
             this.IPTextBox.Name = "IPTextBox";
-            this.IPTextBox.Size = new System.Drawing.Size(194, 20);
+            this.IPTextBox.Size = new System.Drawing.Size(194, 19);
             this.IPTextBox.TabIndex = 1;
             // 
             // textBox3
             // 
             this.textBox3.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.textBox3.Location = new System.Drawing.Point(3, 3);
+            this.textBox3.Multiline = true;
             this.textBox3.Name = "textBox3";
             this.textBox3.ReadOnly = true;
             this.textBox3.ShortcutsEnabled = false;
-            this.textBox3.Size = new System.Drawing.Size(194, 20);
+            this.textBox3.Size = new System.Drawing.Size(194, 27);
             this.textBox3.TabIndex = 0;
             this.textBox3.TabStop = false;
             this.textBox3.Text = "IP Address";
@@ -89,7 +89,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.CadetBlue;
-            this.ClientSize = new System.Drawing.Size(284, 262);
+            this.ClientSize = new System.Drawing.Size(276, 213);
             this.Controls.Add(this.ConnectButton);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Cursor = System.Windows.Forms.Cursors.Default;

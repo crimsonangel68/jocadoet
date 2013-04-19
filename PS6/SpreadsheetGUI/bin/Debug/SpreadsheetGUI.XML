@@ -75,6 +75,13 @@
             <param name="sender"></param>
             <param name="e"></param>
         </member>
+        <member name="M:SpreadsheetGUI.Form1.undoToolStripMenuItem_Click(System.Object,System.EventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
         <member name="M:SpreadsheetGUI.Form1.closeToolStripMenuItem_Click(System.Object,System.EventArgs)">
             <summary>
             Closes the current Form.

@@ -68,7 +68,7 @@ namespace SpreadsheetGUI
             {
                 // Display a message informing the user that the inputs were invalid or the server is off
                 DialogResult result = MessageBox.Show("Invalid IPAddress/Port or Server is currently not running.", "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
-                if (result == DialogResult.Cancel)
+                if (result == DialogResult.Cancel || !this.Visible)
                     this.Close();
             }
         }
