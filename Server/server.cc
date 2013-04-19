@@ -612,6 +612,7 @@ class Connection
 		}
 };
 
+
 int main(int argc, char* argv[])
 {
 	std::cout << "Jocadoet Server Running"<< std::endl;
@@ -638,6 +639,7 @@ int main(int argc, char* argv[])
 	//requests that can be in queue at one time if there for
 	//some reason is a problem with the socket accepting the client
 	//connection
+	
 	int con_num = 0;
 	while(1)
 	{

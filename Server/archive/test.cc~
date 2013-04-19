@@ -1,0 +1,9 @@
+#include <cstdlib>
+int main()
+{
+  std::string test = "CHANGE TEST";
+
+  std::remove(test.begin(), test[5]);
+
+  return 0;
+}
