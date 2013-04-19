@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
@@ -7,6 +8,7 @@
 #include <cstdlib>
 #include <algorithm>
 #include <iterator>
+#include <map>
 #include <set>
 #include <map>
 #include <unistd.h>
@@ -32,6 +34,11 @@ enum com_cmds{
 	ERROR = -1
 };
 
+//global hash map of spreadsheets and connects
+map<string, int> ss_connections;
+
+//list of open/connected  spreadsheets
+
 //prints out an error message
 void error(const char *msg)
 {
@@ -42,11 +49,12 @@ void error(const char *msg)
 
 //=======================parser
 
-vector<string> changeCommand(string change)
+string changeCommand(string change)
 {
 	vector<string> info;
 	stringstream ss(change);
 	string item;
+	string serverResponse = "";
 	while(getline(ss, item))
 	{
 		info.push_back(item);
@@ -77,7 +85,7 @@ vector<string> changeCommand(string change)
 		serverResponseSS << "Version:";
 		serverResponseSS << SSversion;
 		serverResponseSS << " \n";
-		string serverResponse = serverResponseSS.str();
+		serverResponse = serverResponseSS.str();
 		{
 			// Loop through all clients
 			std::cout << serverResponse << std::endl;
@@ -93,7 +101,7 @@ vector<string> changeCommand(string change)
 		serverResponseSS << "Version:";
 		serverResponseSS << SSversion;
 		serverResponseSS << " \n";
-		string serverResponse = serverResponseSS.str();
+		serverResponse = serverResponseSS.str();
 		std::cout << serverResponse << std::endl;
 	}
 	if(true)
@@ -104,19 +112,20 @@ vector<string> changeCommand(string change)
 		serverResponseSS << info[1];
 		serverResponseSS << "\n";
 		serverResponseSS << "MESSAGE REGARDING FAIL\n";
-		string serverResponse = serverResponseSS.str();
+		serverResponse = serverResponseSS.str();
 		std::cout << serverResponse << std::endl;
 	}
 
 
-	return info;
+	return serverResponse;
 
 }
 
-vector<string> undoCommand(string undo)
+string undoCommand(string undo)
 {
 	vector<string> info;
 	stringstream ss(undo);
+	string serverResponse = "";
 	string item;
 	while(getline(ss, item))
 	{
@@ -156,7 +165,7 @@ vector<string> undoCommand(string undo)
 		serverResponseSS << "OLD CONTENT OF CELL";  // - Need to integrate with server
 		serverResponseSS << "\n";
 
-		string serverResponse = serverResponseSS.str();
+		serverResponse = serverResponseSS.str();
 		{
 			// Loop through all clients connected to spreadsheet and send response
 			std::cout << serverResponse << std::endl;
@@ -174,7 +183,7 @@ vector<string> undoCommand(string undo)
 		serverResponseSS << SSversion;  // -Need to integrate with server --
 		serverResponseSS << " \n";
 
-		string serverResponse = serverResponseSS.str();
+		serverResponse = serverResponseSS.str();
 		{
 			// Send message to initial client
 			std::cout << serverResponse << std::endl;
@@ -192,7 +201,7 @@ vector<string> undoCommand(string undo)
 		serverResponseSS << SSversion;  // - Need to integrate with server ----
 		serverResponseSS << " \n";
 
-		string serverResponse = serverResponseSS.str();
+		serverResponse = serverResponseSS.str();
 		{
 			// Send message to initial client
 			std::cout << serverResponse << std::endl;
@@ -209,20 +218,21 @@ vector<string> undoCommand(string undo)
 		serverResponseSS << "UNDO failed for reason:"; // Message for reason for fail
 		serverResponseSS << " \n";
 
-		string serverResponse = serverResponseSS.str();
+		serverResponse = serverResponseSS.str();
 
 		std::cout << serverResponse << std::endl;
 	}
 
 
-	return info;
+	return serverResponse;
 }
 
-vector<string> createCommand(string create)
+string createCommand(string create)
 {
 
 	vector<string> info;
 	stringstream ss(create);
+	string serverResponse = "";
 	string item;
 	while(getline(ss, item))
 	{
@@ -249,12 +259,13 @@ vector<string> createCommand(string create)
 	pos = tempPassword.find(" ");
 	tempPassword = tempPassword.substr(0, pos);
 	std::cout << "tempName is: " << tempName << std::endl << "tempPassword is: " << tempPassword << std::endl << std::endl;
-	bool testNameNotTaken = false; // Test if file name exists already
+	bool testNameNotTaken = true; // Test if file name exists already
 
 
 	if(testNameNotTaken) // Name is not taken
 	{
 		// Create spreadsheet with name and password (Use hashmaps to keep track of spreadsheets?)    
+		
 		stringstream serverResponseSS;
 		serverResponseSS << "CREATE SP OK \n";
 		serverResponseSS << "Name:";
@@ -264,7 +275,7 @@ vector<string> createCommand(string create)
 		serverResponseSS << tempPassword;
 		serverResponseSS << " \n";
 
-		string serverResponse = serverResponseSS.str();
+		serverResponse = serverResponseSS.str();
 
 		std::cout << serverResponse << std::endl;
 	}
@@ -278,19 +289,20 @@ vector<string> createCommand(string create)
 		serverResponseSS << "MESSAGE REGARDING FAIL";
 		serverResponseSS << " \n";
 
-		string serverResponse = serverResponseSS.str();
+		serverResponse = serverResponseSS.str();
 
 		std::cout << serverResponse << std::endl;
 	}
 
-	return info;
+	return serverResponse;
 }
 
-vector<string> joinCommand(string join)
+string joinCommand(string join)
 {
 
 	vector<string> info;
 	stringstream ss(join);
+	string serverResponse = "";
 	string item;
 	while(getline(ss, item))
 	{
@@ -320,13 +332,13 @@ vector<string> joinCommand(string join)
 	std::cout << "tempName is: " << tempName << std::endl << "tempPassword is: " << tempPassword << std::endl << std::endl;
 
 	bool nameExists = true; // Check to see if name exists
-	bool passwordMatches = false; // Check if password matches
+	bool passwordMatches = true; // Check if password matches
 
 	if(nameExists && passwordMatches)
 	{
 
 		// Retrieve spreadsheet information ----- Need to implement -------------
-		int SSversion = 1029; // Get current version number of spreadsheet
+		int SSversion = 0; // Get current version number of spreadsheet
 		int lengthOfSpreadsheetXML = 1313; // lengthOfSpreadsheetXML = SpreadsheetXML.length();
 		std::string xml = ""; // xml = readtextfile(tempName);
 		stringstream serverResponseSS;
@@ -344,7 +356,7 @@ vector<string> joinCommand(string join)
 		serverResponseSS << "\n";
 
 
-		string serverResponse = serverResponseSS.str();
+		serverResponse = serverResponseSS.str();
 
 		std::cout << serverResponse << std::endl;
 	}
@@ -358,19 +370,19 @@ vector<string> joinCommand(string join)
 		serverResponseSS << "MESSAGE REGARDING FAIL";
 		serverResponseSS << " \n";
 
-		string serverResponse = serverResponseSS.str();
+		serverResponse = serverResponseSS.str();
 
 		std::cout << serverResponse << std::endl;
 	}
 
 
 
-	return info;
+	return serverResponse;
 }
 
 int parse(char buf[256])
 {
-  if(buf[0] == 'C')
+	if(buf[0] == 'C')
 		if(buf[1] == 'R')
 			return CREATE;
 		else
@@ -378,16 +390,16 @@ int parse(char buf[256])
 
 	if(buf[0] == 'J')
 		return JOIN;
-	
+
 	if(buf[0] == 'U')
 		if(buf[1] == 'N')
 			return UNDO;
 		else
 			return UPDATE;
-	
+
 	if(buf[0] == 'S')
 		return SAVE;
-	
+
 	if(buf[0] == 'L')
 		return LEAVE;
 
@@ -410,6 +422,7 @@ class Connection
 		//in here we can put the information for the connection 
 		//in a map/list to keep track of live connections
 		//printf("%d\n", con_num);
+
 	}
 
 		//this method is necessary for multithreading. Starts listening
@@ -455,29 +468,31 @@ class Connection
 			int cmd = parse(buffer);
 
 			string message = string(buffer);
-
+			string serv_resp = "ERROR \n";
 			switch(cmd)
 			{
-				case CREATE: createCommand(message);
-				break;
-				case JOIN: joinCommand(message);
-				break;
-				case CHANGE: changeCommand(message);
-				break;
-				case UNDO: undoCommand(message);
-				break;
-				case UPDATE: updateCommand(message);
-				break;
-				case SAVE: saveCommand(message);
-				break;
-				case LEAVE: leaveCommand(message);
-				break;
+				case CREATE: serv_resp = createCommand(message);
+										 break;
+				case JOIN: serv_resp = joinCommand(message);
+									 break;
+				case CHANGE: serv_resp = changeCommand(message);
+										 break;
+				case UNDO: serv_resp = undoCommand(message);
+									 break;
+				case UPDATE: ;
+										 break;
+				case SAVE: ;
+									 break;
+				case LEAVE: ;
+										break;
 				case ERROR: "";
-				break;
+										break;
 
 			}
-			
-			char rspns[] = "Working on it billy";
+
+			char rspns[256]; 
+			size_t length = serv_resp.copy(rspns,256, 0);
+			rspns[length] = '\0';
 			//here is where we will write back to the client the correct msg
 			//we can either keep it here and pass back from the methods we call
 			//what needs to be sent to the client or just send the message from
