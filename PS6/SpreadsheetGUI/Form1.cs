@@ -20,6 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using SS;
+using SpreadsheetUtilities;
 using CustomNetworking;
 using System.IO;
 
@@ -409,13 +410,18 @@ namespace SpreadsheetGUI
         /// <param name="panel"></param>
         private void sendMessage(SpreadsheetPanel panel)
         {
+            Object prevContents = null;
+            string name = "";
+
             try
             {
                 int col, row;
                 panel.GetSelection(out col, out row);
-                string name = alphabet[col] + (row + 1).ToString();
+                name = alphabet[col] + (row + 1).ToString();
 
+                prevContents = sheet.GetCellContents(name);
                 string contents = CellContentBox.Text;
+
                 ISet<string> affectedCells = sheet.SetContentsOfCell(name, contents);
 
                 sheet.CircularCheck(name);
@@ -424,6 +430,7 @@ namespace SpreadsheetGUI
             }
             catch (Exception f)
             {
+                sheet.SetContentsOfCell(name, prevContents.ToString());
                 MessageBox.Show("Idiot... (sendMessage) \n" + f.Message);
             }
         }
@@ -604,7 +611,7 @@ namespace SpreadsheetGUI
                         report += "Undo was not sent to server.\n";
 
                     // Report the user of the wait
-                    MessageBox.Show(report + "Please exit this session and rejoin.", "Wait Error");
+                    MessageBox.Show(report + "Wait for an update, or reconnect.", "Wait Error");
 
                     messagesToReceive = 2;
                     socket.BeginReceive(BlankReceived, 0);
@@ -661,15 +668,29 @@ namespace SpreadsheetGUI
             // Cell name
             else if (message.Contains("Cell:"))
                 modifyingCell = message.Substring(5);
-
-            // Length of the content to 
-            else if (message.Contains("Length:"))
-                lengthCell = message.Substring(7);
-
+            
             //Content
-            else if (!message.Contains("Name:"))
+            else if (!message.Contains("Name:") || !message.Contains("Length:"))
             {
                 // change the content
+                ISet<string> affectedCells = sheet.SetContentsOfCell(modifyingCell, message);
+
+                foreach (string cell in affectedCells)
+                {
+                    int c, r;
+                    c = alphabet.IndexOf(cell.Substring(0, 1));
+                    r = int.Parse(cell.Substring(1)) - 1;
+
+                    spreadsheetPanel1.SetValue(c, r, sheet.GetCellValue(cell).ToString());
+
+                }
+                string value = sheet.GetCellValue(modifyingCell).ToString();
+
+                int cellNum = 0;
+                if (Int32.TryParse(modifyingCell.Substring(1, modifyingCell.Length -1), out cellNum))
+                    spreadsheetPanel1.SetValue(alphabet.IndexOf(modifyingCell.Substring(0, 1)) + 1, cellNum, value);
+
+                updateSelection(spreadsheetPanel1);
 
                 // break out of the method so as to not receive more in this method
                 messagesToReceive--;
