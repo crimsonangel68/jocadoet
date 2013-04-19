@@ -103,7 +103,18 @@ string changeCommand(string change, int connection)
 	unsigned pos = temp1.find(" ");
 	temp1 = temp1.substr(0, pos);
 	int testVersion = atoi(temp1.c_str());
-	std::cout << "temp1 is: " << temp1 << std::endl << std::endl << testVersion << std::endl;
+
+	stringstream nameStream(info[3]);
+	vector<string> cellnameInfo;
+	string temp2;
+	string tempcellName;
+
+	while(getline(tempSS, temp1, ':'))
+	  {
+	    cellNameInfo.push_back(temp2);
+	  }
+	unsigned pos2 = temp2.find(" ");
+	temp2 = temp2.substr(0, pos);
 	bool testVersionEqualsSpreadsheetVersion = true;
 
 	if(testVersionEqualsSpreadsheetVersion)
