@@ -54,61 +54,38 @@ namespace SpreadsheetGUI
             socket = newSocket;
             messagesToReceive = 0;
 
-            String filePath = @"../savedfiles/jocadoetSpreadsheet.ss";
+            String filePath = @"../../../../savedfiles/jocadoetSpreadsheet.ss";
 
-            FileInfo newFile = new FileInfo(filePath);
-
-            using (StreamWriter sw = newFile.CreateText())
+            try
             {
-                sw.WriteLine(xml);
+                FileInfo newFile = new FileInfo(filePath);
+
+                using (StreamWriter sw = newFile.CreateText())
+                {
+                    sw.WriteLine(xml);
+                }
+
+                sheet = new Spreadsheet(filePath, s => true, s => s.ToUpper(), "ps6");
+
+                sheet.FileName = fileName;
+                sheet.Version = version;
+
+                IEnumerable<string> cellNames = sheet.GetNamesOfAllNonemptyCells();
+                foreach (string name in cellNames)
+                {
+                    int col, row;
+                    col = alphabet.IndexOf(name.Substring(0, 1));
+                    row = int.Parse(name.Substring(1)) - 1;
+
+                    spreadsheetPanel1.SetValue(col, row, sheet.GetCellValue(name).ToString());
+                    updateCell(spreadsheetPanel1, col, row);
+                }
+                spreadsheetPanel1.SetSelection(0, 0);
+                updateSelection(spreadsheetPanel1);
             }
-
-            sheet = new Spreadsheet(filePath, s => true, s => s.ToUpper(), "ps6");
-
-            sheet.FileName = fileName;
-            sheet.Version = version;
-
-            IEnumerable<string> cellNames = sheet.GetNamesOfAllNonemptyCells();
-            foreach (string name in cellNames)
+            catch (Exception e)
             {
-                int col, row;
-                col = alphabet.IndexOf(name.Substring(0, 1));
-                row = int.Parse(name.Substring(1)) - 1;
-
-                spreadsheetPanel1.SetValue(col, row, sheet.GetCellValue(name).ToString());
-                updateCell(spreadsheetPanel1, col, row);
-            }
-            spreadsheetPanel1.SetSelection(0, 0);
-            updateSelection(spreadsheetPanel1);
-        }
-
-        //-----------------------------------------------------------------------------------updateSelection
-        /// <summary>
-        /// Updates the selection.
-        /// </summary>
-        /// <param name="panel"></param>
-        private void updateSelection(SpreadsheetPanel panel)
-        {
-            int row, col;
-            panel.GetSelection(out col, out row);
-            string name = alphabet[col] + (row + 1).ToString();
-
-            CellNameBox.Text = name;
-
-            CellValueBox.Text = (sheet.GetCellValue(name)).ToString();
-
-            if (CellValueBox.Text == "")
-            {
-                CellContentBox.Clear();
-            }
-            else
-            {
-                if (sheet.GetCellContents(name) is SpreadsheetUtilities.Formula)
-                    CellContentBox.Text = "=" + (sheet.GetCellContents(name)).ToString();
-                else
-                    CellContentBox.Text = (sheet.GetCellContents(name)).ToString();
-
-                panel.SetValue(col, row, (sheet.GetCellValue(name)).ToString());
+                MessageBox.Show("ERROR:\n" + e, "ERROR");
             }
         }
 
@@ -163,20 +140,20 @@ namespace SpreadsheetGUI
         /// <param name="e"></param>
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // NEED TO SEND TO SERVER
+            Save();
 
-            saveFileDialog1.Filter = "Spreadsheet Files (.ss)|*.ss|All Files (*.*)|*.*";
-            saveFileDialog1.Title = "Save";
-            saveFileDialog1.InitialDirectory = @"C:\";
-            saveFileDialog1.RestoreDirectory = true;
-            saveFileDialog1.OverwritePrompt = true;
+            //saveFileDialog1.Filter = "Spreadsheet Files (.ss)|*.ss|All Files (*.*)|*.*";
+            //saveFileDialog1.Title = "Save";
+            //saveFileDialog1.InitialDirectory = @"C:\";
+            //saveFileDialog1.RestoreDirectory = true;
+            //saveFileDialog1.OverwritePrompt = true;
 
-            DialogResult userClickedOK = saveFileDialog1.ShowDialog();
-            if (userClickedOK == DialogResult.OK)
-            {
-                string filepath = saveFileDialog1.FileName;
-                sheet.Save(filepath);
-            }
+            //DialogResult userClickedOK = saveFileDialog1.ShowDialog();
+            //if (userClickedOK == DialogResult.OK)
+            //{
+            //    string filepath = saveFileDialog1.FileName;
+            //    sheet.Save(filepath);
+            //}
         }
 
         //-----------------------------------------------------------------------------------undoToolStripMenuItem_Click
@@ -241,7 +218,46 @@ namespace SpreadsheetGUI
             MessageBox.Show(helpMessage);
         }
 
-        //-----------------------------------------------------------------------------------CellContentBox
+        //-----------------------------------------------------------------------------------Form1_FormClosing
+        /// <summary>
+        /// Closes the spreadsheet.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (sheet.Changed && (MessageBox.Show("Do you want to exit without saving?", "SpreadsheetProgram", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes))
+            {
+                e.Cancel = false;
+
+                // Create the next prompt window
+                OpenPrompt prompt = new OpenPrompt(IPAddress);
+
+                // Hide the window, leave this session, and open the Open window
+                this.Hide();
+                LeaveSession();
+                prompt.ShowDialog();
+                this.Close();
+            }
+            else
+                e.Cancel = true;
+
+            if (!sheet.Changed)
+            {
+                e.Cancel = false;
+
+                // Create the next prompt window
+                OpenPrompt prompt = new OpenPrompt(IPAddress);
+
+                // Hide the window, leave this session, and open the Open window
+                this.Hide();
+                LeaveSession();
+                prompt.ShowDialog();
+                this.Close();
+            }
+        }
+
+        //-----------------------------------------------------------------------------------CellContentBox  start send here
         /// <summary>
         /// Allows the user to use the keyboard to control data entry from the keyboard.  While the CellContentBox
         /// is selected, the user must use the enter key to input the data into the spreadsheet, and may use the arrows
@@ -259,7 +275,7 @@ namespace SpreadsheetGUI
                 if (e.KeyCode == Keys.Enter)
                 {
                     sendMessage(spreadsheetPanel1);
-                    SetCellContents(spreadsheetPanel1);
+                    //SetCellContents(spreadsheetPanel1);
                 }
 
                 if (e.KeyCode == Keys.Left)
@@ -302,12 +318,47 @@ namespace SpreadsheetGUI
                 }
                 if (e.Control && e.KeyCode == Keys.W)
                 {
-                    Close();
+                    this.Hide();
+
+                    OpenPrompt open = new OpenPrompt(IPAddress);
+                    open.Show();
+
+                    this.Close();
                 }
             }
             catch (Exception)
             {
                 MessageBox.Show("Idiot... ");
+            }
+        }
+
+        //-----------------------------------------------------------------------------------updateSelection
+        /// <summary>
+        /// Updates the selection.
+        /// </summary>
+        /// <param name="panel"></param>
+        private void updateSelection(SpreadsheetPanel panel)
+        {
+            int row, col;
+            panel.GetSelection(out col, out row);
+            string name = alphabet[col] + (row + 1).ToString();
+
+            CellNameBox.Text = name;
+
+            CellValueBox.Text = (sheet.GetCellValue(name)).ToString();
+
+            if (CellValueBox.Text == "")
+            {
+                CellContentBox.Clear();
+            }
+            else
+            {
+                if (sheet.GetCellContents(name) is SpreadsheetUtilities.Formula)
+                    CellContentBox.Text = "=" + (sheet.GetCellContents(name)).ToString();
+                else
+                    CellContentBox.Text = (sheet.GetCellContents(name)).ToString();
+
+                panel.SetValue(col, row, (sheet.GetCellValue(name)).ToString());
             }
         }
 
@@ -329,23 +380,12 @@ namespace SpreadsheetGUI
                 string contents = CellContentBox.Text;
                 ISet<string> affectedCells = sheet.SetContentsOfCell(name, contents);
 
-                // Send change here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                // Change LF
-                // Name:name LF
-                // Version:version LF
-                // Cell:cell LF
-                // Length:length LF
-                // content LF
-
-                // socket.beginSend("^^\n");
-
                 foreach (string cell in affectedCells)
                 {
                     int c, r;
                     c = alphabet.IndexOf(cell.Substring(0, 1));
                     r = int.Parse(cell.Substring(1)) - 1;
 
-                    // Change this to sending to server !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     panel.SetValue(c, r, sheet.GetCellValue(cell).ToString());
 
                 }
@@ -353,7 +393,6 @@ namespace SpreadsheetGUI
 
                 panel.SetValue(col, row, value);
 
-                // Make this a callback for sending the server and have it set the value for the panel as well!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 updateSelection(panel);
 
             }
@@ -363,6 +402,7 @@ namespace SpreadsheetGUI
             }
         }
 
+        //-----------------------------------------------------------------------------------sendMessage
         /// <summary>
         /// 
         /// </summary>
@@ -375,64 +415,16 @@ namespace SpreadsheetGUI
                 panel.GetSelection(out col, out row);
                 string name = alphabet[col] + (row + 1).ToString();
 
-                object oldContent = sheet.GetCellContents(name);
-
                 string contents = CellContentBox.Text;
                 ISet<string> affectedCells = sheet.SetContentsOfCell(name, contents);
 
-                foreach (string cell in affectedCells)
-                {
+                sheet.CircularCheck(name);
+                Change(name, sheet.Version, contents);
 
-                    int c, r;
-                    c = alphabet.IndexOf(cell.Substring(0, 1));
-                    r = int.Parse(cell.Substring(1)) - 1;
-
-                    // Change this to sending to server !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    panel.SetValue(c, r, sheet.GetCellValue(cell).ToString());
-                }
             }
             catch (Exception f)
             {
                 MessageBox.Show("Idiot... (sendMessage) \n" + f.Message);
-            }
-        }
-
-        //-----------------------------------------------------------------------------------Form1_FormClosing
-        /// <summary>
-        /// Closes the spreadsheet.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (sheet.Changed && (MessageBox.Show("Do you want to exit without saving?", "SpreadsheetProgram", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes))
-            {
-                e.Cancel = false;
-
-                // Create the next prompt window
-                OpenPrompt prompt = new OpenPrompt(IPAddress);
-
-                // Hide the window, leave this session, and open the Open window
-                this.Hide();
-                LeaveSession();
-                prompt.ShowDialog();
-                this.Close();
-            }
-            else
-                e.Cancel = true;
-            
-            if (!sheet.Changed)
-            {
-                e.Cancel = false;
-
-                // Create the next prompt window
-                OpenPrompt prompt = new OpenPrompt(IPAddress);
-
-                // Hide the window, leave this session, and open the Open window
-                this.Hide();
-                LeaveSession();
-                prompt.ShowDialog();
-                this.Close();
             }
         }
 
@@ -488,7 +480,7 @@ namespace SpreadsheetGUI
             updateSelection(spreadsheetPanel1);
         }
         
-        // ----------------------------------------------------------------------------------------New stuff
+        // -------------------------------------------------------------------------------------------------------New stuff
 
         // ----------------------------------------------------------------------------------------Sending
         /// <summary>
@@ -549,7 +541,13 @@ namespace SpreadsheetGUI
             // Create leave message, following protocol
             String message = "LEAVE \n";
             message += "Name:" + sheet.FileName + " \n";
-            
+
+            this.Hide();
+
+            OpenPrompt open = new OpenPrompt(IPAddress);
+
+            open.Show();
+
             // send change to server
             socket.BeginSend(message, (e, p) => { socket.CloseSocket(); }, 0);
         }
@@ -568,6 +566,8 @@ namespace SpreadsheetGUI
                 // Call the appropriate callback methods 
                 if (message.Contains("CHANGE SP OK"))
                 {
+                    SetCellContents(spreadsheetPanel1);
+
                     messagesToReceive = 2;
                     socket.BeginReceive(VersionReceived, "Version");
                 }

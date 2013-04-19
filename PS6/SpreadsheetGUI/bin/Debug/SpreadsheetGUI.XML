@@ -55,12 +55,6 @@
             the contents of the file opened.
             </summary>
         </member>
-        <member name="M:SpreadsheetGUI.Form1.updateSelection(SS.SpreadsheetPanel)">
-            <summary>
-            Updates the selection.
-            </summary>
-            <param name="panel"></param>
-        </member>
         <member name="M:SpreadsheetGUI.Form1.openToolStripMenuItem_Click(System.Object,System.EventArgs)">
             <summary>
             Open a saved spreadsheet file.
@@ -96,6 +90,13 @@
             <param name="sender"></param>
             <param name="e"></param>
         </member>
+        <member name="M:SpreadsheetGUI.Form1.Form1_FormClosing(System.Object,System.Windows.Forms.FormClosingEventArgs)">
+            <summary>
+            Closes the spreadsheet.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
         <member name="M:SpreadsheetGUI.Form1.CellContentBox_KeyUp(System.Object,System.Windows.Forms.KeyEventArgs)">
             <summary>
             Allows the user to use the keyboard to control data entry from the keyboard.  While the CellContentBox
@@ -105,6 +106,12 @@
             </summary>
             <param name="sender"></param>
             <param name="e"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.updateSelection(SS.SpreadsheetPanel)">
+            <summary>
+            Updates the selection.
+            </summary>
+            <param name="panel"></param>
         </member>
         <member name="M:SpreadsheetGUI.Form1.SetCellContents(SS.SpreadsheetPanel)">
             <summary>
@@ -119,13 +126,6 @@
             
             </summary>
             <param name="panel"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.Form1_FormClosing(System.Object,System.Windows.Forms.FormClosingEventArgs)">
-            <summary>
-            Closes the spreadsheet.
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
         </member>
         <member name="M:SpreadsheetGUI.Form1.updateCell(SS.SpreadsheetPanel,System.Int32,System.Int32)">
             <summary>

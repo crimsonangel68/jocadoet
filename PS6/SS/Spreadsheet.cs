@@ -407,58 +407,60 @@ namespace SS
         }
 
         //-----------------------------------------------------------------------------------------Working
-        /// <summary>
-        /// Saves the current spreadsheet to the given filename.
-        /// </summary>
-        /// <param name="filename"></param>
-        public override void Save(string filename)
-        {
-            try
-            {
-                using (XmlWriter writer = XmlWriter.Create(filename))
-                {
-                    string newLine = writer.Settings.NewLineChars;
-                    writer.WriteStartDocument();
-                    writer.WriteStartElement("spreadsheet");
+        ///// <summary>
+        ///// Saves the current spreadsheet to the given filename.
+        ///// </summary>
+        ///// <param name="filename"></param>
+        //public override void Save(string filename)
+        //{
+            
+            //try
+            //{
+            //    using (XmlWriter writer = XmlWriter.Create(filename))
+            //    {
+            //        string newLine = writer.Settings.NewLineChars;
+            //        writer.WriteStartDocument();
+            //        writer.WriteStartElement("spreadsheet");
 
-                    writer.WriteAttributeString("version", Version);
-                    writer.WriteString(newLine);
-                    IEnumerable<string> names = GetNamesOfAllNonemptyCells();
+            //        writer.WriteAttributeString("version", Version);
+            //        writer.WriteString(newLine);
+            //        IEnumerable<string> names = GetNamesOfAllNonemptyCells();
 
-                    foreach (string name in names)
-                    {
-                        writer.WriteString(newLine);
-                        writer.WriteStartElement("cell");
-                        writer.WriteString(newLine);
-                        writer.WriteElementString("name", name);
-                        writer.WriteString(newLine);
+            //        foreach (string name in names)
+            //        {
+            //            writer.WriteString(newLine);
+            //            writer.WriteStartElement("cell");
+            //            writer.WriteString(newLine);
+            //            writer.WriteElementString("name", name);
+            //            writer.WriteString(newLine);
 
-                        if (GetCellContents(name) is Formula)
-                        {
-                            writer.WriteElementString("contents", "=" + GetCellContents(name).ToString());
-                            writer.WriteString(newLine);
-                        }
-                        else
-                        {
-                            writer.WriteElementString("contents", GetCellContents(name).ToString());
-                            writer.WriteString(newLine);
-                        }
+            //            if (GetCellContents(name) is Formula)
+            //            {
+            //                writer.WriteElementString("contents", "=" + GetCellContents(name).ToString());
+            //                writer.WriteString(newLine);
+            //            }
+            //            else
+            //            {
+            //                writer.WriteElementString("contents", GetCellContents(name).ToString());
+            //                writer.WriteString(newLine);
+            //            }
 
-                        writer.WriteEndElement();
-                        writer.WriteString(newLine);
-                    }
-                    writer.WriteString(newLine);
-                    writer.WriteEndDocument();
-                }
-                Changed = false;
-            }
-            catch (Exception)
-            {
-                throw new SpreadsheetReadWriteException();
-            }
-        }
+            //            writer.WriteEndElement();
+            //            writer.WriteString(newLine);
+            //        }
+            //        writer.WriteString(newLine);
+            //        writer.WriteEndDocument();
+            //    }
+            //    Changed = false;
+            //}
+            //catch (Exception)
+            //{
+            //    throw new SpreadsheetReadWriteException();
+            //}
+        //}
 
         //-----------------------------------------------------------------------------------------
+
         /// <summary>
         /// Returns the value of the cell
         /// </summary>
@@ -621,6 +623,15 @@ namespace SS
                     temp.CellValue = f.Evaluate(cellLookup, IsValid, Normalize);
                 }
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cellName"></param>
+        public IEnumerable<String> CircularCheck(String cellName)
+        {
+            return GetCellsToRecalculate(cellName);    
         }
     }
 }
