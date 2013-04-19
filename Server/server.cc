@@ -11,6 +11,7 @@
 #include <map>
 #include <set>
 #include <list>
+#include <deque>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -35,11 +36,15 @@ enum com_cmds{
 };
 
 //global hash map of spreadsheets and connections
-map<string, int> ss_connections;
+map<string, list<int> > ss_connections;
 
-//list of open/connected  spreadsheets
-//list<spreadsheet> connected_ss;
-//prints out an error message
+// global dequee for UNDO function
+// Deque of pair<string, string> representing <cell name, cell content> 
+deque<std::pair<string,string> > undoQUE;
+
+// list of open/connected  spreadsheets
+// list<spreadsheet> connected_ss;
+// prints out an error message
 void error(const char *msg)
 {
 	perror(msg);
@@ -49,14 +54,32 @@ void error(const char *msg)
 
 //=======================parser
 
-string updateCommand(string update, int connection, string SSname)
+void updateCommand(string update, int connection, string SSname)
 {
   update.erase(0, 6);
   update.insert(0, "UPDATE");
   // LOOP THROUGH CONNECTIONS AND SEND IT TO ALL OTHER connections except the one that sent change
- 
-  
-  return update;
+  // Initialize iterator
+  std::map <std::string, int>::iterator it;
+  // Initialize buffer for writing to socket
+  char buffer[update.length()];
+  // Copy string to send into char array
+  std::size_t length = update.copy(buffer, 0, update.length());
+  buffer[length] = '\0';
+  // Initialize temp list to loop through all connections for given SS name
+  list<int> temp = ss_connections.find(SSname)->second;
+  for (int i = 0; i < temp.size(); i++)
+    {
+      int tempConnection = temp.front();
+      // Check to make sure the connection in the list is not the connection that sent the CHANGE request
+      // Send all other connections the update message
+      if (connection != tempConnection)
+	{
+	  write(connection, buffer, update.length());
+	}
+      temp.pop_front();
+      temp.push_back(tempConnection);
+    }
 }
 
 string changeCommand(string change, int connection)
@@ -100,7 +123,7 @@ string changeCommand(string change, int connection)
 		 // Change request is valid, call updateCommand to send out the update
 		updateCommand(change, connection, tempName);
 	}
-	else if(testVersionEqualsSpreadsheetVersion)
+	else if(!testVersionEqualsSpreadsheetVersion)
 	{
 		stringstream serverResponseSS;
 		int SSversion = testVersion;
@@ -113,11 +136,11 @@ string changeCommand(string change, int connection)
 		serverResponse = serverResponseSS.str();
 		std::cout << serverResponse << std::endl;
 	}
-	if(true)
+	else
 	{
 		stringstream serverResponseSS;
 		int SSversion = testVersion;
-		serverResponseSS << "CHANGE WAIT OK \n";
+		serverResponseSS << "CHANGE FAIL \n";
 		serverResponseSS << info[1];
 		serverResponseSS << "\n";
 		serverResponseSS << "MESSAGE REGARDING FAIL\n";
@@ -258,8 +281,12 @@ string createCommand(string create, int connection)
 	}
 	unsigned pos = tempName.find(" ");
 	tempName = tempName.substr(0, pos);
+
 	// Add name and Connection to the map
-	ss_connections.insert ( std::pair<std::string, int>(tempName, connection));
+	list<int> connList;
+	ss_connections.insert ( std::pair<std::string, list<int> >(tempName, connList));
+	ss_connections.at(tempName).push_front(connection);
+
 	stringstream tempSS2(info[2]);
 	vector<string> passwordInfo;
 	string tempPassword;
@@ -331,8 +358,12 @@ string joinCommand(string join, int connection)
 	}
 	unsigned pos = tempName.find(" ");
 	tempName = tempName.substr(0, pos);
+
 	// Add name and Connection to the map
-	ss_connections.insert ( std::pair<std::string, int>(tempName, connection) );
+	list<int> connList;
+	ss_connections.insert ( std::pair<std::string, list<int> >(tempName, connList));
+	ss_connections.at(tempName).push_front(connection);
+
 	stringstream tempSS2(info[2]);
 	vector<string> passwordInfo;
 	string tempPassword;
@@ -393,11 +424,11 @@ string joinCommand(string join, int connection)
 	return serverResponse;
 }
 
-string saveCommand(string create)
+string saveCommand(string save)
 {
 
 	vector<string> info;
-	stringstream ss(create);
+	stringstream ss(save);
 	string serverResponse = "";
 	string item;
 	while(getline(ss, item))
@@ -415,30 +446,18 @@ string saveCommand(string create)
 	}
 	unsigned pos = tempName.find(" ");
 	tempName = tempName.substr(0, pos);
-	stringstream tempSS2(info[2]);
-	vector<string> passwordInfo;
-	string tempPassword;
-	while(getline(tempSS2, tempPassword, ':' ))
-	{
-		nameInfo.push_back(tempPassword);
-	}
-	pos = tempPassword.find(" ");
-	tempPassword = tempPassword.substr(0, pos);
-	std::cout << "tempName is: " << tempName << std::endl << "tempPassword is: " << tempPassword << std::endl << std::endl;
+
 	bool testNameNotTaken = true; // Test if file name exists already
 
 
 	if(testNameNotTaken) // Name is not taken
 	{
-		// Create spreadsheet with name and password (Use hashmaps to keep track of spreadsheets?)    
+		// Save spreadsheet with name and password (Use hashmaps to keep track of spreadsheets?)    
 		
 		stringstream serverResponseSS;
 		serverResponseSS << "CREATE SP OK \n";
 		serverResponseSS << "Name:";
 		serverResponseSS << tempName;
-		serverResponseSS << " \n";
-		serverResponseSS << "Password:";
-		serverResponseSS << tempPassword;
 		serverResponseSS << " \n";
 
 		serverResponse = serverResponseSS.str();
@@ -461,6 +480,10 @@ string saveCommand(string create)
 	}
 
 	return serverResponse;
+}
+void leaveCommand()
+{
+  
 }
 int parse(char buf[256])
 {
@@ -554,21 +577,19 @@ class Connection
 			switch(cmd)
 			{
 			case CREATE: serv_resp = createCommand(message, newsockfd);
-										 break;
+			  break;
 			case JOIN: serv_resp = joinCommand(message, newsockfd);
-									 break;
+			  break;
 			case CHANGE: serv_resp = changeCommand(message, newsockfd);
-										 break;
-				case UNDO: serv_resp = undoCommand(message);
-									 break;
-				case UPDATE: ;
-										 break;
-				case SAVE: ;
-									 break;
-				case LEAVE: ;
-										break;
-				case ERROR: "";
-										break;
+			  break;
+			case UNDO: serv_resp = undoCommand(message);
+			  break;
+			case SAVE: ; serv_resp = saveCommand(message);
+			  break;
+			case LEAVE: ;
+			  break;
+			case ERROR: "";
+			  break;
 
 			}
 
