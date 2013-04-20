@@ -51,3 +51,16 @@ C:\msysgit\jocadoet\jocadoet\PS6\SS\bin\Debug\SpreadSheetUtilities.xml
 C:\msysgit\jocadoet\jocadoet\PS6\SS\obj\Debug\ResolveAssemblyReference.cache
 C:\msysgit\jocadoet\jocadoet\PS6\SS\obj\Debug\SS.dll
 C:\msysgit\jocadoet\jocadoet\PS6\SS\obj\Debug\SS.pdb
+X:\ssserver\jocadoet\PS6\SS\bin\Debug\SS.XML
+X:\ssserver\jocadoet\PS6\SS\bin\Debug\SS.dll
+X:\ssserver\jocadoet\PS6\SS\bin\Debug\SS.pdb
+X:\ssserver\jocadoet\PS6\SS\bin\Debug\SS.dll.CodeAnalysisLog.xml
+X:\ssserver\jocadoet\PS6\SS\bin\Debug\SS.dll.lastcodeanalysissucceeded
+X:\ssserver\jocadoet\PS6\SS\bin\Debug\SpreadsheetPanel.dll
+X:\ssserver\jocadoet\PS6\SS\bin\Debug\SpreadSheetUtilities.dll
+X:\ssserver\jocadoet\PS6\SS\bin\Debug\Formula.xml
+X:\ssserver\jocadoet\PS6\SS\bin\Debug\SpreadsheetPanel.xml
+X:\ssserver\jocadoet\PS6\SS\bin\Debug\SpreadSheetUtilities.xml
+X:\ssserver\jocadoet\PS6\SS\obj\Debug\SS.csprojResolveAssemblyReference.cache
+X:\ssserver\jocadoet\PS6\SS\obj\Debug\SS.dll
+X:\ssserver\jocadoet\PS6\SS\obj\Debug\SS.pdb

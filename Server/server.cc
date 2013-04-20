@@ -50,9 +50,11 @@ void error(const char *msg)
 //================================================================updateCommand
 void updateCommand(string update, int connection, string SSname)
 {
+	int n;
 	update.erase(0, 6);
 	update.insert(0, "UPDATE");
-	// LOOP THROUGH CONNECTIONS AND SEND IT TO ALL OTHER connections except the one that sent change
+	// LOOP THROUGH CONNECTIONS AND SEND IT TO ALL OTHER connections except the 
+	// one that sent change
 	// Initialize iterator
 	std::map <std::string, int>::iterator it;
 	// Initialize buffer for writing to socket
@@ -65,11 +67,21 @@ void updateCommand(string update, int connection, string SSname)
 	for (int i = 0; i < temp.size(); i++)
 	{
 		int tempConnection = temp.front();
-		// Check to make sure the connection in the list is not the connection that sent the CHANGE request
+		// Check to make sure the connection in the list is not the connection 
+		// that sent the CHANGE request
 		// Send all other connections the update message
 		if (connection != tempConnection)
 		{
-			write(connection, buffer, update.length());
+			n = write(connection, buffer, update.length());
+			if(n==0)
+			{
+				close(connection);
+				return;
+			}
+			if(n < 0)
+			{
+				error("Error writing to socket");
+			}
 		}
 		temp.pop_front();
 		temp.push_back(tempConnection);
@@ -79,6 +91,8 @@ void updateCommand(string update, int connection, string SSname)
 //================================================================changeCommand
 string changeCommand(string change, int connection)
 {
+
+	cout << change << "that's what it was billy\n" << endl;
 	vector<string> info;
 	stringstream ss(change);
 	string item;
@@ -88,34 +102,44 @@ string changeCommand(string change, int connection)
 		info.push_back(item);
 	}
 
-	std::cout << info[1] << "\n" << info[2] << std::endl;
-	stringstream tempSS(info[2]);
-	vector<string> versionInfo;
-	string temp1;
 	string tempName;
-
-	while(getline(tempSS, temp1, ':' ))
+	vector<string> versionInfo;
+	stringstream tempNameSS(info[1]);
+	while(getline(tempNameSS, tempName, ':' ))
 	{
-		versionInfo.push_back(temp1);
+		versionInfo.push_back(tempName);
 	}
-	unsigned pos = temp1.find(" ");
-	temp1 = temp1.substr(0, pos);
-	int testVersion = atoi(temp1.c_str());
+	unsigned posName = tempName.find(" ");
+	tempName = tempName.substr(0, posName);
+	
+	stringstream tempSS(info[2]);
+	string version;
+
+	while(getline(tempSS, version, ':' ))
+	{
+		versionInfo.push_back(version);
+	}
+	unsigned pos = version.find(" ");
+	version= version.substr(0, pos);
+	int testVersion = atoi(version.c_str());
 
 	stringstream nameStream(info[3]);
 	vector<string> cellNameInfo;
-	string temp2;
-	string tempcellName;
-
-	while(getline(tempSS, temp2, ':'))
+	string cellName;
+	while(getline(nameStream, cellName, ':'))
 	{
-		cellNameInfo.push_back(temp2);
+		cellNameInfo.push_back(cellName);
 	}
-	unsigned pos2 = temp2.find(" ");
-	temp2 = temp2.substr(0, pos);
-	bool testVersionEqualsSpreadsheetVersion = true;
+	unsigned pos2 = cellName.find(" ");
+	cellName= cellName.substr(0, pos2);
+	
+	string cellContent = info[5];
 
-	if(testVersionEqualsSpreadsheetVersion)
+	cout << tempName << "\n" <<  version << "\n" <<  cellName << "\n" <<  cellContent << endl;
+
+	
+
+	if()
 	{
 		// increment spreadsheet version
 		int SSversion = testVersion +1;
@@ -132,7 +156,7 @@ string changeCommand(string change, int connection)
 		{
 			if (tempName == connected_ss[i].get_name())
 			{
-				//connected_ss.edit_cell_content(
+				connected_ss[i].edit_cell_content(version, cellName);
 			}
 		}
 		// Change request is valid, call updateCommand to send out the update
@@ -162,10 +186,7 @@ string changeCommand(string change, int connection)
 		serverResponse = serverResponseSS.str();
 		std::cout << serverResponse << std::endl;
 	}
-
-
 	return serverResponse;
-
 }
 
 //================================================================undoCommand
@@ -201,6 +222,7 @@ string createCommand(string create, int connection)
 	// Add name and Connection to the map
 	list<int> connList;
 	ss_connections.insert ( std::pair<std::string, list<int> >(tempName, connList));
+	cout<< "inserting into map" << endl;
 	ss_connections.at(tempName).push_front(connection);
 
 	stringstream tempSS2(info[2]);
@@ -223,6 +245,7 @@ string createCommand(string create, int connection)
 	if(testNameNotTaken) // Name is not taken
 	{
 		// Create spreadsheet with name and password (Use hashmaps to keep track of spreadsheets?)    
+		
 
 		stringstream serverResponseSS;
 		serverResponseSS << "CREATE SP OK \n";
@@ -258,7 +281,6 @@ string createCommand(string create, int connection)
 //================================================================joinCommand
 string joinCommand(string join, int connection)
 {
-
 	vector<string> info;
 	stringstream ss(join);
 	string serverResponse = "";
@@ -283,6 +305,7 @@ string joinCommand(string join, int connection)
 	// Add name and Connection to the map
 	list<int> connList;
 	ss_connections.insert ( std::pair<std::string, list<int> >(tempName, connList));
+	cout<< "inserting int map join" << endl;
 	ss_connections.at(tempName).push_front(connection);
 
 	stringstream tempSS2(info[2]);
@@ -304,7 +327,7 @@ string joinCommand(string join, int connection)
 
 		// Retrieve spreadsheet information ----- Need to implement -------------
 		int SSversion = 0; // Get current version number of spreadsheet
-		int lengthOfSpreadsheetXML = 1313; // lengthOfSpreadsheetXML = SpreadsheetXML.length();
+		int lengthOfSpreadsheetXML = 1313; //lengthOfSpreadsheetXML=SpreadsheetXML.length();
 		std::string xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?><spreadsheet version=\"ps6\"></spreadsheet>"; // xml = readtextfile(tempName);
 		stringstream serverResponseSS;
 		serverResponseSS << "JOIN SP OK \n";
@@ -319,7 +342,6 @@ string joinCommand(string join, int connection)
 		serverResponseSS << "\n";
 		serverResponseSS << xml;
 		serverResponseSS << "\n";
-
 
 		serverResponse = serverResponseSS.str();
 
@@ -339,16 +361,12 @@ string joinCommand(string join, int connection)
 
 		std::cout << serverResponse << std::endl;
 	}
-
-
-
 	return serverResponse;
 }
 
 //================================================================saveCommand
 string saveCommand(string save)
 {
-
 	vector<string> info;
 	stringstream ss(save);
 	string serverResponse = "";
@@ -362,6 +380,7 @@ string saveCommand(string save)
 	stringstream tempSS(info[1]);
 	vector<string> nameInfo;
 	string tempName;
+	cout << "herehere" << endl;
 	while(getline(tempSS, tempName, ':' ))
 	{
 		nameInfo.push_back(tempName);
@@ -370,7 +389,6 @@ string saveCommand(string save)
 	tempName = tempName.substr(0, pos);
 
 	bool testNameNotTaken = true; // Test if file name exists already
-
 
 	if(testNameNotTaken) // Name is not taken
 	{
@@ -453,15 +471,21 @@ class Connection
 	{
 		//in here we can put the information for the connection 
 		//in a map/list to keep track of live connections
-		//printf("%d\n", con_num);
+		printf("New connection made: %d\n", con_num);
 
 	}
+
+		~Connection()
+		{
+			printf("destroyed connection: %d\n", con_num);
+		}
 
 		//this method is necessary for multithreading. Starts listening
 		//on the socket for messages to come through
 		void operator()()
 		{
 			start_read();
+			return;
 		}
 
 		int get_sockfd()
@@ -481,73 +505,60 @@ class Connection
 		//listen on the socket connection for a message to come through
 		void start_read()
 		{
-			//bzero clears out the buffer
-			bzero(buffer, 1024);
-			//read will read the message off the socket connection and
-			//store the message in buffer
-			n = read(newsockfd, buffer, 1024);
-			if(n==0)
+			while(1)
 			{
-				close_con();
-				return;
-			}
-			if(n<0) error("ERROR reading from socket");
-			//printf("%s",buffer);
+				//bzero clears out the buffer
+				bzero(buffer, 1024);
+				//read will read the message off the socket connection and
+				//store the message in buffer
+				n = read(newsockfd, buffer, 1024);
+				if(n==0)
+				{
+					close_con();
+					return;
+				}
+				if(n<0) error("ERROR reading from socket");
 
-			//here is where we need to parse the message to determine what
-			//command has been sent by the client
+				int cmd = parse(buffer);
 
-			int cmd = parse(buffer);
-
-			string message = string(buffer);
-			string serv_resp = "ERROR \n";
-			switch(cmd)
-			{
-				case CREATE: serv_resp = createCommand(message, newsockfd);
+				string message = string(buffer);
+				string serv_resp = "ERROR \n";
+				switch(cmd)
+				{
+					case CREATE: serv_resp = createCommand(message, newsockfd);
+											 break;
+					case JOIN: serv_resp = joinCommand(message, newsockfd);
 										 break;
-				case JOIN: serv_resp = joinCommand(message, newsockfd);
-									 break;
-				case CHANGE: serv_resp = changeCommand(message, newsockfd);
+					case CHANGE: serv_resp = changeCommand(message, newsockfd);
+											 break;
+					case UNDO: serv_resp = undoCommand();
 										 break;
-				case UNDO: serv_resp = undoCommand();
-									 break;
-				case SAVE: ; serv_resp = saveCommand(message);
-									 break;
-				case LEAVE: close_con();
-										break;
-				case ERROR: "";
-										break;
-			}
+					case SAVE: ; serv_resp = saveCommand(message);
+										 break;
+					case LEAVE: close_con();
+											return;
+					case ERROR: "";
+											break;
+				}
 
-			char rspns[1024]; 
-			size_t length = serv_resp.copy(rspns,1024, 0);
-			rspns[length] = '\0';
-			//here is where we will write back to the client the correct msg
-			//we can either keep it here and pass back from the methods we call
-			//what needs to be sent to the client or just send the message from
-			//the method called and remove this call to start_write()
-			n = start_write(rspns);
-			if(n==0)
-			{
-				return;
+				char rspns[1024]; 
+				size_t length = serv_resp.copy(rspns,1024, 0);
+				rspns[length] = '\0';
+				//here is where we will write back to the client the correct msg
+				//we can either keep it here and pass back from the methods we call
+				//what needs to be sent to the client or just send the message from
+				//the method called and remove this call to start_write()
+				n = write(newsockfd, rspns, 1024);
+				if(n==0)
+				{
+					close_con();
+					return;
+				}
+			  if(n<0) error("Error writing to socket");
+				//clear out the buffer (idk if we need it but it was causing some
+				//issues when i wasn't
+				bzero(buffer,1024);
 			}
-			//clear out the buffer (idk if we need it but it was causing some
-			//issues when i wasn't
-			bzero(buffer,1024);
-			//start listening on the socket connection again
-			start_read();
-		}
-
-		//write the message to the client on the socket connection
-		int start_write(char response[])
-		{
-			n = write(newsockfd, response, 1024);
-			if(n==0)
-			{
-				close_con();
-				return 0;
-			}
-			if(n<0) error("Error writing to socket");
 		}
 
 		//gracefully close the connection when either the client sends a 
@@ -586,7 +597,7 @@ int main(int argc, char* argv[])
 	int con_num = 0;
 	while(1)
 	{
-		listen(sockfd, 5);
+		listen(sockfd, 1);
 
 		clilen = sizeof(cli_addr);
 		newsockfd = accept(sockfd,
