@@ -22,9 +22,6 @@
 
 using namespace std;
 
-//to facilitate working with what commands are
-//set from the client to the server and the methods
-//we need to call on them
 enum com_cmds{
 	CREATE,
 	JOIN,
@@ -41,16 +38,16 @@ map<string, list<int> > ss_connections;
 
 // list of open/connected  spreadsheets
 vector<spreadsheet> connected_ss;
+
 // prints out an error message
 void error(const char *msg)
 {
 	perror(msg);
+	cout << "need to catch exception" << endl;
 	exit(1);
 }
 
-
-//=======================parser
-
+//================================================================updateCommand
 void updateCommand(string update, int connection, string SSname)
 {
 	update.erase(0, 6);
@@ -79,6 +76,7 @@ void updateCommand(string update, int connection, string SSname)
 	}
 }
 
+//================================================================changeCommand
 string changeCommand(string change, int connection)
 {
 	vector<string> info;
@@ -170,11 +168,13 @@ string changeCommand(string change, int connection)
 
 }
 
+//================================================================undoCommand
 string undoCommand()
 {
 
 }
 
+//================================================================createCommand
 string createCommand(string create, int connection)
 {
 
@@ -255,6 +255,7 @@ string createCommand(string create, int connection)
 	return serverResponse;
 }
 
+//================================================================joinCommand
 string joinCommand(string join, int connection)
 {
 
@@ -344,6 +345,7 @@ string joinCommand(string join, int connection)
 	return serverResponse;
 }
 
+//================================================================saveCommand
 string saveCommand(string save)
 {
 
@@ -401,10 +403,14 @@ string saveCommand(string save)
 
 	return serverResponse;
 }
+
+//================================================================leaveCommand
 void leaveCommand()
 {
 
 }
+
+//================================================================parse
 int parse(char buf[256])
 {
 	if(buf[0] == 'C')
@@ -432,6 +438,7 @@ int parse(char buf[256])
 }
 
 
+//================================================================updateCommand
 //Creates a connection object that runs on it's own thread
 //this class will have all the functionality that each 
 //connection that is made will need
@@ -469,16 +476,16 @@ class Connection
 
 	private:
 		int n, newsockfd, con_num;
-		char buffer[256];
+		char buffer[1024];
 
 		//listen on the socket connection for a message to come through
 		void start_read()
 		{
 			//bzero clears out the buffer
-			bzero(buffer, 256);
+			bzero(buffer, 1024);
 			//read will read the message off the socket connection and
 			//store the message in buffer
-			n = read(newsockfd, buffer, 255);
+			n = read(newsockfd, buffer, 1024);
 			if(n==0)
 			{
 				close_con();
@@ -506,15 +513,14 @@ class Connection
 									 break;
 				case SAVE: ; serv_resp = saveCommand(message);
 									 break;
-				case LEAVE: ;
+				case LEAVE: close_con();
 										break;
 				case ERROR: "";
 										break;
-
 			}
 
-			char rspns[256]; 
-			size_t length = serv_resp.copy(rspns,256, 0);
+			char rspns[1024]; 
+			size_t length = serv_resp.copy(rspns,1024, 0);
 			rspns[length] = '\0';
 			//here is where we will write back to the client the correct msg
 			//we can either keep it here and pass back from the methods we call
@@ -527,7 +533,7 @@ class Connection
 			}
 			//clear out the buffer (idk if we need it but it was causing some
 			//issues when i wasn't
-			bzero(buffer,256);
+			bzero(buffer,1024);
 			//start listening on the socket connection again
 			start_read();
 		}
@@ -535,8 +541,7 @@ class Connection
 		//write the message to the client on the socket connection
 		int start_write(char response[])
 		{
-
-			n = write(newsockfd, response, 100);
+			n = write(newsockfd, response, 1024);
 			if(n==0)
 			{
 				close_con();
@@ -552,7 +557,7 @@ class Connection
 			close(newsockfd);
 		}
 };
-
+//==========================================================================main
 int main(int argc, char* argv[])
 {
 	std::cout << "Jocadoet Server Running"<< std::endl;
@@ -574,10 +579,9 @@ int main(int argc, char* argv[])
 	if (bind(sockfd, (struct sockaddr *) &serv_addr,
 				sizeof(serv_addr)) < 0)
 		error("ERROR on binding");
-	//loop here and conitnually listen for connections
-	//the 5 in the parameters is the amount of connection
-	//requests that can be in queue at one time if there for
-	//some reason is a problem with the socket accepting the client
+	//loop here and conitnually listen for connections the 5 in the parameters 
+	//is the amount of connection requests that can be in queue at one time if
+	//there for some reason is a problem with the socket accepting the client
 	//connection
 	int con_num = 0;
 	while(1)
@@ -593,23 +597,15 @@ int main(int argc, char* argv[])
 
 		//make a new connection object
 		Connection c(newsockfd, con_num);
+
 		//send it to it's own thread
 		boost::thread conThread(c);
 
 		//increment connection count
 		con_num++;
-
 	}
-
-	//the close on the newsockfd shouldn't need to be done here but
-	//inside the connection.(however i'm not sure if the actual
-	//new socket file descriptor is sent and this one will need to
-	//be closed or if it will be taken care of when we close it in the
-	//connection object
-	//close(newsockfd);	
-
 	//close the server socket
+	cout << "Exited while loop and closing" << endl;
 	close(sockfd);
-
 	return 0;
 }
