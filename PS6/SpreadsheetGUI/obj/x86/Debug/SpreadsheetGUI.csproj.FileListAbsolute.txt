@@ -82,4 +82,3 @@ C:\msysgit\jocadoet\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\GenerateResource.r
 C:\msysgit\jocadoet\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\GenerateResource.write.1.tlog
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.XML
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUI\bin\Debug\CustomNetworking.dll
-C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUI\bin\Debug\CustomNetworking.pdb
