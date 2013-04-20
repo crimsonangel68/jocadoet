@@ -53,30 +53,30 @@ void error(const char *msg)
 
 void updateCommand(string update, int connection, string SSname)
 {
-  update.erase(0, 6);
-  update.insert(0, "UPDATE");
-  // LOOP THROUGH CONNECTIONS AND SEND IT TO ALL OTHER connections except the one that sent change
-  // Initialize iterator
-  std::map <std::string, int>::iterator it;
-  // Initialize buffer for writing to socket
-  char buffer[update.length()];
-  // Copy string to send into char array
-  std::size_t length = update.copy(buffer, 0, update.length());
-  buffer[length] = '\0';
-  // Initialize temp list to loop through all connections for given SS name
-  list<int> temp = ss_connections.find(SSname)->second;
-  for (int i = 0; i < temp.size(); i++)
-    {
-      int tempConnection = temp.front();
-      // Check to make sure the connection in the list is not the connection that sent the CHANGE request
-      // Send all other connections the update message
-      if (connection != tempConnection)
+	update.erase(0, 6);
+	update.insert(0, "UPDATE");
+	// LOOP THROUGH CONNECTIONS AND SEND IT TO ALL OTHER connections except the one that sent change
+	// Initialize iterator
+	std::map <std::string, int>::iterator it;
+	// Initialize buffer for writing to socket
+	char buffer[update.length()];
+	// Copy string to send into char array
+	std::size_t length = update.copy(buffer, 0, update.length());
+	buffer[length] = '\0';
+	// Initialize temp list to loop through all connections for given SS name
+	list<int> temp = ss_connections.find(SSname)->second;
+	for (int i = 0; i < temp.size(); i++)
 	{
-	  write(connection, buffer, update.length());
+		int tempConnection = temp.front();
+		// Check to make sure the connection in the list is not the connection that sent the CHANGE request
+		// Send all other connections the update message
+		if (connection != tempConnection)
+		{
+			write(connection, buffer, update.length());
+		}
+		temp.pop_front();
+		temp.push_back(tempConnection);
 	}
-      temp.pop_front();
-      temp.push_back(tempConnection);
-    }
 }
 
 string changeCommand(string change, int connection)
@@ -105,14 +105,14 @@ string changeCommand(string change, int connection)
 	int testVersion = atoi(temp1.c_str());
 
 	stringstream nameStream(info[3]);
-	vector<string> cellnameInfo;
+	vector<string> cellNameInfo;
 	string temp2;
 	string tempcellName;
 
-	while(getline(tempSS, temp1, ':'))
-	  {
-	    cellNameInfo.push_back(temp2);
-	  }
+	while(getline(tempSS, temp2, ':'))
+	{
+		cellNameInfo.push_back(temp2);
+	}
 	unsigned pos2 = temp2.find(" ");
 	temp2 = temp2.substr(0, pos);
 	bool testVersionEqualsSpreadsheetVersion = true;
@@ -131,12 +131,12 @@ string changeCommand(string change, int connection)
 		serverResponse = serverResponseSS.str();
 		// Send update to spreadsheet
 		for (int i = 0; i < connected_ss.size(); i++)
-		  {
-		    if (tempName == connected_ss[i].get_name())
-		      {
-			connected_ss.edit_cell_content(
-		      }
-		  }
+		{
+			if (tempName == connected_ss[i].get_name())
+			{
+				//connected_ss.edit_cell_content(
+			}
+		}
 		// Change request is valid, call updateCommand to send out the update
 		updateCommand(change, connection, tempName);
 	}
@@ -172,7 +172,7 @@ string changeCommand(string change, int connection)
 
 string undoCommand()
 {
-  
+
 }
 
 string createCommand(string create, int connection)
@@ -223,7 +223,7 @@ string createCommand(string create, int connection)
 	if(testNameNotTaken) // Name is not taken
 	{
 		// Create spreadsheet with name and password (Use hashmaps to keep track of spreadsheets?)    
-		
+
 		stringstream serverResponseSS;
 		serverResponseSS << "CREATE SP OK \n";
 		serverResponseSS << "Name:";
@@ -373,7 +373,7 @@ string saveCommand(string save)
 	if(testNameNotTaken) // Name is not taken
 	{
 		// Save spreadsheet with name and password (Use hashmaps to keep track of spreadsheets?)    
-		
+
 		stringstream serverResponseSS;
 		serverResponseSS << "CREATE SP OK \n";
 		serverResponseSS << "Name:";
@@ -403,7 +403,7 @@ string saveCommand(string save)
 }
 void leaveCommand()
 {
-  
+
 }
 int parse(char buf[256])
 {
@@ -496,20 +496,20 @@ class Connection
 			string serv_resp = "ERROR \n";
 			switch(cmd)
 			{
-			case CREATE: serv_resp = createCommand(message, newsockfd);
-			  break;
-			case JOIN: serv_resp = joinCommand(message, newsockfd);
-			  break;
-			case CHANGE: serv_resp = changeCommand(message, newsockfd);
-			  break;
-			case UNDO: serv_resp = undoCommand();
-			  break;
-			case SAVE: ; serv_resp = saveCommand(message);
-			  break;
-			case LEAVE: ;
-			  break;
-			case ERROR: "";
-			  break;
+				case CREATE: serv_resp = createCommand(message, newsockfd);
+										 break;
+				case JOIN: serv_resp = joinCommand(message, newsockfd);
+									 break;
+				case CHANGE: serv_resp = changeCommand(message, newsockfd);
+										 break;
+				case UNDO: serv_resp = undoCommand();
+									 break;
+				case SAVE: ; serv_resp = saveCommand(message);
+									 break;
+				case LEAVE: ;
+										break;
+				case ERROR: "";
+										break;
 
 			}
 
