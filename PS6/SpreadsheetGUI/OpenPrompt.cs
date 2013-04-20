@@ -220,7 +220,13 @@ namespace SpreadsheetGUI
         {
             lock (locker)
             {
-                if (s.Contains("JOIN"))
+                if (s.Contains("xml"))
+                {
+                    //receiving = false;
+                    MessageBox.Show(s);
+                    ThreadPool.QueueUserWorkItem(x => (new Form1(IPAddress, name, version, s, socket)).Show());
+                }
+                else if (s.Contains("JOIN"))
                 {
                     if (s.Contains("FAIL"))
                         FAILmessage = true;
@@ -259,12 +265,6 @@ namespace SpreadsheetGUI
 
                     // Continue receiving on the socket
                     socket.BeginReceive(joinReceived, null);
-                }
-                else
-                {
-                    //receiving = false;
-                    MessageBox.Show(s);
-                    ThreadPool.QueueUserWorkItem(x => new Form1(IPAddress, name, version, s, socket));
                 }
             }
         } // End of "JoinReceived" method ..........................................................................................
