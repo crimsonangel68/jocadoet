@@ -304,7 +304,7 @@ string joinCommand(string join, int connection)
 		// Retrieve spreadsheet information ----- Need to implement -------------
 		int SSversion = 0; // Get current version number of spreadsheet
 		int lengthOfSpreadsheetXML = 1313; // lengthOfSpreadsheetXML = SpreadsheetXML.length();
-		std::string xml = "TESTXML"; // xml = readtextfile(tempName);
+		std::string xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?><spreadsheet version=\"ps6\"></spreadsheet>"; // xml = readtextfile(tempName);
 		stringstream serverResponseSS;
 		serverResponseSS << "JOIN SP OK \n";
 		serverResponseSS << "Name:";

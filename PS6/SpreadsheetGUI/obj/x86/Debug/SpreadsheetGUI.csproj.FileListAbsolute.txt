@@ -54,11 +54,9 @@ C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\Sprea
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\SpreadsheetGUI.Properties.Resources.resources
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\GenerateResource.read.1.tlog
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\GenerateResource.write.1.tlog
-C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUI\bin\Debug\CustomNetworking.dll
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUI\bin\Debug\CustomNetworking.xml
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\SpreadsheetGUI.Startup.resources
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\SpreadsheetGUI.OpenPrompt.resources
-C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.XML
 C:\msysgit\jocadoet\jocadoet\PS6\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.XML
 C:\msysgit\jocadoet\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\SpreadsheetGUI.exe
 C:\msysgit\jocadoet\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\SpreadsheetGUI.pdb
@@ -82,3 +80,4 @@ C:\msysgit\jocadoet\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\SpreadsheetGUI.Sta
 C:\msysgit\jocadoet\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\SpreadsheetGUI.Properties.Resources.resources
 C:\msysgit\jocadoet\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\GenerateResource.read.1.tlog
 C:\msysgit\jocadoet\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.XML
