@@ -28,6 +28,9 @@ namespace SpreadsheetGUI
         
         StringSocket socket;        // This socket will be used to communicate to the server
 
+        bool receiving;
+        object locker;
+
         /// <summary>
         /// This method will open a new prompt window, which a user
         ///  will be able to enter in a file to either create a new
@@ -40,6 +43,9 @@ namespace SpreadsheetGUI
             InitializeComponent();
             FAILmessage = false;
             socket = null;
+            receiving = false;
+
+            locker = 0;
 
             // Connect to the provided IP address
             Connect(IP);
@@ -96,7 +102,11 @@ namespace SpreadsheetGUI
             
             // Send the message and then begin receiving
             socket.BeginSend(message, (f, p) => { }, 0);
-            socket.BeginReceive(createReceived, 0);
+            if (!receiving)
+            {
+                receiving = true;
+                socket.BeginReceive(createReceived, 0);
+            }
         } // End of "NewButton_Click" method .............................................................................
 
         /// <summary>
@@ -116,7 +126,11 @@ namespace SpreadsheetGUI
 
             // Send the message to the server and then begin receiving
             socket.BeginSend(message, (f, p) => { }, 0);
-            socket.BeginReceive(joinReceived, 0);
+            if (!receiving)
+            {
+                receiving = true;
+                socket.BeginReceive(joinReceived, 0);
+            }
         } // End of "JoinButton_Click" method .....................................................................................................
 
         /// <summary>
@@ -204,54 +218,55 @@ namespace SpreadsheetGUI
         /// <param name="p"></param>
         private void joinReceived(String s, Exception e, object p)
         {
-            // JOIN SP OK/FAIL LF
-            // Name:name LF
-            // (Version:version LF) / (message LF)
-            // (Length:length LF) / 
-            // (xml LF) / 
-
-            if (s.Contains("JOIN"))
+            lock (locker)
             {
-                if (s.Contains("FAIL"))
-                    FAILmessage = true;
-
-                // Continue receiving on the socket
-                socket.BeginReceive(joinReceived, null);
-            }
-            else if (s.Contains("Name:"))
-            {
-                name = s.Substring(5);
-                // Continue receiving on the socket
-                socket.BeginReceive(joinReceived, null);
-            }
-            // Check to see if the message sent back failed
-            else if (FAILmessage)
-            {
-                // Report to the user the message sent from the server
-                DialogResult result = MessageBox.Show(s, "ERROR", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
-
-                // If the user decides to cancel, disconnect the socket and close the prompts
-                if (result == DialogResult.Cancel)
+                if (s.Contains("JOIN"))
                 {
-                    socket.CloseSocket();
+                    if (s.Contains("FAIL"))
+                        FAILmessage = true;
+
+                    // Continue receiving on the socket
+                    socket.BeginReceive(joinReceived, null);
+                }
+                else if (s.Contains("Name:"))
+                {
+                    name = s.Substring(5);
+                    // Continue receiving on the socket
+                    socket.BeginReceive(joinReceived, null);
+                }
+                // Check to see if the message sent back failed
+                else if (FAILmessage)
+                {
+                    // Report to the user the message sent from the server
+                    DialogResult result = MessageBox.Show(s, "ERROR", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+
+                    // If the user decides to cancel, disconnect the socket and close the prompts
+                    if (result == DialogResult.Cancel)
+                    {
+                        socket.CloseSocket();
+                    }
+                }
+                else if (s.Contains("Version:"))
+                {
+                    version = s.Substring(8);
+
+                    // Continue receiving on the socket
+                    socket.BeginReceive(joinReceived, null);
+                }
+                else if (s.Contains("Length:"))
+                {
+                    Int32.TryParse(s.Substring(7), out length);
+
+                    // Continue receiving on the socket
+                    socket.BeginReceive(joinReceived, null);
+                }
+                else
+                {
+                    //receiving = false;
+                    MessageBox.Show(s);
+                    ThreadPool.QueueUserWorkItem(x => new Form1(IPAddress, name, version, s, socket));
                 }
             }
-            else if (s.Contains("Version:"))
-            {
-                version = s.Substring(8);
-
-                // Continue receiving on the socket
-                socket.BeginReceive(joinReceived, null);
-            }
-            else if (s.Contains("Length:"))
-            {
-                Int32.TryParse(s.Substring(7), out length);
-
-                // Continue receiving on the socket
-                socket.BeginReceive(joinReceived, null);
-            }
-            else
-                ThreadPool.QueueUserWorkItem(x => new Form1(IPAddress, name, version, s, socket));
         } // End of "JoinReceived" method ..........................................................................................
     }
 }

@@ -57,7 +57,7 @@ namespace SpreadsheetGUI
 
             String filePath = @"../../../../savedfiles/jocadoetSpreadsheet.ss";
 
-            try
+            //try
             {
                 FileInfo newFile = new FileInfo(filePath);
 
@@ -84,10 +84,10 @@ namespace SpreadsheetGUI
                 spreadsheetPanel1.SetSelection(0, 0);
                 updateSelection(spreadsheetPanel1);
             }
-            catch (Exception e)
-            {
-                MessageBox.Show("ERROR:\n" + e, "ERROR");
-            }
+            //catch (Exception e)
+            //{
+            //    MessageBox.Show("ERROR:\n" + e, "ERROR");
+            //}
         }
 
         //-----------------------------------------------------------------------------------openToolStripMenuItem_Click
