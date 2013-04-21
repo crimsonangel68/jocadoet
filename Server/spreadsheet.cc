@@ -90,6 +90,11 @@ std::deque<std::pair<std::string, std::string> > spreadsheet::get_undoQUE() cons
 // Clear deque
 void spreadsheet::clear_undo() { this->undoQUE.clear(); }
 
+// Remove client
+void spreadshseet::remove_client(int client)
+{
+  this->clients.remove(client);
+}
 // --------------------- XML and write to file methods -------------------------
 
 // Get XML to write to file
