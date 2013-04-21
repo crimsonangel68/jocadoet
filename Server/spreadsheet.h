@@ -14,6 +14,7 @@
 #include <set>
 #include <cstdlib>
 #include <list>
+#include <deque>
 
 
 class spreadsheet
@@ -47,9 +48,13 @@ std::map<std::string, std::string> openCellMap(std::string file);
   void set_version(int version);
   void add_client(int c);
   void write_file(std::string file);
+	std::deque<std::pair<std::string, std::string> > get_undoQUE() const;
+	void add_undo(std::string cellName, std::string cellContent);
+	std::string get_undo();
 
   // Member Variables
  private:
+  std::deque<std::pair<std::string, std::string> > undoQUE;
   std::string name;
   std::string password;
   int SSVersion;

@@ -137,9 +137,20 @@ string changeCommand(string change, int connection)
 
 	cout << tempName << "\n" <<  version << "\n" <<  cellName << "\n" <<  cellContent << endl;
 
-	
+	bool versionMatch = false;
 
-	if()
+	for(int i = 0; i < connected_ss.size(); i++)
+	{
+		if(tempName==connected_ss[i].get_name())
+		{
+			if(connected_ss[i].check_version(testVersion))
+			{
+				versionMatch = true;
+			}
+		}
+	}
+
+	if(versionMatch)
 	{
 		// increment spreadsheet version
 		int SSversion = testVersion +1;
@@ -162,11 +173,11 @@ string changeCommand(string change, int connection)
 		// Change request is valid, call updateCommand to send out the update
 		updateCommand(change, connection, tempName);
 	}
-	else if(!testVersionEqualsSpreadsheetVersion)
+	else if(!versionMatch)
 	{
 		stringstream serverResponseSS;
 		int SSversion = testVersion;
-		serverResponseSS << "CHANGE WAIT OK \n";
+		serverResponseSS << "CHANGE SP WAIT \n";
 		serverResponseSS << info[1];
 		serverResponseSS << " \n";
 		serverResponseSS << "Version:";
@@ -237,16 +248,12 @@ string createCommand(string create, int connection)
 	std::cout << "tempName is: " << tempName << std::endl << "tempPassword is: " << tempPassword << std::endl << std::endl;
 	bool testNameNotTaken = true; // Test if file name exists already
 
-
 	// Add spreadsheet to list of existing spreadsheets
 	spreadsheet::spreadsheet newSS(tempName, tempPassword, 0);
 	connected_ss.push_back(newSS);
 
 	if(testNameNotTaken) // Name is not taken
 	{
-		// Create spreadsheet with name and password (Use hashmaps to keep track of spreadsheets?)    
-		
-
 		stringstream serverResponseSS;
 		serverResponseSS << "CREATE SP OK \n";
 		serverResponseSS << "Name:";
@@ -477,7 +484,7 @@ class Connection
 
 		~Connection()
 		{
-			printf("destroyed connection: %d\n", con_num);
+			//printf("destroyed connection: %d\n", con_num);
 		}
 
 		//this method is necessary for multithreading. Starts listening
@@ -500,18 +507,20 @@ class Connection
 
 	private:
 		int n, newsockfd, con_num;
+		int buffer_length;
 		char buffer[1024];
 
 		//listen on the socket connection for a message to come through
 		void start_read()
 		{
+			buffer_length = 1024;
 			while(1)
 			{
 				//bzero clears out the buffer
-				bzero(buffer, 1024);
+				bzero(buffer, buffer_length);
 				//read will read the message off the socket connection and
 				//store the message in buffer
-				n = read(newsockfd, buffer, 1024);
+				n = read(newsockfd, buffer, buffer_length);
 				if(n==0)
 				{
 					close_con();
@@ -540,15 +549,18 @@ class Connection
 					case ERROR: "";
 											break;
 				}
-
-				char rspns[1024]; 
-				size_t length = serv_resp.copy(rspns,1024, 0);
+				
+				int rs_len = serv_resp.length();
+				char rspns[rs_len]; 
+				bzero(rspns, rs_len);
+				size_t length = serv_resp.copy(rspns,rs_len, 0);
 				rspns[length] = '\0';
 				//here is where we will write back to the client the correct msg
 				//we can either keep it here and pass back from the methods we call
 				//what needs to be sent to the client or just send the message from
 				//the method called and remove this call to start_write()
-				n = write(newsockfd, rspns, 1024);
+				n = write(newsockfd, rspns, rs_len);
+				cout << "\nwrote to socket:\n" << rspns << "\n" << n << "\n" << endl;
 				if(n==0)
 				{
 					close_con();
@@ -557,7 +569,7 @@ class Connection
 			  if(n<0) error("Error writing to socket");
 				//clear out the buffer (idk if we need it but it was causing some
 				//issues when i wasn't
-				bzero(buffer,1024);
+				bzero(buffer,rs_len);
 			}
 		}
 
@@ -565,6 +577,7 @@ class Connection
 		//message to disconnect or the client side just decides to close
 		void close_con()
 		{
+			printf("closed connection: %d\n", con_num);
 			close(newsockfd);
 		}
 };

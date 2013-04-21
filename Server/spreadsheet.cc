@@ -84,6 +84,12 @@ void spreadsheet::set_password(std::string pw) {this->password = pw;}
 // Set the version of the spreadsheet
 void spreadsheet::set_version(int version) { this->SSVersion = version; }
 
+// get deque
+std::deque<std::pair<std::string, std::string> > spreadsheet::get_undoQUE() const
+{
+	return this->undoQUE;
+}
+
 // ------------------------------------------ XML and write to file methods --------------------------
 
 // Get XML to write to file
@@ -144,7 +150,50 @@ void spreadsheet::write_file(std::string SSname)
 
   void spreadsheet::edit_cell_content(std::string cellName, std::string cellContent)
   {
+		std::map<std::string, std::string>::iterator it;
+		std::string mapValue = cells.find(cellName)->second = cellContent;
   }
+
+	void spreadsheet::add_undo(std::string cellName, std::string cellContent)
+	{
+		std::pair<std::string, std::string> undoPAIR = std::make_pair (cellName, cellContent);
+		this->undoQUE.push_back(undoPAIR);
+		if(this->undoQUE.size() > 10)
+		{
+			this->undoQUE.pop_front();
+		}
+	}
+
+	std::string spreadsheet::get_undo()
+	{
+		std::pair<std::string, std::string> undoPAIR = this->undoQUE.back();
+		this->undoQUE.pop_back();
+		std::string cellName = undoPAIR.first;
+		std::string cellContent = undoPAIR.second;
+
+		std::stringstream convert;
+		convert << cellContent.size();
+		std::string result = convert.str();
+
+		std::stringstream convert2;
+		convert2 << this->get_version();
+		std::string result2 = convert2.str();
+
+		std::stringstream undoMessage;
+
+		undoMessage << "UNDO SP OK \n";
+		undoMessage << "Name:" + this->name + " \n";
+		undoMessage << "Version:";
+		undoMessage << convert2;
+		undoMessage << " \n";
+		undoMessage << "Cell:"+cellName+" \n";
+		undoMessage << "Length:";
+		undoMessage << convert;
+		undoMessage << " \n";
+		undoMessage << cellContent + " \n";
+		
+		return undoMessage.str();
+	}
 
 
 // ------------------------------------ Initialize and Opencell map methods ---------------------------------
@@ -226,27 +275,27 @@ std::map<std::string, std::string> spreadsheet::openCellMap(std::string file)
     return tempCells;
 }
 
-int main()
-{
-  std::cout << "Is it working yet?" << std::endl;
-  std::cout << "Is the map working?" << std::endl;
-  //std::map<std::string, std::string> tempCells = spreadsheet::initializeCellMap();
-  std::map<std::string, std::string>::iterator it;
-  spreadsheet tempSS( "Calvin.ss");
+//int main()
+//{
+//  std::cout << "Is it working yet?" << std::endl;
+//  std::cout << "Is the map working?" << std::endl;
+//  //std::map<std::string, std::string> tempCells = spreadsheet::initializeCellMap();
+//  std::map<std::string, std::string>::iterator it;
+// spreadsheet tempSS( "Calvin.ss");
   //spreadsheet tempSS("Calvin", "poop", 1);
   // for(it = tempCells.begin(); it != tempCells.end(); ++it)
   //   {
   //     std::cout << (*it).first << " " << (*it).second <<std::endl;
   //   }
 
-  std::string xml = tempSS.get_XML();
+//  std::string xml = tempSS.get_XML();
   //tempSS.write_file(tempSS.get_name());
   //std::cout << "Name is: " << tempSS.get_name() << std::endl;
   //std::cout << "Password is: " << tempSS.get_password() << std::endl;
   //std::cout << "Version is: " << tempSS.get_version() << std::endl;
-  std::cout << xml << std::endl;
-  return 0;
-}
+//  std::cout << xml << std::endl;
+//  return 0;
+//}
 
 
 
