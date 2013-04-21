@@ -51,6 +51,7 @@ class spreadsheet
 		void write_file(std::string file);
 		void add_undo(std::string cellName, std::string cellContent);
 		void clear_undo();
+		void remove_client(int client);
 
 		// Member Variables
 	private:

@@ -91,10 +91,7 @@ std::deque<std::pair<std::string, std::string> > spreadsheet::get_undoQUE() cons
 void spreadsheet::clear_undo() { this->undoQUE.clear(); }
 
 // Remove client
-void spreadshseet::remove_client(int client)
-{
-  this->clients.remove(client);
-}
+void spreadsheet::remove_client(int c){  this->clients.remove(c);}
 // --------------------- XML and write to file methods -------------------------
 
 // Get XML to write to file
@@ -157,9 +154,10 @@ void spreadsheet::write_file(std::string SSname)
 void spreadsheet::edit_cell_content(std::string cellName, std::string cellContent)
 {
 	std::map<std::string, std::string>::iterator it;
-	std::string mapValue = cells.find(cellName)->second = cellContent;
+	std::string previousContent = cells.find(cellName)->second;
+	cells.find(cellName)->second = cellContent;
 	SSVersion++;
-	add_undo(cellName, cellContent);
+	add_undo(cellName, previousContent);
 }
 
 void spreadsheet::add_undo(std::string cellName, std::string cellContent)
@@ -280,3 +278,4 @@ std::map<std::string, std::string> spreadsheet::openCellMap(std::string file)
 	return tempCells;
 }
 
+int main () { return 0; }
