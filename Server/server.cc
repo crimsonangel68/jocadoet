@@ -214,9 +214,109 @@ string changeCommand(string change, int connection)
 //Takes an undo command that is received on a given connection and 
 //determines if the undo request is valid or not and returns the 
 //corresponding response to the client
-string undoCommand()
+vector<string> undoCommand(string undo)
 {
+  vector<string> info;
+  stringstream ss(undo);
+  string item;
+  while(getline(ss, item))
+    {
+      info.push_back(item);
+    }
 
+    std::cout << info[1] << "\n" << info[2] << std::endl;
+    stringstream tempSS(info[2]);
+    vector<string> versionInfo;
+    string temp1;
+    while(getline(tempSS, temp1, ':' ))
+      {
+	versionInfo.push_back(temp1);
+      }
+    unsigned pos = temp1.find(" ");
+    temp1 = temp1.substr(0, pos);
+    int testVersion = atoi(temp1.c_str());
+    std::cout << "temp1 is: " << temp1 << std::endl << std::endl << testVersion << std::endl;
+
+    //if(testVersion == "spreadsheet version")  // --------------------- Need to integrate with server -----------
+     {
+      	      	// increment spreadsheet version
+      	int SSversion = testVersion +1;
+      	stringstream serverResponseSS;
+      	serverResponseSS << "UNDO SP OK \n";
+      	serverResponseSS << info[1];
+      	serverResponseSS << " \n";
+      	serverResponseSS << "Version:";
+      	serverResponseSS << SSversion;  // --------------------- Need to integrate with server -----------
+      	serverResponseSS << " \n";
+      	serverResponseSS << "Cell:";
+      	serverResponseSS << "CELL TO BE REPLACED";  // --------------------- Need to integrate with server -----------
+      	serverResponseSS << "\n";
+      	serverResponseSS << "Length:";
+      	serverResponseSS << "Length of content"; // --------------------- Need to integrate with server -----------
+      	serverResponseSS << "\n";
+      	serverResponseSS << "OLD CONTENT OF CELL";  // --------------------- Need to integrate with server -----------
+      	serverResponseSS << "\n";
+	
+      	string serverResponse = serverResponseSS.str();
+	 {
+	   // Loop through all clients connected to spreadsheet and send response
+	   std::cout << serverResponse << std::endl;
+	 }
+   }
+    //else if (undoStack.size() == 0) // no undo to perform
+    {
+	      
+      	int SSversion = testVersion;
+      	stringstream serverResponseSS;
+      	serverResponseSS << "UNDO SP END \n";
+      	serverResponseSS << info[1];
+      	serverResponseSS << " \n";
+      	serverResponseSS << "Version:";
+      	serverResponseSS << SSversion;  // --------------------- Need to integrate with server -----------
+      	serverResponseSS << " \n";
+	
+      	string serverResponse = serverResponseSS.str();
+	{
+	  // Send message to initial client
+      	std::cout << serverResponse << std::endl;
+	}
+    }
+    // else if(testVersion != SSversion)
+     {
+	      
+      	int SSversion = testVersion;
+      	stringstream serverResponseSS;
+      	serverResponseSS << "UNDO SP WAIT \n";
+      	serverResponseSS << info[1];
+      	serverResponseSS << " \n";
+      	serverResponseSS << "Version:";
+      	serverResponseSS << SSversion;  // --------------------- Need to integrate with server -----------
+      	serverResponseSS << " \n";
+	
+      	string serverResponse = serverResponseSS.str();
+	{
+	  // Send message to initial client
+      	std::cout << serverResponse << std::endl;
+	}
+    }
+     //else //Some other error
+     {
+	      
+      	int SSversion = testVersion;
+      	stringstream serverResponseSS;
+      	serverResponseSS << "UNDO SP FAIL \n";
+      	serverResponseSS << info[1];
+      	serverResponseSS << " \n";
+      	serverResponseSS << "UNDO failed for reason:"; // Message for reason for fail
+      	serverResponseSS << " \n";
+	
+      	string serverResponse = serverResponseSS.str();
+
+      	std::cout << serverResponse << std::endl;
+     }
+
+    
+    return info;
 }
 
 //================================================================createCommand
