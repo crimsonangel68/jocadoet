@@ -81,8 +81,13 @@ namespace SpreadsheetGUI
         /// <param name="e"></param>
         private void OpenPrompt_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // Disconnect the socket gracefully.
-            socket.CloseSocket();
+            try
+            {
+                // Disconnect the socket gracefully.
+                //socket.CloseSocket();
+            }
+            catch (Exception)
+            { }
         }
 
         /// <summary>
@@ -100,11 +105,12 @@ namespace SpreadsheetGUI
             message += "Name:" + FileNameTextBox.Text + " \n";
             message += "Password:" + PasswordTextBox.Text + " \n";
             
-            // Send the message and then begin receiving
-            socket.BeginSend(message, (f, p) => { }, 0);
             if (!receiving)
             {
-                receiving = true;
+                // Send the message and then begin receiving
+                socket.BeginSend(message, (f, p) => { }, 0);
+
+                //receiving = true;
                 socket.BeginReceive(createReceived, 0);
             }
         } // End of "NewButton_Click" method .............................................................................
@@ -124,11 +130,12 @@ namespace SpreadsheetGUI
             message += "Name:" + FileNameTextBox.Text + " \n";
             message += "Password:" + PasswordTextBox.Text + " \n";
 
-            // Send the message to the server and then begin receiving
-            socket.BeginSend(message, (f, p) => { }, 0);
             if (!receiving)
             {
-                receiving = true;
+                // Send the message to the server and then begin receiving
+                socket.BeginSend(message, (f, p) => { }, 0);
+
+                //receiving = true;
                 socket.BeginReceive(joinReceived, 0);
             }
         } // End of "JoinButton_Click" method .....................................................................................................
@@ -149,38 +156,22 @@ namespace SpreadsheetGUI
         /// <param name="p"></param>
         private void createReceived(String s, Exception e, object p)
         {
-            // CREATE SP OK/FAIL LF
-            // Name:name LF
-            // (Password:password LF) / (message LF)
-            
-            if (s.Contains("CREATE"))
-            {
-                if (s.Contains("FAIL"))
-                {
-                    FAILmessage = true;
-                }
+            if (s.Contains("CREATE SP FAIL"))
+                socket.BeginReceive(failMethod, 0);
 
-                // Continue receiving on the socket
-                socket.BeginReceive(createReceived, null);
-            }
-            else if (s.Contains("Name:"))
+            else if (s.StartsWith("CREATE SP OK"))
+                socket.BeginReceive(createReceived, 0);
+            
+            else if (s.StartsWith("Name:"))
             {
                 name = s.Substring(5);
+                
                 // Continue receiving on the socket
-                socket.BeginReceive(createReceived, null);
+                socket.BeginReceive(createReceived, 0);
             }
-            // Check to see if the message sent back failed
-            else if (FAILmessage)
-            {
-                // Report to the user the message sent from the server
-                DialogResult result = MessageBox.Show(s, "ERROR", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
-
-                // If the user decides to cancel, disconnect the socket and close the prompts
-                if (result == DialogResult.Cancel)
-                    socket.CloseSocket();
-            }
-            // If the string contains Password:, we know that we have completed a successful transmission
-            else if (s.Contains("Password:"))
+            
+                // If the string contains Password:, we know that we have completed a successful transmission
+            else if (s.StartsWith("Password:"))
             {
                 // We show the password returned from the server, along with the name of the spreadsheet returned from the server.
                 //  We then ask for confirmation on whether or not they want to join the specified spreadsheet.
@@ -191,13 +182,18 @@ namespace SpreadsheetGUI
                 {
                     // Crreate the correct message according to protocol
                     String message = "JOIN \n";
-                    message += "Name:" + FileNameTextBox.Text + " \n";
+                    message += "Name:" + name + " \n";
                     message += "Password:" + PasswordTextBox.Text + " \n";
 
+                    MessageBox.Show(message);
                     // Send the message to the server and then begin receiving
                     socket.BeginSend(message, (f, q) => { }, 0);
                     socket.BeginReceive(joinReceived, 0);
                 }
+                else
+                    receiving = false;
+
+                
             }
 
         } // End of "createReceived" method ............................................................................................................
@@ -218,13 +214,20 @@ namespace SpreadsheetGUI
         /// <param name="p"></param>
         private void joinReceived(String s, Exception e, object p)
         {
-            lock (locker)
+            //lock (locker)
             {
                 if (s.Contains("xml"))
                 {
-                    //receiving = false;
+                    //this.BeginInvoke(new Action(() => { Close(); }));
+                    
                     MessageBox.Show(s);
-                    ThreadPool.QueueUserWorkItem(x => (new Form1(IPAddress, name, version, s, socket)).Show());
+
+                    SpreadsheetApplicationContext appContext = SpreadsheetApplicationContext.getAppContext();
+                    appContext.RunForm(new Form1(IPAddress, name, version, s, socket));
+                    Application.Run(appContext);
+                    //Application.Run(new Form1(IPAddress, name, version, s, socket));
+                    
+                    //ThreadPool.QueueUserWorkItem(x => (new Form1(IPAddress, name, version, s, socket)).Show());
                 }
                 else if (s.Contains("JOIN"))
                 {
@@ -232,13 +235,13 @@ namespace SpreadsheetGUI
                         FAILmessage = true;
 
                     // Continue receiving on the socket
-                    socket.BeginReceive(joinReceived, null);
+                    socket.BeginReceive(joinReceived, 0);
                 }
                 else if (s.Contains("Name:"))
                 {
                     name = s.Substring(5);
                     // Continue receiving on the socket
-                    socket.BeginReceive(joinReceived, null);
+                    socket.BeginReceive(joinReceived, 0);
                 }
                 // Check to see if the message sent back failed
                 else if (FAILmessage)
@@ -257,16 +260,37 @@ namespace SpreadsheetGUI
                     version = s.Substring(8);
 
                     // Continue receiving on the socket
-                    socket.BeginReceive(joinReceived, null);
+                    socket.BeginReceive(joinReceived, 0);
                 }
                 else if (s.Contains("Length:"))
                 {
                     Int32.TryParse(s.Substring(7), out length);
 
                     // Continue receiving on the socket
-                    socket.BeginReceive(joinReceived, null);
+                    socket.BeginReceive(joinReceived, 0);
                 }
             }
         } // End of "JoinReceived" method ..........................................................................................
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="e"></param>
+        /// <param name="p"></param>
+        private void failMethod(String s, Exception e, Object p)
+        {
+            if (!s.StartsWith("Name:"))
+            {
+                receiving = false;
+
+                // Report to the user the message sent from the server
+                DialogResult result = MessageBox.Show(s, "ERROR", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+
+                // If the user decides to cancel, disconnect the socket and close the prompts
+                if (result == DialogResult.Cancel)
+                    socket.CloseSocket();
+            }
+        }
     }
 }

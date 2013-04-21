@@ -551,10 +551,6 @@ namespace SpreadsheetGUI
 
             this.Hide();
 
-            OpenPrompt open = new OpenPrompt(IPAddress);
-
-            open.Show();
-
             // send change to server
             socket.BeginSend(message, (e, p) => { socket.CloseSocket(); }, 0);
         }
