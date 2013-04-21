@@ -1,4 +1,4 @@
-a.out: server.cc spreadsheet.cc
+a.out: server.cc spreadsheet.cc spreadsheet.h
 	g++ -g server.cc spreadsheet.cc -lboost_system -lboost_thread-mt
 
 clean: 
