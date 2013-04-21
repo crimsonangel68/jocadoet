@@ -185,7 +185,6 @@ namespace SpreadsheetGUI
                     message += "Name:" + name + " \n";
                     message += "Password:" + PasswordTextBox.Text + " \n";
 
-                    MessageBox.Show(message);
                     // Send the message to the server and then begin receiving
                     socket.BeginSend(message, (f, q) => { }, 0);
                     socket.BeginReceive(joinReceived, 0);
@@ -218,13 +217,13 @@ namespace SpreadsheetGUI
             {
                 if (s.Contains("xml"))
                 {
-                    //this.BeginInvoke(new Action(() => { Close(); }));
-                    
                     MessageBox.Show(s);
 
                     SpreadsheetApplicationContext appContext = SpreadsheetApplicationContext.getAppContext();
-                    appContext.RunForm(new Form1(IPAddress, name, version, s, socket));
-                    Application.Run(appContext);
+                    //appContext.RunForm(new Form1(IPAddress, name, version, s, socket));
+                    this.BeginInvoke(new Action(() => { (new Form1(IPAddress, name, version, s, socket)).ShowDialog(); }));
+                    this.BeginInvoke(new Action(() => { Close(); }));
+                    //Application.Run(appContext);
                     //Application.Run(new Form1(IPAddress, name, version, s, socket));
                     
                     //ThreadPool.QueueUserWorkItem(x => (new Form1(IPAddress, name, version, s, socket)).Show());

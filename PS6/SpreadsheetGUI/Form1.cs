@@ -564,6 +564,8 @@ namespace SpreadsheetGUI
         /// <param name="p"></param>
         public void MessageReceived(String message, Exception e, Object p)
         {
+            MessageBox.Show("Receiving: " + message);
+
             if (++messagesToReceive == 1)
             {
                 // Call the appropriate callback methods 
