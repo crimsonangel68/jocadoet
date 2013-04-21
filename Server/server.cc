@@ -72,10 +72,10 @@ void updateCommand(string update, int connection, string SSname)
 		// Send all other connections the update message
 		if (connection != tempConnection)
 		{
-			n = write(connection, buffer, update.length());
+			n = write(tempConnection, buffer, update.length()+1);
 			if(n==0)
 			{
-				close(connection);
+				close(tempConnection);
 				return;
 			}
 			if(n < 0)
@@ -91,7 +91,7 @@ void updateCommand(string update, int connection, string SSname)
 //================================================================changeCommand
 string changeCommand(string change, int connection)
 {
-	cout << change << "This is what I received\n" << endl;
+	//cout << change << "This is what I received" << endl;
 	vector<string> info;
 	stringstream ss(change);
 	string item;
@@ -111,10 +111,10 @@ string changeCommand(string change, int connection)
 	unsigned posName = tempName.find(" ");
 	tempName = tempName.substr(0, posName);
 	
-	stringstream tempSS(info[2]);
+	stringstream versionSS(info[2]);
 	string version;
 
-	while(getline(tempSS, version, ':' ))
+	while(getline(versionSS, version, ':' ))
 	{
 		versionInfo.push_back(version);
 	}
@@ -134,7 +134,7 @@ string changeCommand(string change, int connection)
 	
 	string cellContent = info[5];
 
-	cout << tempName << "\n" <<  version << "\n" <<  cellName << "\n" <<  cellContent << endl;
+	//cout << tempName << "\n" <<  version << "\n" <<  cellName << "\n" <<  cellContent << endl;
 
 	bool versionMatch = false;
 
@@ -183,7 +183,7 @@ string changeCommand(string change, int connection)
 		serverResponseSS << SSversion;
 		serverResponseSS << " \n";
 		serverResponse = serverResponseSS.str();
-		std::cout << serverResponse << std::endl;
+		//std::cout << serverResponse << std::endl;
 	}
 	else
 	{
@@ -194,7 +194,7 @@ string changeCommand(string change, int connection)
 		serverResponseSS << "\n";
 		serverResponseSS << "MESSAGE REGARDING FAIL\n";
 		serverResponse = serverResponseSS.str();
-		std::cout << serverResponse << std::endl;
+		//std::cout << serverResponse << std::endl;
 	}
 	return serverResponse;
 }
@@ -218,11 +218,11 @@ string createCommand(string create, int connection)
 		info.push_back(item);
 	}
 
-	std::cout << info[1] << "\n" << info[2] << std::endl;
-	stringstream tempSS(info[1]);
+	//std::cout << info[1] << "\n" << info[2] << std::endl;
+	stringstream nameSS(info[1]);
 	vector<string> nameInfo;
 	string tempName;
-	while(getline(tempSS, tempName, ':' ))
+	while(getline(nameSS, tempName, ':' ))
 	{
 		nameInfo.push_back(tempName);
 	}
@@ -232,23 +232,23 @@ string createCommand(string create, int connection)
 	// Add name and Connection to the map
 	list<int> connList;
 	ss_connections.insert ( std::pair<std::string, list<int> >(tempName, connList));
-	cout<< "inserting into map" << endl;
+	//cout<< "inserting into map" << endl;
 	ss_connections.at(tempName).push_front(connection);
 
-	stringstream tempSS2(info[2]);
+	stringstream passwordSS(info[2]);
 	vector<string> passwordInfo;
 	string tempPassword;
-	while(getline(tempSS2, tempPassword, ':' ))
+	while(getline(passwordSS, tempPassword, ':' ))
 	{
 		nameInfo.push_back(tempPassword);
 	}
 	pos = tempPassword.find(" ");
 	tempPassword = tempPassword.substr(0, pos);
-	std::cout << "tempName is: " << tempName << std::endl << "tempPassword is: " << tempPassword << std::endl << std::endl;
+	//std::cout << "tempName is: " << tempName << std::endl << "tempPassword is: " << tempPassword << std::endl << std::endl;
 	bool testNameNotTaken = true; // Test if file name exists already
 
 	// Add spreadsheet to list of existing spreadsheets
-	spreadsheet::spreadsheet newSS(tempName, tempPassword, 0);
+	spreadsheet::spreadsheet newSS(tempName, tempPassword, 1);
 	connected_ss.push_back(newSS);
 
 	if(testNameNotTaken) // Name is not taken
@@ -264,7 +264,7 @@ string createCommand(string create, int connection)
 
 		serverResponse = serverResponseSS.str();
 
-		std::cout << serverResponse << std::endl;
+		//std::cout << serverResponse << std::endl;
 	}
 	else
 	{
@@ -278,7 +278,7 @@ string createCommand(string create, int connection)
 
 		serverResponse = serverResponseSS.str();
 
-		std::cout << serverResponse << std::endl;
+	//	std::cout << serverResponse << std::endl;
 	}
 
 	return serverResponse;
@@ -296,12 +296,12 @@ string joinCommand(string join, int connection)
 		info.push_back(item);
 	}
 
-	std::cout << info[1] << "\n" << info[2] << std::endl;
+	//std::cout << info[1] << "\n" << info[2] << std::endl;
 
-	stringstream tempSS(info[1]);
+	stringstream nameSS(info[1]);
 	vector<string> nameInfo;
 	string tempName;
-	while(getline(tempSS, tempName, ':' ))
+	while(getline(nameSS, tempName, ':' ))
 	{
 		nameInfo.push_back(tempName);
 	}
@@ -311,30 +311,41 @@ string joinCommand(string join, int connection)
 	// Add name and Connection to the map
 	list<int> connList;
 	ss_connections.insert ( std::pair<std::string, list<int> >(tempName, connList));
-	cout<< "inserting int map join" << endl;
+	//cout<< "inserting int map join" << endl;
 	ss_connections.at(tempName).push_front(connection);
 
-	stringstream tempSS2(info[2]);
+	stringstream passwordSS(info[2]);
 	vector<string> passwordInfo;
 	string tempPassword;
-	while(getline(tempSS2, tempPassword, ':' ))
+	while(getline(passwordSS, tempPassword, ':' ))
 	{
 		nameInfo.push_back(tempPassword);
 	}
 	pos = tempPassword.find(" ");
 	tempPassword = tempPassword.substr(0, pos);
-	std::cout << "tempName is: " << tempName << std::endl << "tempPassword is: " << tempPassword << std::endl << std::endl;
 
-	bool nameExists = true; // Check to see if name exists
-	bool passwordMatches = true; // Check if password matches
+	bool nameExists = false; // Check to see if name exists
+	bool passwordMatches = false; // Check if password matches
+
+	spreadsheet sheet(tempName, tempPassword, 1);
+
+	for(int i = 0; i < connected_ss.size(); i++)
+	{
+		if(tempName == connected_ss[i].get_name())
+		{
+			sheet = connected_ss[i];
+			nameExists = true;
+		}
+	}
+
+	passwordMatches = sheet.check_password(tempPassword);
 
 	if(nameExists && passwordMatches)
 	{
-
-		// Retrieve spreadsheet information ----- Need to implement -------------
-		int SSversion = 0; // Get current version number of spreadsheet
-		int lengthOfSpreadsheetXML = 1313; //lengthOfSpreadsheetXML=SpreadsheetXML.length();
-		std::string xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?><spreadsheet version=\"ps6\"></spreadsheet>"; // xml = readtextfile(tempName);
+		// Retrieve spreadsheet information
+		int SSversion = sheet.get_version(); // Get current version number of spreadsheet
+		std::string xml = sheet.get_XML_for_user();
+		int lengthOfSpreadsheetXML = xml.length();
 		stringstream serverResponseSS;
 		serverResponseSS << "JOIN SP OK \n";
 		serverResponseSS << "Name:";
@@ -351,7 +362,7 @@ string joinCommand(string join, int connection)
 
 		serverResponse = serverResponseSS.str();
 
-		std::cout << serverResponse << std::endl;
+		//std::cout << serverResponse << std::endl;
 	}
 	else
 	{
@@ -365,7 +376,7 @@ string joinCommand(string join, int connection)
 
 		serverResponse = serverResponseSS.str();
 
-		std::cout << serverResponse << std::endl;
+		//std::cout << serverResponse << std::endl;
 	}
 	return serverResponse;
 }
@@ -382,12 +393,12 @@ string saveCommand(string save)
 		info.push_back(item);
 	}
 
-	std::cout << info[1] << "\n" << info[2] << std::endl;
-	stringstream tempSS(info[1]);
+	//std::cout << info[1] << "\n" << info[2] << std::endl;
+	stringstream nameSS(info[1]);
 	vector<string> nameInfo;
 	string tempName;
-	cout << "herehere" << endl;
-	while(getline(tempSS, tempName, ':' ))
+	//cout << "herehere" << endl;
+	while(getline(nameSS, tempName, ':' ))
 	{
 		nameInfo.push_back(tempName);
 	}
@@ -408,7 +419,7 @@ string saveCommand(string save)
 
 		serverResponse = serverResponseSS.str();
 
-		std::cout << serverResponse << std::endl;
+		//std::cout << serverResponse << std::endl;
 	}
 	else
 	{
@@ -422,16 +433,10 @@ string saveCommand(string save)
 
 		serverResponse = serverResponseSS.str();
 
-		std::cout << serverResponse << std::endl;
+		//std::cout << serverResponse << std::endl;
 	}
 
 	return serverResponse;
-}
-
-//================================================================leaveCommand
-void leaveCommand()
-{
-
 }
 
 //================================================================parse
@@ -440,7 +445,7 @@ int parse(char buf[256])
 	if(buf[0] == 'C')
 		if(buf[1] == 'R')
 			return CREATE;
-		else
+		else if(buf[1] == 'H')
 			return CHANGE;
 
 	if(buf[0] == 'J')
@@ -449,7 +454,7 @@ int parse(char buf[256])
 	if(buf[0] == 'U')
 		if(buf[1] == 'N')
 			return UNDO;
-		else
+		else if(buf[1] == 'P')
 			return UPDATE;
 
 	if(buf[0] == 'S')
@@ -462,7 +467,7 @@ int parse(char buf[256])
 }
 
 
-//================================================================updateCommand
+//================================================================Connection
 //Creates a connection object that runs on it's own thread
 //this class will have all the functionality that each 
 //connection that is made will need
@@ -478,9 +483,7 @@ class Connection
 		//in here we can put the information for the connection 
 		//in a map/list to keep track of live connections
 		printf("New connection made: %d\n", con_num);
-
 	}
-
 		~Connection()
 		{
 			//printf("destroyed connection: %d\n", con_num);
@@ -520,12 +523,15 @@ class Connection
 				//read will read the message off the socket connection and
 				//store the message in buffer
 				n = read(newsockfd, buffer, buffer_length);
-				if(n==0)
+				if(n<=0)
 				{
 					close_con();
 					return;
 				}
-				if(n<0) error("ERROR reading from socket");
+				//if(n<0) error("ERROR reading from socket");
+
+				cout << "\n========================================\nreceived from connection# ";
+				cout <<con_num<<"\n"<<buffer<<endl;	
 
 				int cmd = parse(buffer);
 
@@ -559,16 +565,16 @@ class Connection
 				//what needs to be sent to the client or just send the message from
 				//the method called and remove this call to start_write()
 				n = write(newsockfd, rspns, rs_len+1);
-				cout << "\nwrote to socket:\n" << rspns << "\n" << n << "\n" << endl;
-				if(n==0)
+				cout << "\nwrote to socket:\n" << rspns << "\n";
+				cout << n << "\n=====================================\n" << endl;
+				if(n<=0)
 				{
 					close_con();
 					return;
 				}
-			  if(n<0) error("Error writing to socket");
+			  //if(n<0) error("Error writing to socket");
 				//clear out the buffer (idk if we need it but it was causing some
 				//issues when i wasn't
-				bzero(buffer,rs_len);
 			}
 		}
 
