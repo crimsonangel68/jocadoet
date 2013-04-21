@@ -13,3 +13,8 @@ C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUITests\bin\Debug\Spre
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUITests\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUITests\obj\Debug\SpreadsheetGUITests.dll
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetGUITests\obj\Debug\SpreadsheetGUITests.pdb
+X:\FinalProject\jocadoet\PS6\SpreadsheetGUITests\bin\Debug\SpreadsheetGUITests.dll
+X:\FinalProject\jocadoet\PS6\SpreadsheetGUITests\bin\Debug\SpreadsheetGUITests.pdb
+X:\FinalProject\jocadoet\PS6\SpreadsheetGUITests\obj\Debug\SpreadsheetGUITests.csprojResolveAssemblyReference.cache
+X:\FinalProject\jocadoet\PS6\SpreadsheetGUITests\obj\Debug\SpreadsheetGUITests.dll
+X:\FinalProject\jocadoet\PS6\SpreadsheetGUITests\obj\Debug\SpreadsheetGUITests.pdb

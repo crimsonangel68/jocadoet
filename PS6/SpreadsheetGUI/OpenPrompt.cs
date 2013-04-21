@@ -160,16 +160,19 @@ namespace SpreadsheetGUI
                 socket.BeginReceive(failMethod, 0);
 
             else if (s.StartsWith("CREATE SP OK"))
+            {
                 socket.BeginReceive(createReceived, 0);
-            
+                version = "1";
+            }
+
             else if (s.StartsWith("Name:"))
             {
                 name = s.Substring(5);
-                
+
                 // Continue receiving on the socket
                 socket.BeginReceive(createReceived, 0);
             }
-            
+
                 // If the string contains Password:, we know that we have completed a successful transmission
             else if (s.StartsWith("Password:"))
             {
@@ -192,7 +195,7 @@ namespace SpreadsheetGUI
                 else
                     receiving = false;
 
-                
+
             }
 
         } // End of "createReceived" method ............................................................................................................
@@ -217,8 +220,6 @@ namespace SpreadsheetGUI
             {
                 if (s.Contains("xml"))
                 {
-                    MessageBox.Show(s);
-
                     SpreadsheetApplicationContext appContext = SpreadsheetApplicationContext.getAppContext();
                     //appContext.RunForm(new Form1(IPAddress, name, version, s, socket));
                     this.BeginInvoke(new Action(() => { (new Form1(IPAddress, name, version, s, socket)).ShowDialog(); }));

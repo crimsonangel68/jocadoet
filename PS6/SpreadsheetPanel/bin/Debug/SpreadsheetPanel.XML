@@ -4,22 +4,6 @@
         <name>SpreadsheetPanel</name>
     </assembly>
     <members>
-        <member name="T:SS.Properties.Resources">
-            <summary>
-              A strongly-typed resource class, for looking up localized strings, etc.
-            </summary>
-        </member>
-        <member name="P:SS.Properties.Resources.ResourceManager">
-            <summary>
-              Returns the cached ResourceManager instance used by this class.
-            </summary>
-        </member>
-        <member name="P:SS.Properties.Resources.Culture">
-            <summary>
-              Overrides the current thread's CurrentUICulture property for all
-              resource lookups using this strongly typed resource class.
-            </summary>
-        </member>
         <member name="T:SS.SpreadsheetPanel">
             <summary>
             A panel that displays a spreadsheet with 26 columns (labeled A-Z) and 99 rows
@@ -141,6 +125,22 @@
             the indexes are zero based.
             </summary>
             <param name="e"></param>
+        </member>
+        <member name="T:SS.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:SS.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:SS.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
         </member>
         <member name="T:SS.SelectionChangedHandler">
             <summary>

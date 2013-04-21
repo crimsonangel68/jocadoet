@@ -24,3 +24,10 @@ C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetPanel\obj\x86\Debug\Gen
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetPanel\obj\x86\Debug\GenerateResource.write.1.tlog
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetPanel\obj\x86\Debug\SpreadsheetPanel.dll
 C:\Users\Calvin\Documents\GitHub\jocadoet\PS6\SpreadsheetPanel\obj\x86\Debug\SpreadsheetPanel.pdb
+X:\FinalProject\jocadoet\PS6\SpreadsheetPanel\bin\Debug\SpreadsheetPanel.XML
+X:\FinalProject\jocadoet\PS6\SpreadsheetPanel\bin\Debug\SpreadsheetPanel.dll
+X:\FinalProject\jocadoet\PS6\SpreadsheetPanel\bin\Debug\SpreadsheetPanel.pdb
+X:\FinalProject\jocadoet\PS6\SpreadsheetPanel\obj\x86\Debug\SS.Properties.Resources.resources
+X:\FinalProject\jocadoet\PS6\SpreadsheetPanel\obj\x86\Debug\SpreadsheetPanel.csproj.GenerateResource.Cache
+X:\FinalProject\jocadoet\PS6\SpreadsheetPanel\obj\x86\Debug\SpreadsheetPanel.dll
+X:\FinalProject\jocadoet\PS6\SpreadsheetPanel\obj\x86\Debug\SpreadsheetPanel.pdb

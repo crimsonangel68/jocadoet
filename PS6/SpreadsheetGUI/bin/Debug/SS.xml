@@ -439,6 +439,21 @@
             Returns the true if the version has been changed and false if it has not since the last save.
             </summary>
         </member>
+        <member name="T:SS.CircularException">
+            <summary>
+            Thrown to indicate that a change to a cell will cause a circular dependency.
+            </summary>
+        </member>
+        <member name="T:SS.InvalidNameException">
+            <summary>
+            Thrown to indicate that a name parameter was either null or invalid.
+            </summary>
+        </member>
+        <member name="T:SS.SpreadsheetReadWriteException">
+            <summary>
+            Thrown to indicate that a read or write attempt has failed.
+            </summary>
+        </member>
         <member name="T:SS.Cell">
             <summary>
             Cell class.  Each cell has a name, content and value.
@@ -473,21 +488,6 @@
         <member name="P:SS.Cell.CellValue">
             <summary>
             Value of the cell
-            </summary>
-        </member>
-        <member name="T:SS.CircularException">
-            <summary>
-            Thrown to indicate that a change to a cell will cause a circular dependency.
-            </summary>
-        </member>
-        <member name="T:SS.InvalidNameException">
-            <summary>
-            Thrown to indicate that a name parameter was either null or invalid.
-            </summary>
-        </member>
-        <member name="T:SS.SpreadsheetReadWriteException">
-            <summary>
-            Thrown to indicate that a read or write attempt has failed.
             </summary>
         </member>
     </members>
