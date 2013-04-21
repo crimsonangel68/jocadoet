@@ -43,18 +43,21 @@ vector<spreadsheet> connected_ss;
 void error(const char *msg)
 {
 	perror(msg);
-	cout << "need to catch exception" << endl;
+	cout << "need to catch/deal with exception" << endl;
 	exit(1);
 }
 
 //================================================================updateCommand
+//Takes an update command that is received on a given connection and
+//broadcasts the updates to all of the clients connected to the indicated
+//spreadsheet name
 void updateCommand(string update, int connection, string SSname)
 {
 	int n;
 	update.erase(0, 6);
 	update.insert(0, "UPDATE");
 	// LOOP THROUGH CONNECTIONS AND SEND IT TO ALL OTHER connections except the 
-	// one that sent change
+	// one that sent the change
 	// Initialize iterator
 	std::map <std::string, int>::iterator it;
 	// Initialize buffer for writing to socket
@@ -72,7 +75,11 @@ void updateCommand(string update, int connection, string SSname)
 		// Send all other connections the update message
 		if (connection != tempConnection)
 		{
+			//write the update to the connection because it is tied
+			//to this spreadsheet
 			n = write(tempConnection, buffer, update.length()+1);
+			//error check for write to socket write returns 0 if there is no
+			//connection on the given socket file descriptor
 			if(n==0)
 			{
 				close(tempConnection);
@@ -80,6 +87,7 @@ void updateCommand(string update, int connection, string SSname)
 			}
 			if(n < 0)
 			{
+				cout << "updateCommand[89]" << endl;
 				error("Error writing to socket");
 			}
 		}
@@ -89,6 +97,9 @@ void updateCommand(string update, int connection, string SSname)
 }
 
 //================================================================changeCommand
+//Takes a change command that is received on a given connection and 
+//determines if the change is a valid change to the spreadsheet.  If
+//the request is valid or not the corresponding message will be returned.
 string changeCommand(string change, int connection)
 {
 	//cout << change << "This is what I received" << endl;
@@ -172,6 +183,7 @@ string changeCommand(string change, int connection)
 		// Change request is valid, call updateCommand to send out the update
 		updateCommand(change, connection, tempName);
 	}
+	//client does not have the correct version
 	else if(!versionMatch)
 	{
 		stringstream serverResponseSS;
@@ -183,29 +195,34 @@ string changeCommand(string change, int connection)
 		serverResponseSS << SSversion;
 		serverResponseSS << " \n";
 		serverResponse = serverResponseSS.str();
-		//std::cout << serverResponse << std::endl;
 	}
+	//i don't see how this code will ever be reached....
 	else
 	{
 		stringstream serverResponseSS;
 		int SSversion = testVersion;
-		serverResponseSS << "CHANGE FAIL \n";
+		serverResponseSS << "CHANGE SP FAIL \n";
 		serverResponseSS << info[1];
 		serverResponseSS << "\n";
 		serverResponseSS << "MESSAGE REGARDING FAIL\n";
 		serverResponse = serverResponseSS.str();
-		//std::cout << serverResponse << std::endl;
 	}
 	return serverResponse;
 }
 
 //================================================================undoCommand
+//Takes an undo command that is received on a given connection and 
+//determines if the undo request is valid or not and returns the 
+//corresponding response to the client
 string undoCommand()
 {
 
 }
 
 //================================================================createCommand
+//Takes a create command that is received on a given connection and 
+//determines if the request is valid or not and returns the corresponding
+//response to the client.
 string createCommand(string create, int connection)
 {
 
@@ -285,6 +302,9 @@ string createCommand(string create, int connection)
 }
 
 //================================================================joinCommand
+//Takes a join command that is received from the given client and 
+//determines if the join request is valid or not and responds with
+//the corresponding message.
 string joinCommand(string join, int connection)
 {
 	vector<string> info;
@@ -382,6 +402,8 @@ string joinCommand(string join, int connection)
 }
 
 //================================================================saveCommand
+//Takes a save message from a given client and determines if the
+//request is a valid one and returns the corresponding response
 string saveCommand(string save)
 {
 	vector<string> info;
@@ -440,6 +462,9 @@ string saveCommand(string save)
 }
 
 //================================================================parse
+//Determines by the first characters of the message what type of
+//message has been received in order to call the correct method
+//to handle the message
 int parse(char buf[256])
 {
 	if(buf[0] == 'C')
@@ -496,17 +521,6 @@ class Connection
 			start_read();
 			return;
 		}
-
-		int get_sockfd()
-		{
-			return newsockfd;
-		}
-
-		int get_con_num()
-		{
-			return con_num;
-		}
-
 	private:
 		int n, newsockfd, con_num;
 		int buffer_length;
@@ -528,15 +542,18 @@ class Connection
 					close_con();
 					return;
 				}
-				//if(n<0) error("ERROR reading from socket");
-
-				cout << "\n========================================\nreceived from connection# ";
+				//advertise to server administrator what was received on the given
+				//connection number
+				cout << "\n==============\n--------------\nreceived from connection# ";
 				cout <<con_num<<"\n"<<buffer<<endl;	
 
+				//determine what command was received on this connection
 				int cmd = parse(buffer);
-
+				
 				string message = string(buffer);
 				string serv_resp = "ERROR \n";
+				//depending on the message that is received on this connection
+				//call the corresponding method to handle the request.
 				switch(cmd)
 				{
 					case CREATE: serv_resp = createCommand(message, newsockfd);
@@ -555,26 +572,26 @@ class Connection
 											break;
 				}
 				
+				//prepare the response to write back to the client
 				int rs_len = serv_resp.length();
 				char rspns[rs_len]; 
 				bzero(rspns, rs_len);
 				size_t length = serv_resp.copy(rspns,rs_len, 0);
+				//add the terminating char to the end of the buffer
 				rspns[length] = '\0';
-				//here is where we will write back to the client the correct msg
-				//we can either keep it here and pass back from the methods we call
-				//what needs to be sent to the client or just send the message from
-				//the method called and remove this call to start_write()
+				//Write the response to the client and have the error check
+				//if the write call returns 0, the client is no longer
+				//connected if it is less than 0 a different error occured
 				n = write(newsockfd, rspns, rs_len+1);
-				cout << "\nwrote to socket:\n" << rspns << "\n";
-				cout << n << "\n=====================================\n" << endl;
 				if(n<=0)
 				{
 					close_con();
 					return;
 				}
-			  //if(n<0) error("Error writing to socket");
-				//clear out the buffer (idk if we need it but it was causing some
-				//issues when i wasn't
+				//advertise to the server administrator what was wrote back to 
+				//the client on this connection
+				cout << "\nwrote to socket:\n" << rspns << "\nLength: ";
+				cout << n << "\n------------------\n==================\n" << endl;
 			}
 		}
 
