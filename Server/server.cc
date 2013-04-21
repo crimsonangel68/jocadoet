@@ -82,6 +82,7 @@ void updateCommand(string update, int connection, string SSname)
 			//connection on the given socket file descriptor
 			if(n==0)
 			{
+				cout << "updateCommand[85]" << endl;
 				close(tempConnection);
 				return;
 			}
@@ -102,7 +103,6 @@ void updateCommand(string update, int connection, string SSname)
 //the request is valid or not the corresponding message will be returned.
 string changeCommand(string change, int connection)
 {
-	//cout << change << "This is what I received" << endl;
 	vector<string> info;
 	stringstream ss(change);
 	string item;
@@ -121,7 +121,7 @@ string changeCommand(string change, int connection)
 	}
 	unsigned posName = tempName.find(" ");
 	tempName = tempName.substr(0, posName);
-	
+
 	stringstream versionSS(info[2]);
 	string version;
 
@@ -142,10 +142,8 @@ string changeCommand(string change, int connection)
 	}
 	unsigned pos2 = cellName.find(" ");
 	cellName= cellName.substr(0, pos2);
-	
-	string cellContent = info[5];
 
-	//cout << tempName << "\n" <<  version << "\n" <<  cellName << "\n" <<  cellContent << endl;
+	string cellContent = info[5];
 
 	bool versionMatch = false;
 
@@ -214,109 +212,102 @@ string changeCommand(string change, int connection)
 //Takes an undo command that is received on a given connection and 
 //determines if the undo request is valid or not and returns the 
 //corresponding response to the client
-vector<string> undoCommand(string undo)
+string undoCommand(string undo)
 {
-  vector<string> info;
-  stringstream ss(undo);
-  string item;
-  while(getline(ss, item))
-    {
-      info.push_back(item);
-    }
-
-    std::cout << info[1] << "\n" << info[2] << std::endl;
-    stringstream tempSS(info[2]);
-    vector<string> versionInfo;
-    string temp1;
-    while(getline(tempSS, temp1, ':' ))
-      {
-	versionInfo.push_back(temp1);
-      }
-    unsigned pos = temp1.find(" ");
-    temp1 = temp1.substr(0, pos);
-    int testVersion = atoi(temp1.c_str());
-    std::cout << "temp1 is: " << temp1 << std::endl << std::endl << testVersion << std::endl;
-
-    //if(testVersion == "spreadsheet version")  // --------------------- Need to integrate with server -----------
-     {
-      	      	// increment spreadsheet version
-      	int SSversion = testVersion +1;
-      	stringstream serverResponseSS;
-      	serverResponseSS << "UNDO SP OK \n";
-      	serverResponseSS << info[1];
-      	serverResponseSS << " \n";
-      	serverResponseSS << "Version:";
-      	serverResponseSS << SSversion;  // --------------------- Need to integrate with server -----------
-      	serverResponseSS << " \n";
-      	serverResponseSS << "Cell:";
-      	serverResponseSS << "CELL TO BE REPLACED";  // --------------------- Need to integrate with server -----------
-      	serverResponseSS << "\n";
-      	serverResponseSS << "Length:";
-      	serverResponseSS << "Length of content"; // --------------------- Need to integrate with server -----------
-      	serverResponseSS << "\n";
-      	serverResponseSS << "OLD CONTENT OF CELL";  // --------------------- Need to integrate with server -----------
-      	serverResponseSS << "\n";
-	
-      	string serverResponse = serverResponseSS.str();
-	 {
-	   // Loop through all clients connected to spreadsheet and send response
-	   std::cout << serverResponse << std::endl;
-	 }
-   }
-    //else if (undoStack.size() == 0) // no undo to perform
-    {
-	      
-      	int SSversion = testVersion;
-      	stringstream serverResponseSS;
-      	serverResponseSS << "UNDO SP END \n";
-      	serverResponseSS << info[1];
-      	serverResponseSS << " \n";
-      	serverResponseSS << "Version:";
-      	serverResponseSS << SSversion;  // --------------------- Need to integrate with server -----------
-      	serverResponseSS << " \n";
-	
-      	string serverResponse = serverResponseSS.str();
+	string serverResponse = ""; 
+	vector<string> info;
+	stringstream ss(undo);
+	string item;
+	while(getline(ss, item))
 	{
-	  // Send message to initial client
-      	std::cout << serverResponse << std::endl;
+		info.push_back(item);
 	}
-    }
-    // else if(testVersion != SSversion)
-     {
-	      
-      	int SSversion = testVersion;
-      	stringstream serverResponseSS;
-      	serverResponseSS << "UNDO SP WAIT \n";
-      	serverResponseSS << info[1];
-      	serverResponseSS << " \n";
-      	serverResponseSS << "Version:";
-      	serverResponseSS << SSversion;  // --------------------- Need to integrate with server -----------
-      	serverResponseSS << " \n";
-	
-      	string serverResponse = serverResponseSS.str();
+
+	std::cout << info[1] << "\n" << info[2] << std::endl;
+
+	stringstream nameSS(info[1]);
+	vector<string> nameInfo;
+	string name;
+	while(getline(nameSS, name, ':' ))
 	{
-	  // Send message to initial client
-      	std::cout << serverResponse << std::endl;
+		nameInfo.push_back(name);
 	}
-    }
-     //else //Some other error
-     {
-	      
-      	int SSversion = testVersion;
-      	stringstream serverResponseSS;
-      	serverResponseSS << "UNDO SP FAIL \n";
-      	serverResponseSS << info[1];
-      	serverResponseSS << " \n";
-      	serverResponseSS << "UNDO failed for reason:"; // Message for reason for fail
-      	serverResponseSS << " \n";
-	
-      	string serverResponse = serverResponseSS.str();
+	unsigned pos = name.find(" ");
+	name = name.substr(0, pos);
+	std::cout << "name is: " << name << endl;
 
-      	std::cout << serverResponse << std::endl;
-     }
+	stringstream tempSS(info[2]);
+	vector<string> versionInfo;
+	string vers;
+	while(getline(tempSS, vers, ':' ))
+	{
+		versionInfo.push_back(vers);
+	}
+	unsigned pos1 = vers.find(" ");
+	vers = vers.substr(0, pos1);
+	int version = atoi(vers.c_str());
+	std::cout << "vers is: " << vers << std::endl << std::endl << version << std::endl;
 
-    
-    return info;
+	string undo_str = "";
+	bool versionMatch = false;
+	bool undo_ok = false;
+	int cur_vers;
+	//get spreadsheet according to name
+	for(int i = 0; i < connected_ss.size(); i++)
+	{
+		if(name==connected_ss[i].get_name())
+		{
+			cur_vers = connected_ss[i].get_version();
+			versionMatch = connected_ss[i].check_version(version);
+			undo_ok = connected_ss[i].check_queue();
+			undo_str = connected_ss[i].get_undo();
+		}
+	}
+
+	if(versionMatch && undo_ok)  
+	{
+		return undo_str;
+	}
+	else if (!undo_ok && versionMatch) 
+	{
+		int SSversion = version+1;
+		stringstream serverResponseSS;
+		serverResponseSS << "UNDO SP END \n";
+		serverResponseSS << info[1];
+		serverResponseSS << " \n";
+		serverResponseSS << "Version:";
+		serverResponseSS << SSversion; 
+		serverResponseSS << " \n";
+
+		serverResponse = serverResponseSS.str();
+		return serverResponse;
+	}
+	else if(!versionMatch)
+	{
+		stringstream serverResponseSS;
+		serverResponseSS << "UNDO SP WAIT \n";
+		serverResponseSS << info[1];
+		serverResponseSS << " \n";
+		serverResponseSS << "Version:";
+		serverResponseSS << cur_vers; 
+		serverResponseSS << " \n";
+
+		serverResponse = serverResponseSS.str();
+		return serverResponse;
+	}
+	else //Some other error
+	{
+		stringstream serverResponseSS;
+		serverResponseSS << "UNDO SP FAIL \n";
+		serverResponseSS << info[1];
+		serverResponseSS << " \n";
+		serverResponseSS << "UNDO fail";
+		serverResponseSS << " \n";
+
+		serverResponse = serverResponseSS.str();
+		return serverResponse;
+	}
+	return serverResponse;
 }
 
 //================================================================createCommand
@@ -395,7 +386,7 @@ string createCommand(string create, int connection)
 
 		serverResponse = serverResponseSS.str();
 
-	//	std::cout << serverResponse << std::endl;
+		//	std::cout << serverResponse << std::endl;
 	}
 
 	return serverResponse;
@@ -515,11 +506,9 @@ string saveCommand(string save)
 		info.push_back(item);
 	}
 
-	//std::cout << info[1] << "\n" << info[2] << std::endl;
 	stringstream nameSS(info[1]);
 	vector<string> nameInfo;
 	string tempName;
-	//cout << "herehere" << endl;
 	while(getline(nameSS, tempName, ':' ))
 	{
 		nameInfo.push_back(tempName);
@@ -527,37 +516,43 @@ string saveCommand(string save)
 	unsigned pos = tempName.find(" ");
 	tempName = tempName.substr(0, pos);
 
-	bool testNameNotTaken = true; // Test if file name exists already
+	bool sheetExists = false;
+	for(int i = 0; i < connected_ss.size(); i++)
+	{
+		if(connected_ss[i].get_name() == tempName)
+		{
+			connected_ss[i].write_file(tempName);
+			connected_ss[i].clear_undo();
+			sheetExists = true;
+		}
+	}
 
-	if(testNameNotTaken) // Name is not taken
+	if(sheetExists) // Name is not taken
 	{
 		// Save spreadsheet with name and password (Use hashmaps to keep track of spreadsheets?)    
 
 		stringstream serverResponseSS;
-		serverResponseSS << "CREATE SP OK \n";
+		serverResponseSS << "SAVE SP OK \n";
 		serverResponseSS << "Name:";
 		serverResponseSS << tempName;
 		serverResponseSS << " \n";
 
 		serverResponse = serverResponseSS.str();
-
-		//std::cout << serverResponse << std::endl;
+		return serverResponse;
 	}
 	else
 	{
 		stringstream serverResponseSS;
-		serverResponseSS << "CREATE SP FAIL \n";
+		serverResponseSS << "SAVE SP FAIL \n";
 		serverResponseSS << "Name:";
 		serverResponseSS << tempName;
 		serverResponseSS << " \n";
-		serverResponseSS << "MESSAGE REGARDING FAIL";
+		serverResponseSS << "Failed to save";
 		serverResponseSS << " \n";
 
 		serverResponse = serverResponseSS.str();
-
-		//std::cout << serverResponse << std::endl;
+		return serverResponse;
 	}
-
 	return serverResponse;
 }
 
@@ -639,6 +634,7 @@ class Connection
 				n = read(newsockfd, buffer, buffer_length);
 				if(n<=0)
 				{
+					cout << "Connection[681]" << endl;
 					close_con();
 					return;
 				}
@@ -649,7 +645,7 @@ class Connection
 
 				//determine what command was received on this connection
 				int cmd = parse(buffer);
-				
+
 				string message = string(buffer);
 				string serv_resp = "ERROR \n";
 				//depending on the message that is received on this connection
@@ -662,7 +658,7 @@ class Connection
 										 break;
 					case CHANGE: serv_resp = changeCommand(message, newsockfd);
 											 break;
-					case UNDO: serv_resp = undoCommand();
+					case UNDO: serv_resp = undoCommand(message);
 										 break;
 					case SAVE: ; serv_resp = saveCommand(message);
 										 break;
@@ -671,7 +667,7 @@ class Connection
 					case ERROR: "";
 											break;
 				}
-				
+
 				//prepare the response to write back to the client
 				int rs_len = serv_resp.length();
 				char rspns[rs_len]; 
@@ -685,6 +681,7 @@ class Connection
 				n = write(newsockfd, rspns, rs_len+1);
 				if(n<=0)
 				{
+					cout << "Connection[681]"<<endl;
 					close_con();
 					return;
 				}

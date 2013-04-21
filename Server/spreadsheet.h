@@ -28,6 +28,7 @@ class spreadsheet
 		~spreadsheet();
 
 		// Methods
+		
 		std::map<std::string, std::string> initializeCellMap();
 		std::map<std::string, std::string> openCellMap(std::string file);
 		std::map<std::string, std::string> get_cells() const;
@@ -41,6 +42,7 @@ class spreadsheet
 		int get_version() const;
 		bool check_password(std::string pass);
 		bool check_version(int testVersion);
+		bool check_queue();
 		void edit_cell_content(std::string cellName, std::string cellContent);
 		void set_name(std::string n);
 		void set_password(std::string pw);
@@ -48,6 +50,7 @@ class spreadsheet
 		void add_client(int c);
 		void write_file(std::string file);
 		void add_undo(std::string cellName, std::string cellContent);
+		void clear_undo();
 
 		// Member Variables
 	private:

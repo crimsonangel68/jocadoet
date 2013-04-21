@@ -49,16 +49,13 @@ spreadsheet::~spreadsheet ()
 // --------------------------- Helper  Methods ---------------------------------
 
 // check password provided against spreadsheet password
-bool spreadsheet::check_password(std::string pass) 
-{ 
-	return (this->password == pass);  
-}
+bool spreadsheet::check_password(std::string pass){ 	return (this->password == pass);  }
 
 // check version provided against spreadsheet version
-bool spreadsheet::check_version(int testVersion) 
-{ 
-	return (this->SSVersion == testVersion);  
-}
+bool spreadsheet::check_version(int testVersion) { return (this->SSVersion == testVersion);  }
+
+//check the size of the undo queue, returns true of size > 1; else returns false
+bool spreadsheet::check_queue() { return (this->undoQUE.size() > 0); }
 
 // Get name of spreadsheet
 std::string spreadsheet::get_name() const { return this->name; }
@@ -70,10 +67,7 @@ std::string spreadsheet::get_password() const { return this->password; }
 int spreadsheet::get_version() const { return this->SSVersion; }
 
 // Get cells of spreadsheet
-std::map<std::string, std::string> spreadsheet::get_cells() const 
-{
-	return this->cells; 
-}
+std::map<std::string, std::string> spreadsheet::get_cells() const {	return this->cells; }
 
 // Get clients of spreadsheet
 std::list<int> spreadsheet::get_clients() const{ return this->clients; }
@@ -91,10 +85,10 @@ void spreadsheet::set_password(std::string pw) { this->password = pw; }
 void spreadsheet::set_version(int version) { this->SSVersion = version; }
 
 // get deque
-std::deque<std::pair<std::string, std::string> > spreadsheet::get_undoQUE() const
-{
-	return this->undoQUE;
-}
+std::deque<std::pair<std::string, std::string> > spreadsheet::get_undoQUE() const{	return this->undoQUE;}
+
+// Clear deque
+void spreadsheet::clear_undo() { this->undoQUE.clear(); }
 
 // --------------------- XML and write to file methods -------------------------
 
@@ -160,6 +154,7 @@ void spreadsheet::edit_cell_content(std::string cellName, std::string cellConten
 	std::map<std::string, std::string>::iterator it;
 	std::string mapValue = cells.find(cellName)->second = cellContent;
 	SSVersion++;
+	add_undo(cellName, cellContent);
 }
 
 void spreadsheet::add_undo(std::string cellName, std::string cellContent)
@@ -279,3 +274,4 @@ std::map<std::string, std::string> spreadsheet::openCellMap(std::string file)
 
 	return tempCells;
 }
+
