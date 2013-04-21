@@ -91,8 +91,7 @@ void updateCommand(string update, int connection, string SSname)
 //================================================================changeCommand
 string changeCommand(string change, int connection)
 {
-
-	cout << change << "that's what it was billy\n" << endl;
+	cout << change << "This is what I received\n" << endl;
 	vector<string> info;
 	stringstream ss(change);
 	string item;
@@ -559,7 +558,7 @@ class Connection
 				//we can either keep it here and pass back from the methods we call
 				//what needs to be sent to the client or just send the message from
 				//the method called and remove this call to start_write()
-				n = write(newsockfd, rspns, rs_len);
+				n = write(newsockfd, rspns, rs_len+1);
 				cout << "\nwrote to socket:\n" << rspns << "\n" << n << "\n" << endl;
 				if(n==0)
 				{

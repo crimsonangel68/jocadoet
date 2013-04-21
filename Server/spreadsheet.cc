@@ -148,10 +148,12 @@ void spreadsheet::write_file(std::string SSname)
   tempFile.close();
 }
 
+//===============================  Edit / Undo  ===============================
   void spreadsheet::edit_cell_content(std::string cellName, std::string cellContent)
   {
 		std::map<std::string, std::string>::iterator it;
 		std::string mapValue = cells.find(cellName)->second = cellContent;
+		SSVersion++;
   }
 
 	void spreadsheet::add_undo(std::string cellName, std::string cellContent)
