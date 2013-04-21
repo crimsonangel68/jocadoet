@@ -27,8 +27,8 @@ using System.IO;
 namespace SpreadsheetGUI
 {
     /// <summary>
-    /// A GUI representation of a Spreadsheet.  Allows the user to navigate and manipulate the 
-    /// contents of a spreadsheet.
+    /// A GUI representation of a Spreadsheet.  Allows the user to navigate
+		/// and manipulate the contents of a spreadsheet.
     /// </summary>
     public partial class Form1 : Form
     {
@@ -43,10 +43,10 @@ namespace SpreadsheetGUI
         private String IPAddress;
         private StringSocket socket;
 
-        //-----------------------------------------------------------------------------------Form1(pathname)
+        //-------------------------------------------------------Form1(pathname)
         /// <summary>
-        /// Opens a new Window when a file with a .ss extension is opened.  The Window will contain
-        /// the contents of the file opened.
+        /// Opens a new Window when a file with a .ss extension is opened.  
+				/// The Window will contain the contents of the file opened.
         /// </summary>
         public Form1(String IP, String fileName, String version, String xml, StringSocket newSocket)
         {
@@ -91,7 +91,7 @@ namespace SpreadsheetGUI
             //}
         }
 
-        //-----------------------------------------------------------------------------------openToolStripMenuItem_Click
+        //------------------------------------------------openToolStripMenuItem_Click
         /// <summary>
         /// Open a saved spreadsheet file.
         /// </summary>
@@ -134,7 +134,7 @@ namespace SpreadsheetGUI
             //}
         }
 
-        //-----------------------------------------------------------------------------------saveToolStripMenuItem_Click
+        //---------------------------------------------saveToolStripMenuItem_Click
         /// <summary>
         /// Save a version of the spreadsheet.
         /// </summary>
@@ -158,7 +158,7 @@ namespace SpreadsheetGUI
             //}
         }
 
-        //-----------------------------------------------------------------------------------undoToolStripMenuItem_Click
+        //---------------------------------------------undoToolStripMenuItem_Click
         /// <summary>
         /// 
         /// </summary>
@@ -169,7 +169,7 @@ namespace SpreadsheetGUI
             Undo();
         }
 
-        //-----------------------------------------------------------------------------------closeToolStripMenuItem_Click
+        //--------------------------------------------closeToolStripMenuItem_Click
         /// <summary>
         /// Closes the current Form.
         /// </summary>
@@ -203,7 +203,7 @@ namespace SpreadsheetGUI
             }
         }
 
-        //-----------------------------------------------------------------------------------Help_Click
+        //-----------------------------------------------------------Help_Click
         /// <summary>
         /// Displays a message box that explains to a user how to use the GUI.
         /// </summary>
@@ -220,7 +220,7 @@ namespace SpreadsheetGUI
             MessageBox.Show(helpMessage);
         }
 
-        //-----------------------------------------------------------------------------------Form1_FormClosing
+        //----------------------------------------------------Form1_FormClosing
         /// <summary>
         /// Closes the spreadsheet.
         /// </summary>
@@ -259,12 +259,13 @@ namespace SpreadsheetGUI
             }
         }
 
-        //-----------------------------------------------------------------------------------CellContentBox  start send here
+        //------------------------------------------CellContentBox  start send here
         /// <summary>
-        /// Allows the user to use the keyboard to control data entry from the keyboard.  While the CellContentBox
-        /// is selected, the user must use the enter key to input the data into the spreadsheet, and may use the arrows
-        /// to navigate the spreadsheet cells.  Also, when control + w is pressed, the option to close the Window will
-        /// be presented to the user.
+        /// Allows the user to use the keyboard to control data entry from the
+				/// keyboard.  While the CellContentBox is selected, the user must use
+				/// the enter key to input the data into the spreadsheet, and may use the arrows
+        /// to navigate the spreadsheet cells.  Also, when control + w is pressed,
+				/// the option to close the Window will be presented to the user.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -334,7 +335,7 @@ namespace SpreadsheetGUI
             }
         }
 
-        //-----------------------------------------------------------------------------------updateSelection
+        //------------------------------------------------------updateSelection
         /// <summary>
         /// Updates the selection.
         /// </summary>
@@ -364,10 +365,10 @@ namespace SpreadsheetGUI
             }
         }
 
-        //-----------------------------------------------------------------------------------SetCellContents
+        //---------------------------------------------------------SetCellContents
         /// <summary>
-        /// A helper method to set the contents of the cell in the spreadsheetPanel.  This will
-        /// actually display on the panel the inputed information.
+        /// A helper method to set the contents of the cell in the spreadsheetPanel.
+				/// This will actually display on the panel the inputed information.
         /// </summary>
         /// <param name="panel"></param>
         /// <returns></returns>
@@ -404,7 +405,7 @@ namespace SpreadsheetGUI
             }
         }
 
-        //-----------------------------------------------------------------------------------sendMessage
+        //-------------------------------------------------------------sendMessage
         /// <summary>
         /// 
         /// </summary>
@@ -436,7 +437,7 @@ namespace SpreadsheetGUI
             }
         }
 
-        //-----------------------------------------------------------------------------------updateCell
+        //--------------------------------------------------------------updateCell
         /// <summary>
         /// A helper method to update the contents of the cell in the spreadsheetPanel.
         /// </summary>
@@ -450,7 +451,7 @@ namespace SpreadsheetGUI
 
         }
 
-        //-----------------------------------------------------------------------------------updatePanel()
+        //-----------------------------------------------------------updatePanel()
         /// <summary>
         /// A helper method to update the entire spreadsheetPanel when a file is loaded.
         /// </summary>
@@ -468,7 +469,7 @@ namespace SpreadsheetGUI
             }
         }
 
-        //-----------------------------------------------------------------------------------NavigateUpdate
+        //----------------------------------------------------------NavigateUpdate
         /// <summary>
         /// A helper method to update the selection on the spreadsheetPanel when the arrow
         /// keys are used to navigate the spreadsheet.
@@ -488,9 +489,9 @@ namespace SpreadsheetGUI
             updateSelection(spreadsheetPanel1);
         }
         
-        // -------------------------------------------------------------------------------------------------------New stuff
+        // ---------------------------------------------------------------New stuff
 
-        // ----------------------------------------------------------------------------------------Sending
+        // -----------------------------------------------------------------Sending
         /// <summary>
         /// This method will send a change to the server.
         /// </summary>
@@ -556,7 +557,7 @@ namespace SpreadsheetGUI
             socket.BeginSend(message, (e, p) => { socket.CloseSocket(); }, 0);
         }
 
-        //----------------------------------------------------------------------------------------Receiving
+        //-----------------------------------------------------------Receiving
         /// <summary>
         /// 
         /// </summary>
