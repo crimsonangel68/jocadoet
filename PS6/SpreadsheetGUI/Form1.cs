@@ -101,12 +101,18 @@ namespace SpreadsheetGUI
         /// <param name="e"></param>
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // Create the next prompt window
-            OpenPrompt prompt = new OpenPrompt(IPAddress);
+            try
+            {
+                // Create the next prompt window
+                OpenPrompt prompt = new OpenPrompt(IPAddress);
 
-            // open the Open window
-            ThreadPool.QueueUserWorkItem(x => { prompt.ShowDialog(); });
-
+                // open the Open window
+                ThreadPool.QueueUserWorkItem(x => { prompt.ShowDialog(); });
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Server is not responding, please try again or close and reconnect", "ERROR");
+            }
 
             //openFileDialog.Filter = "Spreadsheet Files (.ss)|*.ss|All Files (*.*)|*.*";
             //openFileDialog.Title = "Open Spreadsheet";
@@ -244,14 +250,13 @@ namespace SpreadsheetGUI
 
                     // Hide the window, leave this session, and open the Open window
                     //this.Hide();
+
                     LeaveSession();
+                    
                     //prompt.ShowDialog();
                     //this.Close();
                 }
-                else
-                    e.Cancel = true;
-
-                if (!sheet.Changed)
+                else if (!sheet.Changed)
                 {
                     e.Cancel = false;
 
@@ -260,14 +265,17 @@ namespace SpreadsheetGUI
 
                     // Hide the window, leave this session, and open the Open window
                     //this.Hide();
+
                     LeaveSession();
+
                     //prompt.ShowDialog();
                     //this.Close();
                 }
+                else
+                    e.Cancel = true;
             }
             catch(Exception)
             {
-                this.Close();
             }
         }
 
@@ -332,18 +340,32 @@ namespace SpreadsheetGUI
                     NavigateUpdate(newCol, newRow);
                 }
                 if (e.Control && e.KeyCode == Keys.W)
-                {
-                    this.Hide();
-
-                    OpenPrompt open = new OpenPrompt(IPAddress);
-                    open.Show();
-
                     this.Close();
+
+                if (e.Control && e.KeyCode == Keys.Z)
+                    Undo();
+                
+                if (e.Control && e.KeyCode == Keys.O)
+                {
+                    try
+                    {
+                        // Create the next prompt window
+                        OpenPrompt prompt = new OpenPrompt(IPAddress);
+
+                        // open the Open window
+                        ThreadPool.QueueUserWorkItem(x => { prompt.ShowDialog(); });
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("Server is not responding, please try again or close and reconnect", "ERROR");
+                    }
                 }
+                if (e.Control && e.KeyCode == Keys.S)
+                    Save();
             }
-            catch (Exception)
+            catch (Exception f)
             {
-                MessageBox.Show("Idiot... ");
+                MessageBox.Show("Idiot...\n" + f.ToString());
             }
         }
 
