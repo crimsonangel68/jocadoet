@@ -54,12 +54,12 @@ class spreadsheet
 		void add_undo(std::string cellName, std::string cellContent);
 		void clear_undo();
 		void remove_client(int client);
-
+		std::vector<int> clients;
 		// Member Variables
 	private:
 		std::deque<std::pair<std::string, std::string> > undoQUE;
 		std::map<std::string, std::string> cells;
-		std::vector<int> clients;
+
 		std::string name;
 		std::string password;
 		int SSVersion;

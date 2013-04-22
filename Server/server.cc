@@ -69,6 +69,7 @@ void updateCommand(string update, int connection, string SSname)
 		{
 			vector<int> temp;
 			temp = connected_ss[i].get_clients();
+			cout << "temp size is: " << temp.size() << endl;
 			for(int j = 0; j < temp.size(); j++)
 			{
 				cout << "temp[i]:" << temp[i] << endl;
@@ -186,6 +187,7 @@ string changeCommand(string change, int connection)
 			if (tempName == connected_ss[i].get_name())
 			{
 				connected_ss[i].edit_cell_content(cellName, cellContent);
+				cout << "client size is: " << connected_ss[i].clients.size() << endl;
 			}
 		}
 		// Change request is valid, call updateCommand to send out the update
@@ -279,6 +281,7 @@ void undoCommand(string undo)
 
 	if(versionMatch && undo_ok)  
 	{
+	  cout<< "Undo Ok reached" << endl;
 		serverResponse = undo_str;
 	}
 	else if (!undo_ok && versionMatch) 
@@ -329,7 +332,7 @@ void undoCommand(string undo)
 	//Write the response to the client and have the error check
 	//if the write call returns 0, the client is no longer
 	//connected if it is less than 0 a different error occured
-
+	cout << "Temp size is:"<<  temp.size() << endl;
 	for(int i = 0; i < temp.size(); i++)
 	{
 		n = write(temp[i], rspns, rs_len+1);
@@ -516,6 +519,7 @@ string joinCommand(string join, int connection)
 		// Retrieve spreadsheet information
 		cout << "[join516]adding connection:" << connection << endl;
 		sheet.add_client(connection);
+
 		int SSversion = sheet.get_version(); // Get current version number of spreadsheet
 		std::string xml = sheet.get_XML_for_user();
 		int lengthOfSpreadsheetXML = xml.length();
@@ -822,8 +826,7 @@ class Connection
 				}
 				if(n<=0)
 				{
-					cout << "Connection[825]\nerror writing to sockfd\n
-						"<<endl;
+					cout << "Connection[825]\nerror writing to sockfd\n"<<endl;
 					close_con();
 					return;
 				}

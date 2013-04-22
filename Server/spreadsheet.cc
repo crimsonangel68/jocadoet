@@ -71,10 +71,10 @@ int spreadsheet::get_version() const { return this->SSVersion; }
 std::map<std::string, std::string> spreadsheet::get_cells() const {	return this->cells; }
 
 // Get clients of spreadsheet
-std::vector<int> spreadsheet::get_clients() const{ return this->clients; }
+std::vector<int> spreadsheet::get_clients() const{ return clients; }
 
 // add client to list of clients on spreadsheet
-void spreadsheet::add_client(int c){ this->clients.push_back(c); }
+void spreadsheet::add_client(int c){ clients.push_back(c); std::cout << "Adding client: " << c << std::endl; }
 
 // Set the name of the spreadsheet
 void spreadsheet::set_name(std::string n) { this->name = n; }
