@@ -10,6 +10,7 @@
 #include "spreadsheet.h"
 #include <list>
 #include <fstream>
+#include <vector>
 
 //=============================  Constructors  ================================
 // Base Constructor
@@ -70,10 +71,10 @@ int spreadsheet::get_version() const { return this->SSVersion; }
 std::map<std::string, std::string> spreadsheet::get_cells() const {	return this->cells; }
 
 // Get clients of spreadsheet
-std::list<int> spreadsheet::get_clients() const{ return this->clients; }
+std::vector<int> spreadsheet::get_clients() const{ return this->clients; }
 
 // add client to list of clients on spreadsheet
-void spreadsheet::add_client(int c){ this->clients.push_front(c); }
+void spreadsheet::add_client(int c){ this->clients.push_back(c); }
 
 // Set the name of the spreadsheet
 void spreadsheet::set_name(std::string n) { this->name = n; }
@@ -90,6 +91,17 @@ std::deque<std::pair<std::string, std::string> > spreadsheet::get_undoQUE() cons
 // Clear deque
 void spreadsheet::clear_undo() { this->undoQUE.clear(); }
 
+// Remove client
+void spreadsheet::remove_client(int c)
+{
+	for(int i = 0; i < clients.size(); i++)
+	{
+		if(clients[i] == c)
+		{
+			clients.erase(clients.begin()+i);
+		}
+	}
+}
 // --------------------- XML and write to file methods -------------------------
 
 // Get XML to write to file
@@ -100,7 +112,7 @@ std::string spreadsheet::get_XML()
 	ss << "<spreadsheet name>\n" << this->name << "\n</spreadsheet name>\n";
 	ss << "<password>\n" << this->password << "\n</password>\n";
 	ss << "<version>\n" << this->SSVersion << "\n</version>\n";
-	ss << "<?xml version=\"" << SSVersion << ".0\" encoding=\"utf-8\"?>\n";
+	ss << "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
 	ss << "<spreadsheet version=\"ps6\">\n";
 	std::map<std::string, std::string>::iterator it;
 	for(it = this->cells.begin(); it != this->cells.end(); ++it)
@@ -119,7 +131,7 @@ std::string spreadsheet::get_XML_for_user()
 {
 	std::string xml;
 	std::stringstream ss;
-	ss << "<?xml version=\"" << SSVersion << ".0\" encoding=\"utf-8\"?>";
+	ss << "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
 	ss << "<spreadsheet version=\"ps6\">";
 	std::map<std::string, std::string>::iterator it;
 	for(it = this->cells.begin(); it != this->cells.end(); ++it)
@@ -138,7 +150,7 @@ void spreadsheet::write_file(std::string SSname)
 	std::string xml = get_XML();
 	//std::cout << xml << std::endl;
 	std::stringstream ss;
-	ss << SSname << ".ss";
+	ss << "../savedfiles/" << SSname << ".ss";
 	std::string file = ss.str();
 	char buffer[256];
 	std::size_t length = file.copy(buffer,256, 0);
@@ -152,9 +164,10 @@ void spreadsheet::write_file(std::string SSname)
 void spreadsheet::edit_cell_content(std::string cellName, std::string cellContent)
 {
 	std::map<std::string, std::string>::iterator it;
-	std::string mapValue = cells.find(cellName)->second = cellContent;
+	std::string previousContent = cells.find(cellName)->second;
+	cells.find(cellName)->second = cellContent;
 	SSVersion++;
-	add_undo(cellName, cellContent);
+	add_undo(cellName, previousContent);
 }
 
 void spreadsheet::add_undo(std::string cellName, std::string cellContent)
@@ -185,14 +198,14 @@ std::string spreadsheet::get_undo()
 
 	std::stringstream undoMessage;
 
-	undoMessage << "UNDO SP OK \n";
+	undoMessage << "UNDO OK \n";
 	undoMessage << "Name:" + this->name + " \n";
 	undoMessage << "Version:";
-	undoMessage << convert2;
+	undoMessage << result2;
 	undoMessage << " \n";
 	undoMessage << "Cell:"+cellName+" \n";
 	undoMessage << "Length:";
-	undoMessage << convert;
+	undoMessage << result;
 	undoMessage << " \n";
 	undoMessage << cellContent + " \n";
 
@@ -275,3 +288,4 @@ std::map<std::string, std::string> spreadsheet::openCellMap(std::string file)
 	return tempCells;
 }
 
+//int main () { return 0; }

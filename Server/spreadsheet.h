@@ -12,6 +12,7 @@
 #include <cstdlib>
 #include <list>
 #include <deque>
+#include <vector>
 
 //Class to represent a spreadsheet
 class spreadsheet
@@ -32,7 +33,7 @@ class spreadsheet
 		std::map<std::string, std::string> initializeCellMap();
 		std::map<std::string, std::string> openCellMap(std::string file);
 		std::map<std::string, std::string> get_cells() const;
-		std::list<int> get_clients() const;
+		std::vector<int> get_clients() const;
 		std::deque<std::pair<std::string, std::string> > get_undoQUE() const;
 		std::string get_XML();
 		std::string get_XML_for_user();
@@ -51,12 +52,13 @@ class spreadsheet
 		void write_file(std::string file);
 		void add_undo(std::string cellName, std::string cellContent);
 		void clear_undo();
+		void remove_client(int client);
 
 		// Member Variables
 	private:
 		std::deque<std::pair<std::string, std::string> > undoQUE;
 		std::map<std::string, std::string> cells;
-		std::list<int> clients;
+		std::vector<int> clients;
 		std::string name;
 		std::string password;
 		int SSVersion;
