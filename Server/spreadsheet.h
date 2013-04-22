@@ -45,6 +45,7 @@ class spreadsheet
 		bool check_version(int testVersion);
 		bool check_queue();
 		void edit_cell_content(std::string cellName, std::string cellContent);
+		void edit_cell_content_undo(std::string cellName, std::string cellContent);
 		void set_name(std::string n);
 		void set_password(std::string pw);
 		void set_version(int version);

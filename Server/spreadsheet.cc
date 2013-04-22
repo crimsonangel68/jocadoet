@@ -167,11 +167,17 @@ void spreadsheet::write_file(std::string SSname)
 //===============================  Edit / Undo  ================================
 void spreadsheet::edit_cell_content(std::string cellName, std::string cellContent)
 {
-	std::map<std::string, std::string>::iterator it;
 	std::string previousContent = cells.find(cellName)->second;
 	cells.find(cellName)->second = cellContent;
 	SSVersion++;
 	add_undo(cellName, previousContent);
+}
+
+void spreadsheet::edit_cell_content_undo(std::string cellName, std::string cellContent)
+{
+	std::string previousContent = cells.find(cellName)->second;
+	cells.find(cellName)->second = cellContent;
+	SSVersion++;
 }
 
 void spreadsheet::add_undo(std::string cellName, std::string cellContent)
@@ -191,6 +197,8 @@ std::string spreadsheet::get_undo()
 	this->undoQUE.pop_back();
 	std::string cellName = undoPAIR.first;
 	std::string cellContent = undoPAIR.second;
+
+	spreadsheet::edit_cell_content_undo(cellName, cellContent);
 
 	std::stringstream convert;
 	convert << cellContent.size();

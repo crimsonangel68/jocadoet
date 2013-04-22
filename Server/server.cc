@@ -230,8 +230,6 @@ void undoCommand(string undo)
 		info.push_back(item);
 	}
 
-	std::cout << info[1] << "\n" << info[2] << std::endl;
-
 	stringstream nameSS(info[1]);
 	vector<string> nameInfo;
 	string name;
@@ -241,7 +239,6 @@ void undoCommand(string undo)
 	}
 	unsigned pos = name.find(" ");
 	name = name.substr(0, pos);
-	std::cout << "name is: " << name << endl;
 
 	stringstream tempSS(info[2]);
 	vector<string> versionInfo;
@@ -270,7 +267,10 @@ void undoCommand(string undo)
 			versionMatch = connected_ss[i].check_version(version);
 			undo_ok = connected_ss[i].check_queue();
 			if(undo_ok)
+			{
+			
 				undo_str = connected_ss[i].get_undo();
+			}
 		}
 	}
 
@@ -330,7 +330,7 @@ void undoCommand(string undo)
 	for(int i = 0; i < temp.size(); i++)
 	{
 		n = write(temp[i], rspns, rs_len+1);
-		cout << "wrote to socket: " << endl;
+		cout << "---wrote to socket: " << endl;
 		cout << rspns << endl;
 		if(n==0)
 		{
