@@ -63,14 +63,15 @@ void updateCommand(string update, int connection, string SSname)
 	// Copy string to send into char array
 	std::size_t length = update.copy(buffer, 0, update.length());
 	buffer[length] = '\0';
-	vector<int> temp;
 	for (int i = 0; i < connected_ss.size(); i++)
 	{
 		if (connected_ss[i].get_name() == SSname)
 		{
+			vector<int> temp;
 			temp = connected_ss[i].get_clients();
 			for(int j = 0; j < temp.size(); j++)
 			{
+				cout << "temp[i]:" << temp[i] << endl;
 				if(temp[i] != connection)
 				{
 					cout << "[UPDATE]writing to connection:" << temp[i] << "|" << endl;
@@ -82,12 +83,14 @@ void updateCommand(string update, int connection, string SSname)
 					if(n==0)
 					{
 						cout << "updateCommand[84]\n" << n << endl;
-						error("[UPDATE]Error writing to socket");
+						//error("[UPDATE]Error writing to socket");
+						close(temp[i]);
 					}
 					if(n < 0)
 					{
 						cout << "updateCommand[89]\n" << n << endl;
-						error("[UPDATE]Error writing to socket");
+						//error("[UPDATE]Error writing to socket");
+						close(temp[i]);
 					}
 				}
 			}
@@ -268,7 +271,7 @@ void undoCommand(string undo)
 			undo_ok = connected_ss[i].check_queue();
 			if(undo_ok)
 			{
-			
+
 				undo_str = connected_ss[i].get_undo();
 			}
 		}
@@ -407,7 +410,8 @@ string createCommand(string create, int connection)
 
 	// Add spreadsheet to list of existing spreadsheets
 	spreadsheet::spreadsheet newSS(tempName, tempPassword, 1);
-	newSS.add_client(connection);
+	//	cout << "[create413]adding connection:" << connection << endl;
+	//	newSS.add_client(connection);
 	connected_ss.push_back(newSS);
 
 	if(!testNameTaken) // Name is not taken
@@ -510,6 +514,7 @@ string joinCommand(string join, int connection)
 	if(nameExists && passwordMatches)
 	{
 		// Retrieve spreadsheet information
+		cout << "[join516]adding connection:" << connection << endl;
 		sheet.add_client(connection);
 		int SSversion = sheet.get_version(); // Get current version number of spreadsheet
 		std::string xml = sheet.get_XML_for_user();
@@ -536,8 +541,9 @@ string joinCommand(string join, int connection)
 	{
 		//read
 		spreadsheet sheetfromfile(filepath);
-		
+
 		// Retrieve spreadsheet information
+		cout << "[join545]adding connection:" << connection << endl;
 		sheetfromfile.add_client(connection);
 		int SSversion = 1;// Get current version number of spreadsheet
 		std::string xml = sheetfromfile.get_XML_for_user();
@@ -816,7 +822,7 @@ class Connection
 				}
 				//advertise to the server administrator what was wrote back to 
 				//the client on this connection
-				cout << "\nwrote to socket:\n" << rspns << "\nLength: ";
+				cout << "\nwrote to socket:\n" << newsockfd << rspns << "\nLength: ";
 				cout << n << "\n------------------\n==================\n" << endl;
 			}
 		}
