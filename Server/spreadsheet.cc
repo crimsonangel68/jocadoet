@@ -270,7 +270,7 @@ std::map<std::string, std::string> spreadsheet::openCellMap(std::string file)
 		else if(ss.str() == "<version>")
 		{
 			getline(in, line);
-			this->set_version(atoi(line.c_str()));
+			this->set_version(0);
 		}
 		if(ss.str() == "<cell>")
 		{

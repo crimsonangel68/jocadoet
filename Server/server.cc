@@ -54,37 +54,45 @@ void error(const char *msg)
 void updateCommand(string update, int connection, string SSname)
 {
 	int n;
-	update.erase(0, 6);
-	update.insert(0, "UPDATE");
+	update.erase(0, 9);
+	update.insert(0, "UPDATE ");
 	// LOOP THROUGH CONNECTIONS AND SEND IT TO ALL OTHER connections except the 
 	// one that sent the change
 	// Initialize buffer for writing to socket
+	//cout << "[UPDATE] msg is:\n" << update << endl;
 	char buffer[update.length()];
 	// Copy string to send into char array
-	std::size_t length = update.copy(buffer, 0, update.length());
+	std::size_t length = update.copy(buffer, update.length(), 0);
 	buffer[length] = '\0';
+	//cout << "[UPDATE] buffer contains:\n" << buffer << endl;
 	for (int i = 0; i < connected_ss.size(); i++)
 	{
 		if (connected_ss[i].get_name() == SSname)
 		{
 			vector<int> temp;
 			temp = connected_ss[i].get_clients();
-			cout << "temp size is: " << temp.size() << endl;
-			for(int j = 0; j < temp.size(); j++)
+			//cout << "temp size is: " << temp.size() << endl;
+			for(int j = 0; j < connected_ss[i].get_clients().size(); j++)
 			{
-				cout << "temp[i]:" << temp[i] << endl;
-				if(temp[i] != connection)
+			//	cout << "temp[j]:" << temp[i] << endl;
+			//	cout << "connected_ss[i].get_clients()[j]:" << connected_ss[i].get_clients()[i] << endl;
+			//	cout << "sockfd that made change:" << connection << endl;
+			//	cout << "j=" << j << endl;
+				if(connected_ss[i].get_clients()[j] != connection)
 				{
-					cout << "[UPDATE]writing to connection:" << temp[i] << "|" << endl;
+			//		cout << "[UPDATE]writing to connection:" << connected_ss[i].get_clients()[j] << "|" << endl;
 					//write the update to the connection because it is tied
 					//to this spreadsheet
-					n = write(temp[i], buffer, length+1);
+					n = write(connected_ss[i].get_clients()[j], buffer, length+1);
+
+					cout << "[UPDATE]wrote to socket: " << temp[i] << "\n" << buffer << endl;
 					//error check for write to socket write returns 0 if there is no
 					//connection on the given socket file descriptor
 					if(n==0)
 					{
 						cout << "updateCommand[84]\nsocket does not exist\n" << n << endl;
 						//error("[UPDATE]Error writing to socket");
+//need to fix this
 						close(temp[i]);
 					}
 					if(n < 0)
@@ -190,8 +198,15 @@ string changeCommand(string change, int connection)
 				cout << "client size is: " << connected_ss[i].clients.size() << endl;
 			}
 		}
+		cout << "[change198] calling update with msg:\n" << change << endl;
 		// Change request is valid, call updateCommand to send out the update
-		updateCommand(change, connection, tempName);
+		stringstream upSS;
+		upSS << serverResponse;
+		upSS << "Cell:" << cellName << " \n";
+		upSS << "Length:" << cellContent.length() << " \n";
+		upSS << cellContent << " \n";
+		string up_msg = upSS.str();
+		updateCommand(up_msg, connection, tempName);
 	}
 	//client does not have the correct version
 	else if(!versionMatch)
@@ -255,7 +270,7 @@ void undoCommand(string undo)
 	unsigned pos1 = vers.find(" ");
 	vers = vers.substr(0, pos1);
 	int version = atoi(vers.c_str());
-	std::cout << "vers is: " << vers << std::endl << std::endl << version << std::endl;
+	//std::cout << "vers is: " << vers << std::endl << std::endl << version << std::endl;
 
 	string undo_str = "";
 	bool versionMatch = false;
@@ -281,7 +296,8 @@ void undoCommand(string undo)
 
 	if(versionMatch && undo_ok)  
 	{
-	  cout<< "Undo Ok reached" << endl;
+	 // cout<< "Undo Ok reached" << endl;
+	//	cout<< "[undo] response is:\n" << undo_str << endl;
 		serverResponse = undo_str;
 	}
 	else if (!undo_ok && versionMatch) 
@@ -332,7 +348,7 @@ void undoCommand(string undo)
 	//Write the response to the client and have the error check
 	//if the write call returns 0, the client is no longer
 	//connected if it is less than 0 a different error occured
-	cout << "Temp size is:"<<  temp.size() << endl;
+	//cout << "Temp size is:"<<  temp.size() << endl;
 	for(int i = 0; i < temp.size(); i++)
 	{
 		n = write(temp[i], rspns, rs_len+1);
@@ -340,16 +356,18 @@ void undoCommand(string undo)
 		cout << rspns << endl;
 		if(n==0)
 		{
-			cout << "undoCommand[333]\nsocket does not exist\n"<< n << endl;
+			cout << "undoCommand[333]\nsocket does not exist\nclosing"<< n << endl;
+			cout << temp[i];
 			close(temp[i]);	
 		}
 		if(n<0)
 		{
-			cout << "undoCommand[339]\nerror writing to socket\n"<< n << endl;
+			cout << "undoCommand[339]\nerror writing to socket\nclosing"<< n << endl;
+			cout << temp[i];
 			close(temp[i]);	
 		}
 	}
-	cout << "---------------------\n=================" << endl;
+	cout << "---------------------" << endl;
 }
 
 //================================================================createCommand
@@ -396,6 +414,7 @@ string createCommand(string create, int connection)
 	tempPassword = tempPassword.substr(0, pos);
 
 	bool testNameTaken = false; // Test if file name exists already
+	bool nameAlreadyOpen = false;
 
 	stringstream fpSS;
 	fpSS << "../savedfiles/";
@@ -405,6 +424,14 @@ string createCommand(string create, int connection)
 	size_t length = filepath.copy(filebuf, 256, 0);
 	filebuf[length] = '\0';
 	ifstream filestream(filebuf);
+
+	for(int i = 0; i < connected_ss.size(); i++)
+	{
+		if(tempName == connected_ss[i].get_name())
+		{
+			nameAlreadyOpen = true;
+		}
+	}		
 
 	if(filestream.good())
 	{
@@ -417,7 +444,7 @@ string createCommand(string create, int connection)
 	//	newSS.add_client(connection);
 	connected_ss.push_back(newSS);
 
-	if(!testNameTaken) // Name is not taken
+	if(!testNameTaken && !nameAlreadyOpen) // Name is not taken
 	{
 		stringstream serverResponseSS;
 		serverResponseSS << "CREATE OK \n";
@@ -432,6 +459,18 @@ string createCommand(string create, int connection)
 
 		//std::cout << serverResponse << std::endl;
 	}
+	else if(!testNameTaken && nameAlreadyOpen)
+	{
+		stringstream serverResponseSS;
+		serverResponseSS << "CREATE FAIL \n";
+		serverResponseSS << "Name:";
+		serverResponseSS << tempName;
+		serverResponseSS << " \n";
+		serverResponseSS << "Spreadsheet is open";
+		serverResponseSS << " \n";
+
+		serverResponse = serverResponseSS.str();
+	}
 	else
 	{
 		stringstream serverResponseSS;
@@ -439,7 +478,7 @@ string createCommand(string create, int connection)
 		serverResponseSS << "Name:";
 		serverResponseSS << tempName;
 		serverResponseSS << " \n";
-		serverResponseSS << "Test name is taken";
+		serverResponseSS << "Spreadsheet name is taken";
 		serverResponseSS << " \n";
 
 		serverResponse = serverResponseSS.str();
@@ -448,6 +487,12 @@ string createCommand(string create, int connection)
 	}
 
 	return serverResponse;
+}
+
+bool fexists(const char *filename)
+{
+	ifstream ifile(filename);
+	return ifile;
 }
 
 //================================================================joinCommand
@@ -492,36 +537,47 @@ string joinCommand(string join, int connection)
 
 	bool nameExists = false; // Check to see if name exists
 	bool passwordMatches = false; // Check if password matches
+
 	stringstream fpSS;
 	fpSS << "../savedfiles/";
 	fpSS << tempName << ".ss";
 	string filepath = fpSS.str();
+	cout << "filepath is: " << filepath << endl;
 	char filebuf[256];
 	size_t length = filepath.copy(filebuf, 256, 0);
 	filebuf[length] = '\0';
+	bool file_exists = false;
+	file_exists = fexists(filebuf);
+	cout << "fexists returned: " << file_exists << endl;
 	ifstream filestream(filebuf);
 
 	spreadsheet sheet(tempName, tempPassword, 1);
 
+	int position;
 	for(int i = 0; i < connected_ss.size(); i++)
 	{
 		if(tempName == connected_ss[i].get_name())
 		{
 			sheet = connected_ss[i];
+			//connected_ss[i].add_client(connection);
 			nameExists = true;
+			passwordMatches = connected_ss[position].check_password(tempPassword);
+			position = i;
 		}
+
 	}
 
-	passwordMatches = sheet.check_password(tempPassword);
+	cout << "finished for loop[560]" << endl;
 
+	cout << "checked password" << endl;
 	if(nameExists && passwordMatches)
 	{
+		cout << "inside nameExists and passwordMatches" << endl;	
 		// Retrieve spreadsheet information
-		cout << "[join516]adding connection:" << connection << endl;
-		sheet.add_client(connection);
+		connected_ss[position].add_client(connection);
 
-		int SSversion = sheet.get_version(); // Get current version number of spreadsheet
-		std::string xml = sheet.get_XML_for_user();
+		int SSversion = connected_ss[position].get_version(); // Get current version number of spreadsheet
+		std::string xml = connected_ss[position].get_XML_for_user();
 		int lengthOfSpreadsheetXML = xml.length();
 		stringstream serverResponseSS;
 		serverResponseSS << "JOIN OK \n";
@@ -541,32 +597,50 @@ string joinCommand(string join, int connection)
 
 		//std::cout << serverResponse << std::endl;
 	}
-	else if(filestream.good() && !nameExists && !passwordMatches)
+	else if(file_exists == 1 && !nameExists)
 	{
-		//read
+		cout << "filepath is: " << filepath << endl;
 		spreadsheet sheetfromfile(filepath);
 
-		// Retrieve spreadsheet information
-		cout << "[join545]adding connection:" << connection << endl;
-		sheetfromfile.add_client(connection);
-		int SSversion = 1;// Get current version number of spreadsheet
-		std::string xml = sheetfromfile.get_XML_for_user();
-		int lengthOfSpreadsheetXML = xml.length();
-		stringstream serverResponseSS;
-		serverResponseSS << "JOIN OK \n";
-		serverResponseSS << "Name:";
-		serverResponseSS << tempName;
-		serverResponseSS << " \n";
-		serverResponseSS << "Version:";
-		serverResponseSS << SSversion;
-		serverResponseSS << " \n";
-		serverResponseSS << "Length:";
-		serverResponseSS << lengthOfSpreadsheetXML;
-		serverResponseSS << "\n";
-		serverResponseSS << xml;
-		serverResponseSS << "\n";
+		if(sheetfromfile.check_password(tempPassword) && sheetfromfile.get_name() == tempName)
+		{
+			// Retrieve spreadsheet information
+			cout << "[join545]adding connection to SS:" << connection << endl;
+			sheetfromfile.add_client(connection);
+			int SSversion = 0;
+			std::string xml = sheetfromfile.get_XML_for_user();
+			int lengthOfSpreadsheetXML = xml.length();
+			stringstream serverResponseSS;
+			serverResponseSS << "JOIN OK \n";
+			serverResponseSS << "Name:";
+			serverResponseSS << tempName;
+			serverResponseSS << " \n";
+			serverResponseSS << "Version:";
+			serverResponseSS << SSversion;
+			serverResponseSS << " \n";
+			serverResponseSS << "Length:";
+			serverResponseSS << lengthOfSpreadsheetXML;
+			serverResponseSS << "\n";
+			serverResponseSS << xml;
+			serverResponseSS << "\n";
 
-		serverResponse = serverResponseSS.str();
+			serverResponse = serverResponseSS.str();
+			connected_ss.push_back(sheetfromfile);
+		}
+
+		else
+		{
+			stringstream serverResponseSS;
+			serverResponseSS << "JOIN FAIL \n";
+			serverResponseSS << "Name:";
+			serverResponseSS << tempName;
+			serverResponseSS << " \n";
+			serverResponseSS << "Wrong password";
+			serverResponseSS << " \n";
+
+			serverResponse = serverResponseSS.str();
+
+		}
 
 	}
 	else
@@ -679,6 +753,10 @@ void leaveCommand(string message, int connection)
 		{
 			cout << "removing sockfd: " << connection << endl;
 			connected_ss[i].remove_client(connection);
+			if(connected_ss[i].get_clients().size() == 0)
+			{
+				connected_ss.erase(connected_ss.begin()+i);
+			}
 		}
 	}
 }
@@ -833,7 +911,7 @@ class Connection
 
 				//advertise to the server administrator what was wrote back to 
 				//the client on this connection
-				cout << "\nwrote to socket:\n" << newsockfd << rspns << "\nLength: ";
+				cout << "\nwrote to socket:\n" << newsockfd << "\n" << rspns << "\nLength: ";
 				cout << n << "\n------------------\n==================\n" << endl;
 			}
 		}

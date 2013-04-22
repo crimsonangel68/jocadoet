@@ -44,11 +44,11 @@ class spreadsheet
 		bool check_password(std::string pass);
 		bool check_version(int testVersion);
 		bool check_queue();
+		void set_version(int version);
 		void edit_cell_content(std::string cellName, std::string cellContent);
 		void edit_cell_content_undo(std::string cellName, std::string cellContent);
 		void set_name(std::string n);
 		void set_password(std::string pw);
-		void set_version(int version);
 		void add_client(int c);
 		void write_file(std::string file);
 		void add_undo(std::string cellName, std::string cellContent);
