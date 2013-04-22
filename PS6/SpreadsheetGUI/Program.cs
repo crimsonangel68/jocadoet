@@ -75,9 +75,13 @@ namespace SpreadsheetGUI
 
             SpreadsheetApplicationContext appContext = SpreadsheetApplicationContext.getAppContext();
             appContext.RunForm(new Startup());
-
             Application.Run(appContext);
             //Application.Run(new Startup());
+
+            while (Application.OpenForms.Count > 0)
+            {
+
+            }
 
             // end of new opening method................................  */
              
