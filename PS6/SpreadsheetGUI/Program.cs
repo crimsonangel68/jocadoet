@@ -16,10 +16,7 @@ using System.Windows.Forms;
 
 namespace SpreadsheetGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public class SpreadsheetApplicationContext : ApplicationContext
+    class SpreadsheetApplicationContext : ApplicationContext
     {
         //The number of open forms
         private int formCount = 0;
@@ -77,14 +74,13 @@ namespace SpreadsheetGUI
             Application.SetCompatibleTextRenderingDefault(false);
 
             SpreadsheetApplicationContext appContext = SpreadsheetApplicationContext.getAppContext();
-            appContext.RunForm(new Startup(appContext));
+            appContext.RunForm(new Startup());
             Application.Run(appContext);
             //Application.Run(new Startup());
 
-            int count = Application.OpenForms.Count;
             while (Application.OpenForms.Count > 0)
             {
-                
+
             }
 
             // end of new opening method................................  */

@@ -19,8 +19,7 @@ namespace SpreadsheetGUI
     /// If the connection was unsuccessful, it will inform the user.
     /// </summary>
     public partial class Startup : Form
-    {
-        SpreadsheetApplicationContext app;
+    {   
         /// <summary>
         ///  This is the constructor for the startup method.
         ///  
@@ -30,11 +29,10 @@ namespace SpreadsheetGUI
         ///  specify the file name and whether they will create a new
         ///  file, or join an existing file.
         /// </summary>
-        public Startup(SpreadsheetApplicationContext appContext)
+        public Startup()
         {
             // Initialize this prompt and create a new model
             InitializeComponent();
-            app = appContext;
         }
 
         /// <summary>
@@ -64,12 +62,11 @@ namespace SpreadsheetGUI
             try
             {
                 // Create the next prompt window
-                OpenPrompt prompt = new OpenPrompt(IPAddress, app);
+                OpenPrompt prompt = new OpenPrompt(IPAddress);
 
                 // Show the next prompt and close this window
                 this.Hide();
-                app.RunForm(prompt);
-                //prompt.ShowDialog();
+                prompt.ShowDialog();
                 this.Close();
             }
             catch (Exception)

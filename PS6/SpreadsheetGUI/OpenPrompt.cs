@@ -20,7 +20,6 @@ namespace SpreadsheetGUI
     public partial class OpenPrompt : Form
     {
         StringSocket socket;        // This socket will be used to communicate to the server
-        SpreadsheetApplicationContext app;
 
         private String name;        // This will store the name of the file inputed to the screen
         private String IPAddress;   // This will store the IP address inputed to the screen
@@ -35,13 +34,12 @@ namespace SpreadsheetGUI
         ///  spreadsheet of or join an existing file.
         /// </summary>
         /// <param name="IP"></param>
-        public OpenPrompt(String IP, SpreadsheetApplicationContext appContext)
+        public OpenPrompt(String IP)
         {
             // Initialize the window and set up the member variables.
             InitializeComponent();
             socket = null;
             receiving = false;
-            app = appContext;
 
             // Connect to the provided IP address
             Connect(IP);
@@ -226,7 +224,7 @@ namespace SpreadsheetGUI
             if (s.Contains("xml"))
             {
                 // We've received the xml, create a new form1 and show it
-                Form1 ss = new Form1(IPAddress, name, version, s, socket, app);
+                Form1 ss = new Form1(IPAddress, name, version, s, socket);
 
                 this.BeginInvoke(new Action(() => { this.Hide(); }));
                 this.Invoke(new Action(() => { ss.ShowDialog(); }));

@@ -43,21 +43,19 @@ namespace SpreadsheetGUI
 
         private String IPAddress;
         private StringSocket socket;
-        private SpreadsheetApplicationContext app;
 
         //-------------------------------------------------------Form1(pathname)
         /// <summary>
         /// Opens a new Window when a file with a .ss extension is opened.  
 				/// The Window will contain the contents of the file opened.
         /// </summary>
-        public Form1(String IP, String fileName, String version, String xml, StringSocket newSocket, SpreadsheetApplicationContext appContext)
+        public Form1(String IP, String fileName, String version, String xml, StringSocket newSocket)
         {
             InitializeComponent();
 
             this.IPAddress = IP;
             socket = newSocket;
             messagesToReceive = 0;
-            app = appContext;
 
             String filePath = @"../../../../tmpfiles/jocadoetSpreadsheet.ss";
 
@@ -106,12 +104,11 @@ namespace SpreadsheetGUI
             try
             {
                 // Create the next prompt window
-                OpenPrompt prompt = new OpenPrompt(IPAddress, app);
+                OpenPrompt prompt = new OpenPrompt(IPAddress);
 
-                app.RunForm(prompt);
                 // open the Open window
-                //SpreadsheetApplicationContext app = SpreadsheetApplicationContext.getAppContext();
-                //app.RunForm(prompt);
+                SpreadsheetApplicationContext app = SpreadsheetApplicationContext.getAppContext();
+                app.RunForm(prompt);
 
                 //ThreadPool.QueueUserWorkItem(x => { Application.Run(prompt); });
             }
@@ -356,11 +353,10 @@ namespace SpreadsheetGUI
                     try
                     {
                         // Create the next prompt window
-                        OpenPrompt prompt = new OpenPrompt(IPAddress, app);
+                        OpenPrompt prompt = new OpenPrompt(IPAddress);
 
-                        app.RunForm(prompt);
                         // open the Open window
-                        //ThreadPool.QueueUserWorkItem(x => { Application.Run(prompt); });
+                        ThreadPool.QueueUserWorkItem(x => { prompt.ShowDialog(); });
                     }
                     catch (Exception)
                     {
