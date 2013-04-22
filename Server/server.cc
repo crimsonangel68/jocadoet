@@ -82,13 +82,13 @@ void updateCommand(string update, int connection, string SSname)
 					//connection on the given socket file descriptor
 					if(n==0)
 					{
-						cout << "updateCommand[84]\n" << n << endl;
+						cout << "updateCommand[84]\nsocket does not exist\n" << n << endl;
 						//error("[UPDATE]Error writing to socket");
 						close(temp[i]);
 					}
 					if(n < 0)
 					{
-						cout << "updateCommand[89]\n" << n << endl;
+						cout << "updateCommand[89]\nerror writing to socket\n" << n << endl;
 						//error("[UPDATE]Error writing to socket");
 						close(temp[i]);
 					}
@@ -337,12 +337,12 @@ void undoCommand(string undo)
 		cout << rspns << endl;
 		if(n==0)
 		{
-			cout << "undoCommand[333]\n"<< n << endl;
+			cout << "undoCommand[333]\nsocket does not exist\n"<< n << endl;
 			close(temp[i]);	
 		}
 		if(n<0)
 		{
-			cout << "undoCommand[339]\n"<< n << endl;
+			cout << "undoCommand[339]\nerror writing to socket\n"<< n << endl;
 			close(temp[i]);	
 		}
 	}
@@ -757,13 +757,13 @@ class Connection
 				n = read(newsockfd, buffer, buffer_length);
 				if(n==0)
 				{
-					cout << "Connection[681]\n" << n << endl;
+					cout << "Connection[760]\nsockfd doesn't exist\n" << n << endl;
 					close_con();
 					return;
 				}
 				if(n<0)
 				{
-					cout << "Connection[699]\n" << n << endl;
+					cout << "Connection[766]\nerror writing to sockfd\n" << n << endl;
 					close_con();
 					return;
 				}
@@ -814,12 +814,20 @@ class Connection
 				//if the write call returns 0, the client is no longer
 				//connected if it is less than 0 a different error occured
 				n = write(newsockfd, rspns, rs_len+1);
-				if(n<=0)
+				if(n==0)
 				{
-					cout << "Connection[681]"<<endl;
+					cout << "Connection[819]\nsockfd doesn't exist\n"<<endl;
 					close_con();
 					return;
 				}
+				if(n<=0)
+				{
+					cout << "Connection[825]\nerror writing to sockfd\n
+						"<<endl;
+					close_con();
+					return;
+				}
+
 				//advertise to the server administrator what was wrote back to 
 				//the client on this connection
 				cout << "\nwrote to socket:\n" << newsockfd << rspns << "\nLength: ";
