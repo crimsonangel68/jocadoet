@@ -54,7 +54,7 @@
             this.JoinButton.Location = new System.Drawing.Point(248, 254);
             this.JoinButton.Name = "JoinButton";
             this.JoinButton.Size = new System.Drawing.Size(75, 23);
-            this.JoinButton.TabIndex = 2;
+            this.JoinButton.TabIndex = 1;
             this.JoinButton.Text = "Join";
             this.JoinButton.UseVisualStyleBackColor = true;
             this.JoinButton.Click += new System.EventHandler(this.JoinButton_Click);
@@ -65,7 +65,7 @@
             this.NewButton.Location = new System.Drawing.Point(61, 254);
             this.NewButton.Name = "NewButton";
             this.NewButton.Size = new System.Drawing.Size(75, 23);
-            this.NewButton.TabIndex = 1;
+            this.NewButton.TabIndex = 0;
             this.NewButton.Text = "New";
             this.NewButton.UseVisualStyleBackColor = true;
             this.NewButton.Click += new System.EventHandler(this.NewButton_Click);

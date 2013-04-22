@@ -223,7 +223,7 @@ namespace SpreadsheetGUI
             else if (s.StartsWith("JOIN FAIL"))
                 socket.BeginReceive(failMethod, "FAIL");
 
-            else if (s.Contains("JOIN"))
+            else if (s.Contains("JOIN OK"))
             {
                 // Continue receiving on the socket
                 socket.BeginReceive(joinReceived, "JOIN");
@@ -248,7 +248,7 @@ namespace SpreadsheetGUI
                 // Continue receiving on the socket
                 socket.BeginReceive(joinReceived, "JOIN");
             }
-            //socket.BeginReceive(
+            //socket.BeginReceive(joinReceived, "JOIN");
         } // End of "JoinReceived" method ..........................................................................................
 
         /// <summary>

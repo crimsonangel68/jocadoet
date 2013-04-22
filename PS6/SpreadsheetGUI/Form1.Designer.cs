@@ -176,9 +176,11 @@
             // 
             // CellContentBox
             // 
+            this.CellContentBox.AcceptsReturn = true;
             this.CellContentBox.Dock = System.Windows.Forms.DockStyle.Left;
             this.CellContentBox.Location = new System.Drawing.Point(0, 0);
             this.CellContentBox.Name = "CellContentBox";
+            this.CellContentBox.ShortcutsEnabled = false;
             this.CellContentBox.Size = new System.Drawing.Size(819, 20);
             this.CellContentBox.TabIndex = 0;
             this.CellContentBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.CellContentBox_KeyUp);
@@ -263,6 +265,7 @@
             this.spreadsheetPanel1.Name = "spreadsheetPanel1";
             this.spreadsheetPanel1.Size = new System.Drawing.Size(1057, 706);
             this.spreadsheetPanel1.TabIndex = 1;
+            this.spreadsheetPanel1.TabStop = false;
             // 
             // openFileDialog
             // 
