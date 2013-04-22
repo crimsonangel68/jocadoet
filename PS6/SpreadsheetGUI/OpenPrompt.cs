@@ -248,6 +248,7 @@ namespace SpreadsheetGUI
                 // Continue receiving on the socket
                 socket.BeginReceive(joinReceived, "JOIN");
             }
+            //socket.BeginReceive(
         } // End of "JoinReceived" method ..........................................................................................
 
         /// <summary>
