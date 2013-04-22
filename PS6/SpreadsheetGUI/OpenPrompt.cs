@@ -159,8 +159,10 @@ namespace SpreadsheetGUI
         private void createReceived(String s, Exception e, object p)
         {
             if (s.StartsWith("CREATE FAIL") || s.StartsWith("\0CREATE FAIL"))
+            {
                 socket.BeginReceive(failMethod, "FAIL");
-
+                return;
+            }
             else if (s.StartsWith("Name:"))
                 name = s.Substring(5);
 
@@ -220,8 +222,10 @@ namespace SpreadsheetGUI
             }
 
             else if (s.StartsWith("JOIN FAIL") || s.StartsWith("\0JOIN FAIL"))
+            {
                 socket.BeginReceive(failMethod, "FAIL");
-
+                return;
+            }
             else if (s.StartsWith("Name:"))
                 name = s.Substring(5);
 
@@ -252,8 +256,8 @@ namespace SpreadsheetGUI
                 // If the user decides to cancel, disconnect the socket and close the prompts
                 if (result == DialogResult.Cancel)
                     this.Invoke(new Action(() => { Close(); }));
-                else
-                    return;
+
+                return;
             }
 
             socket.BeginReceive(failMethod, "FAIL");
