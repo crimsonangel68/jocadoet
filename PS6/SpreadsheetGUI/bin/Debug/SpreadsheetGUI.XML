@@ -393,7 +393,7 @@
         </member>
         <member name="M:SpreadsheetGUI.OpenPrompt.failMethod(System.String,System.Exception,System.Object)">
             <summary>
-            
+            This method is for dealing with receiving fails.
             </summary>
             <param name="s"></param>
             <param name="e"></param>

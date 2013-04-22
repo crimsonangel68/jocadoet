@@ -158,18 +158,12 @@ namespace SpreadsheetGUI
         /// <param name="p"></param>
         private void createReceived(String s, Exception e, object p)
         {
-            if (s.Contains("CREATE FAIL"))
+            if (s.StartsWith("CREATE FAIL") || s.StartsWith("\0CREATE FAIL"))
                 socket.BeginReceive(failMethod, "FAIL");
-            
-            else if (s.StartsWith("CREATE OK"))
-                socket.BeginReceive(createReceived, "CREATE");
 
             else if (s.StartsWith("Name:"))
-            {
                 name = s.Substring(5);
 
-                socket.BeginReceive(createReceived, "CREATE");
-            }
             // If the string contains Password:, we know that we have completed a successful transmission
             else if (s.StartsWith("Password:"))
             {
@@ -191,9 +185,11 @@ namespace SpreadsheetGUI
                 }
                 else
                     receiving = false;
-            }
 
-            //socket.BeginReceive(createReceived, "CREATE");
+                return;
+            }
+            
+            socket.BeginReceive(createReceived, "CREATE");
         } // End of "createReceived" method ............................................................................................................
 
         /// <summary>
@@ -214,45 +210,32 @@ namespace SpreadsheetGUI
         {
             if (s.Contains("xml"))
             {
+                // We've received the xml, create a new form1 and show it
                 Form1 ss = new Form1(IPAddress, name, version, s, socket);
-                    
+
                 this.BeginInvoke(new Action(() => { this.Hide(); }));
                 this.Invoke(new Action(() => { ss.ShowDialog(); }));
+
+                return;
             }
 
-            else if (s.StartsWith("JOIN FAIL"))
+            else if (s.StartsWith("JOIN FAIL") || s.StartsWith("\0JOIN FAIL"))
                 socket.BeginReceive(failMethod, "FAIL");
 
-            else if (s.Contains("JOIN OK"))
-            {
-                // Continue receiving on the socket
-                socket.BeginReceive(joinReceived, "JOIN");
-            }
             else if (s.StartsWith("Name:"))
-            {
                 name = s.Substring(5);
-                // Continue receiving on the socket
-                socket.BeginReceive(joinReceived, "JOIN");
-            }
-            else if (s.Contains("Version:"))
-            {
+
+            else if (s.StartsWith("Version:"))
                 version = s.Substring(8);
 
-                // Continue receiving on the socket
-                socket.BeginReceive(joinReceived, "JOIN");
-            }
-            else if (s.Contains("Length:"))
-            {
+            else if (s.StartsWith("Length:"))
                 Int32.TryParse(s.Substring(7), out length);
 
-                // Continue receiving on the socket
-                socket.BeginReceive(joinReceived, "JOIN");
-            }
-            //socket.BeginReceive(joinReceived, "JOIN");
+            socket.BeginReceive(joinReceived, "JOIN");
         } // End of "JoinReceived" method ..........................................................................................
 
         /// <summary>
-        /// 
+        /// This method is for dealing with receiving fails.
         /// </summary>
         /// <param name="s"></param>
         /// <param name="e"></param>
@@ -269,6 +252,8 @@ namespace SpreadsheetGUI
                 // If the user decides to cancel, disconnect the socket and close the prompts
                 if (result == DialogResult.Cancel)
                     this.Invoke(new Action(() => { Close(); }));
+                else
+                    return;
             }
 
             socket.BeginReceive(failMethod, "FAIL");
