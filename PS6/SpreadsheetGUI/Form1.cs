@@ -577,7 +577,7 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
-        /// 
+        /// This method will send the required leave message to the user
         /// </summary>
         public void LeaveSession()
         {
@@ -593,7 +593,9 @@ namespace SpreadsheetGUI
 
         //-----------------------------------------------------------Receiving
         /// <summary>
-        /// 
+        /// This method will take in all first receives, then call
+        /// begin receive on the required method for the rest of the
+        /// incoming message
         /// </summary>
         /// <param name="message"></param>
         /// <param name="e"></param>
@@ -669,7 +671,8 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
-        /// 
+        /// This method will receive all the information needed for a
+        /// receive message.
         /// </summary>
         /// <param name="message"></param>
         /// <param name="e"></param>
@@ -723,7 +726,8 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
-        /// 
+        /// This method receives all the neccessary information for an undo
+        /// message.
         /// </summary>
         /// <param name="message"></param>
         /// <param name="e"></param>
@@ -814,7 +818,7 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
-        /// 
+        /// This will hand the main bulk of an undo message
         /// </summary>
         public void UndoMain(String message)
         {

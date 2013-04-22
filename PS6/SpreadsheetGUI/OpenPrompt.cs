@@ -19,16 +19,14 @@ namespace SpreadsheetGUI
     /// </summary>
     public partial class OpenPrompt : Form
     {
-        private String name;        // This will store the name of the file inputed to the screen
-        private String IPAddress;   // This will store the IP address inputed to the screen
-        private String version;
-
-        private bool FAILmessage;   // This flag will be used in the callback methods
-        private int length;         // This value will store the length of the xml that will be received
-        
         StringSocket socket;        // This socket will be used to communicate to the server
 
-        bool receiving;
+        private String name;        // This will store the name of the file inputed to the screen
+        private String IPAddress;   // This will store the IP address inputed to the screen
+        private String version;     // This will store the version sent in from the server
+        private int length;         // This will store the length of the xml that will be received
+        
+        bool receiving;             // This flag will keep the client from sending messages while it's receiving
 
         /// <summary>
         /// This method will open a new prompt window, which a user
@@ -40,7 +38,6 @@ namespace SpreadsheetGUI
         {
             // Initialize the window and set up the member variables.
             InitializeComponent();
-            FAILmessage = false;
             socket = null;
             receiving = false;
 
@@ -107,9 +104,16 @@ namespace SpreadsheetGUI
                 {
                     receiving = true;
 
-                    // Send the message and then begin receiving
-                    socket.BeginSend(message, (f, p) => { }, 0);
-                    socket.BeginReceive(createReceived, "CREATE");
+                    try
+                    {
+                        // Send the message and then begin receiving
+                        socket.BeginSend(message, (f, p) => { }, 0);
+                        socket.BeginReceive(createReceived, "CREATE");
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("Server is not responding, please wait or close and reconnect");
+                    }
                 }
             }
         } // End of "NewButton_Click" method .............................................................................
@@ -135,9 +139,16 @@ namespace SpreadsheetGUI
                 {
                     receiving = true;
 
-                    // Send the message to the server and then begin receiving
-                    socket.BeginSend(message, (f, p) => { }, 0);
-                    socket.BeginReceive(joinReceived, "JOIN");
+                    try
+                    {
+                        // Send the message to the server and then begin receiving
+                        socket.BeginSend(message, (f, p) => { }, 0);
+                        socket.BeginReceive(joinReceived, "JOIN");
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("Server is not responding, please wait or close and reconnect");
+                    }
                 }
             }
         } // End of "JoinButton_Click" method .....................................................................................................
