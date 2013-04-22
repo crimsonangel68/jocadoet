@@ -73,21 +73,21 @@ void updateCommand(string update, int connection, string SSname)
 			{
 				if(temp[i] != connection)
 				{
-					cout << "writing to connection: " << temp[i] << endl;
+					cout << "[UPDATE]writing to connection:" << temp[i] << "|" << endl;
 					//write the update to the connection because it is tied
 					//to this spreadsheet
-					n = write(temp[i], buffer, update.length()+1);
+					n = write(temp[i], buffer, length+1);
 					//error check for write to socket write returns 0 if there is no
 					//connection on the given socket file descriptor
 					if(n==0)
 					{
-						cout << "updateCommand[85]" << endl;
-						close(temp[i]);
+						cout << "updateCommand[84]\n" << n << endl;
+						error("[UPDATE]Error writing to socket");
 					}
 					if(n < 0)
 					{
-						cout << "updateCommand[89]" << endl;
-						error("Error writing to socket");
+						cout << "updateCommand[89]\n" << n << endl;
+						error("[UPDATE]Error writing to socket");
 					}
 				}
 			}
@@ -330,16 +330,16 @@ void undoCommand(string undo)
 	for(int i = 0; i < temp.size(); i++)
 	{
 		n = write(temp[i], rspns, rs_len+1);
-		cout << "---wrote to socket: " << endl;
+		cout << "[UNDO]---wrote to socket: " << endl;
 		cout << rspns << endl;
 		if(n==0)
 		{
-			cout << "undoCommand[333]"<<endl;
+			cout << "undoCommand[333]\n"<< n << endl;
 			close(temp[i]);	
 		}
 		if(n<0)
 		{
-			cout << "undoCommand[339]"<<endl;
+			cout << "undoCommand[339]\n"<< n << endl;
 			close(temp[i]);	
 		}
 	}
@@ -667,10 +667,10 @@ void leaveCommand(string message, int connection)
 	{
 		if (connected_ss[i].get_name() == name)
 		{
+			cout << "removing sockfd: " << connection << endl;
 			connected_ss[i].remove_client(connection);
 		}
 	}
-
 }
 
 //================================================================parse
@@ -751,13 +751,13 @@ class Connection
 				n = read(newsockfd, buffer, buffer_length);
 				if(n==0)
 				{
-					cout << "Connection[681]" << endl;
+					cout << "Connection[681]\n" << n << endl;
 					close_con();
 					return;
 				}
 				if(n<0)
 				{
-					cout << "Connection[699]" << endl;
+					cout << "Connection[699]\n" << n << endl;
 					close_con();
 					return;
 				}
