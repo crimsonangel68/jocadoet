@@ -388,15 +388,29 @@ string createCommand(string create, int connection)
 	}
 	pos = tempPassword.find(" ");
 	tempPassword = tempPassword.substr(0, pos);
-	//std::cout << "tempName is: " << tempName << std::endl << "tempPassword is: " << tempPassword << std::endl << std::endl;
-	bool testNameNotTaken = true; // Test if file name exists already
+
+	bool testNameTaken = false; // Test if file name exists already
+
+	stringstream fpSS;
+	fpSS << "../savedfiles/";
+	fpSS << tempName << ".ss";
+	string filepath = fpSS.str();
+	char filebuf[256];
+	size_t length = filepath.copy(filebuf, 256, 0);
+	filebuf[length] = '\0';
+	ifstream filestream(filebuf);
+
+	if(filestream.good())
+	{
+		testNameTaken = true;
+	}
 
 	// Add spreadsheet to list of existing spreadsheets
 	spreadsheet::spreadsheet newSS(tempName, tempPassword, 1);
 	newSS.add_client(connection);
 	connected_ss.push_back(newSS);
 
-	if(testNameNotTaken) // Name is not taken
+	if(!testNameTaken) // Name is not taken
 	{
 		stringstream serverResponseSS;
 		serverResponseSS << "CREATE OK \n";
@@ -418,7 +432,7 @@ string createCommand(string create, int connection)
 		serverResponseSS << "Name:";
 		serverResponseSS << tempName;
 		serverResponseSS << " \n";
-		serverResponseSS << "MESSAGE REGARDING FAIL";
+		serverResponseSS << "Test name is taken";
 		serverResponseSS << " \n";
 
 		serverResponse = serverResponseSS.str();
@@ -518,7 +532,7 @@ string joinCommand(string join, int connection)
 
 		//std::cout << serverResponse << std::endl;
 	}
-	else if(filestream.good() && !nameExists)
+	else if(filestream.good() && !nameExists && !passwordMatches)
 	{
 		//read
 		spreadsheet sheetfromfile(filepath);
@@ -544,7 +558,6 @@ string joinCommand(string join, int connection)
 
 		serverResponse = serverResponseSS.str();
 
-
 	}
 	else
 	{
@@ -553,7 +566,7 @@ string joinCommand(string join, int connection)
 		serverResponseSS << "Name:";
 		serverResponseSS << tempName;
 		serverResponseSS << " \n";
-		serverResponseSS << "MESSAGE REGARDING FAIL";
+		serverResponseSS << "Wrong name/password";
 		serverResponseSS << " \n";
 
 		serverResponse = serverResponseSS.str();
