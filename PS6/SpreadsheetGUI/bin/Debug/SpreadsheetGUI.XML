@@ -4,6 +4,11 @@
         <name>SpreadsheetGUI</name>
     </assembly>
     <members>
+        <member name="T:SpreadsheetGUI.SpreadsheetApplicationContext">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="M:SpreadsheetGUI.SpreadsheetApplicationContext.#ctor">
             <summary>
             Private constructor for singleton pattern.
@@ -49,7 +54,7 @@
             the contents of this method with the code editor.
             </summary>
         </member>
-        <member name="M:SpreadsheetGUI.Form1.#ctor(System.String,System.String,System.String,System.String,CustomNetworking.StringSocket)">
+        <member name="M:SpreadsheetGUI.Form1.#ctor(System.String,System.String,System.String,System.String,CustomNetworking.StringSocket,SpreadsheetGUI.SpreadsheetApplicationContext)">
             <summary>
             Opens a new Window when a file with a .ss extension is opened.  
             The Window will contain the contents of the file opened.
@@ -270,7 +275,7 @@
             the contents of this method with the code editor.
             </summary>
         </member>
-        <member name="M:SpreadsheetGUI.Startup.#ctor">
+        <member name="M:SpreadsheetGUI.Startup.#ctor(SpreadsheetGUI.SpreadsheetApplicationContext)">
             <summary>
              This is the constructor for the startup method.
              
@@ -317,7 +322,7 @@
             the contents of this method with the code editor.
             </summary>
         </member>
-        <member name="M:SpreadsheetGUI.OpenPrompt.#ctor(System.String)">
+        <member name="M:SpreadsheetGUI.OpenPrompt.#ctor(System.String,SpreadsheetGUI.SpreadsheetApplicationContext)">
             <summary>
             This method will open a new prompt window, which a user
              will be able to enter in a file to either create a new
