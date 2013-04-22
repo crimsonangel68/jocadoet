@@ -43,7 +43,6 @@ vector<spreadsheet> connected_ss;
 void error(const char *msg)
 {
 	perror(msg);
-	cout << "need to catch/deal with exception" << endl;
 	exit(1);
 }
 
@@ -195,10 +194,9 @@ string changeCommand(string change, int connection)
 			if (tempName == connected_ss[i].get_name())
 			{
 				connected_ss[i].edit_cell_content(cellName, cellContent);
-				cout << "client size is: " << connected_ss[i].clients.size() << endl;
+				//cout << "client size is: " << connected_ss[i].clients.size() << endl;
 			}
 		}
-		cout << "[change198] calling update with msg:\n" << change << endl;
 		// Change request is valid, call updateCommand to send out the update
 		stringstream upSS;
 		upSS << serverResponse;
@@ -270,7 +268,6 @@ void undoCommand(string undo)
 	unsigned pos1 = vers.find(" ");
 	vers = vers.substr(0, pos1);
 	int version = atoi(vers.c_str());
-	//std::cout << "vers is: " << vers << std::endl << std::endl << version << std::endl;
 
 	string undo_str = "";
 	bool versionMatch = false;
@@ -296,8 +293,6 @@ void undoCommand(string undo)
 
 	if(versionMatch && undo_ok)  
 	{
-	 // cout<< "Undo Ok reached" << endl;
-	//	cout<< "[undo] response is:\n" << undo_str << endl;
 		serverResponse = undo_str;
 	}
 	else if (!undo_ok && versionMatch) 
@@ -367,7 +362,7 @@ void undoCommand(string undo)
 			close(temp[i]);	
 		}
 	}
-	cout << "---------------------" << endl;
+	cout << "-----------done broadcasting undo" << endl;
 }
 
 //================================================================createCommand
@@ -386,7 +381,6 @@ string createCommand(string create, int connection)
 		info.push_back(item);
 	}
 
-	//std::cout << info[1] << "\n" << info[2] << std::endl;
 	stringstream nameSS(info[1]);
 	vector<string> nameInfo;
 	string tempName;
@@ -439,13 +433,14 @@ string createCommand(string create, int connection)
 	}
 
 	// Add spreadsheet to list of existing spreadsheets
-	spreadsheet::spreadsheet newSS(tempName, tempPassword, 1);
-	//	cout << "[create413]adding connection:" << connection << endl;
-	//	newSS.add_client(connection);
-	connected_ss.push_back(newSS);
+	//spreadsheet::spreadsheet newSS(tempName, tempPassword, 1);
+	//connected_ss.push_back(newSS);
 
 	if(!testNameTaken && !nameAlreadyOpen) // Name is not taken
 	{
+		// Add spreadsheet to list of existing spreadsheets
+		spreadsheet::spreadsheet newSS(tempName, tempPassword, 1);
+		connected_ss.push_back(newSS);
 		stringstream serverResponseSS;
 		serverResponseSS << "CREATE OK \n";
 		serverResponseSS << "Name:";
@@ -542,13 +537,11 @@ string joinCommand(string join, int connection)
 	fpSS << "../savedfiles/";
 	fpSS << tempName << ".ss";
 	string filepath = fpSS.str();
-	cout << "filepath is: " << filepath << endl;
 	char filebuf[256];
 	size_t length = filepath.copy(filebuf, 256, 0);
 	filebuf[length] = '\0';
 	bool file_exists = false;
 	file_exists = fexists(filebuf);
-	cout << "fexists returned: " << file_exists << endl;
 	ifstream filestream(filebuf);
 
 	spreadsheet sheet(tempName, tempPassword, 1);
@@ -561,18 +554,15 @@ string joinCommand(string join, int connection)
 			sheet = connected_ss[i];
 			//connected_ss[i].add_client(connection);
 			nameExists = true;
-			passwordMatches = connected_ss[position].check_password(tempPassword);
+			passwordMatches = connected_ss[i].check_password(tempPassword);
 			position = i;
 		}
 
 	}
 
-	cout << "finished for loop[560]" << endl;
 
-	cout << "checked password" << endl;
 	if(nameExists && passwordMatches)
 	{
-		cout << "inside nameExists and passwordMatches" << endl;	
 		// Retrieve spreadsheet information
 		connected_ss[position].add_client(connection);
 
@@ -599,13 +589,12 @@ string joinCommand(string join, int connection)
 	}
 	else if(file_exists == 1 && !nameExists)
 	{
-		cout << "filepath is: " << filepath << endl;
 		spreadsheet sheetfromfile(filepath);
 
 		if(sheetfromfile.check_password(tempPassword) && sheetfromfile.get_name() == tempName)
 		{
 			// Retrieve spreadsheet information
-			cout << "[join545]adding connection to SS:" << connection << endl;
+			//	cout << "[join545]adding connection to SS:" << connection << endl;
 			sheetfromfile.add_client(connection);
 			int SSversion = 0;
 			std::string xml = sheetfromfile.get_XML_for_user();
