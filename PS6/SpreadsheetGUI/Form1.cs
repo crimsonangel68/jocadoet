@@ -23,6 +23,7 @@ using SS;
 using SpreadsheetUtilities;
 using CustomNetworking;
 using System.IO;
+using System.Threading;
 
 namespace SpreadsheetGUI
 {
@@ -56,7 +57,7 @@ namespace SpreadsheetGUI
             socket = newSocket;
             messagesToReceive = 0;
 
-            String filePath = @"../../../../savedfiles/jocadoetSpreadsheet.ss";
+            String filePath = @"../../../../tmpfiles/jocadoetSpreadsheet.ss";
 
             //try
             {
@@ -85,6 +86,7 @@ namespace SpreadsheetGUI
                 spreadsheetPanel1.SetSelection(0, 0);
                 updateSelection(spreadsheetPanel1);
             }
+            socket.BeginReceive(MessageReceived, "MESSAGE");
             //catch (Exception e)
             //{
             //    MessageBox.Show("ERROR:\n" + e, "ERROR");
@@ -103,7 +105,7 @@ namespace SpreadsheetGUI
             OpenPrompt prompt = new OpenPrompt(IPAddress);
 
             // open the Open window
-            prompt.ShowDialog();
+            ThreadPool.QueueUserWorkItem(x => { prompt.ShowDialog(); });
 
 
             //openFileDialog.Filter = "Spreadsheet Files (.ss)|*.ss|All Files (*.*)|*.*";
@@ -177,30 +179,32 @@ namespace SpreadsheetGUI
         /// <param name="e"></param>
         private void leaveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (sheet.Changed && (MessageBox.Show("Do you want to exit without saving?", "SpreadsheetProgram", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes))
-            {
-                // Create the next prompt window
-                OpenPrompt prompt = new OpenPrompt(IPAddress);
+            Close();
+            //if (sheet.Changed && (MessageBox.Show("Do you want to exit without saving?", "SpreadsheetProgram", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes))
+            //{
+            //    // Create the next prompt window
+            //    //OpenPrompt prompt = new OpenPrompt(IPAddress);
 
-                // Hide the window, leave this session, and open the Open window
-                this.Hide();
-                LeaveSession();
-                prompt.ShowDialog();
+            //    // Hide the window, leave this session, and open the Open window
+            //    //this.Hide();
+            //    //LeaveSession();
+            //    //ThreadPool.QueueUserWorkItem(x => prompt.ShowDialog());
+            //    //prompt.ShowDialog();
 
-                Close();
-            }
-            if (!sheet.Changed)
-            {
-                // Create the next prompt window
-                OpenPrompt prompt = new OpenPrompt(IPAddress);
+            //    Close();
+            //}
+            //if (!sheet.Changed)
+            //{
+            //    // Create the next prompt window
+            //    //OpenPrompt prompt = new OpenPrompt(IPAddress);
 
-                // Hide the window, leave this session, and open the Open window
-                this.Hide();
-                LeaveSession();
-                prompt.ShowDialog();
+            //    // Hide the window, leave this session, and open the Open window
+            //    //this.Hide();
+            //    //LeaveSession();
+            //    //prompt.ShowDialog();
 
-                Close();
-            }
+            //    Close();
+            //}
         }
 
         //-----------------------------------------------------------Help_Click
@@ -228,33 +232,41 @@ namespace SpreadsheetGUI
         /// <param name="e"></param>
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (sheet.Changed && (MessageBox.Show("Do you want to exit without saving?", "SpreadsheetProgram", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes))
+            try
             {
-                e.Cancel = false;
+                if (sheet.Changed && (MessageBox.Show("Do you want to exit without saving?", "SpreadsheetProgram", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes))
+                {
+                    
+                    e.Cancel = false;
+                    
+                    // Create the next prompt window
+                    //OpenPrompt prompt = new OpenPrompt(IPAddress);
 
-                // Create the next prompt window
-                OpenPrompt prompt = new OpenPrompt(IPAddress);
+                    // Hide the window, leave this session, and open the Open window
+                    //this.Hide();
+                    LeaveSession();
+                    //prompt.ShowDialog();
+                    //this.Close();
+                }
+                else
+                    e.Cancel = true;
 
-                // Hide the window, leave this session, and open the Open window
-                this.Hide();
-                LeaveSession();
-                prompt.ShowDialog();
-                this.Close();
+                if (!sheet.Changed)
+                {
+                    e.Cancel = false;
+
+                    // Create the next prompt window
+                    //OpenPrompt prompt = new OpenPrompt(IPAddress);
+
+                    // Hide the window, leave this session, and open the Open window
+                    //this.Hide();
+                    LeaveSession();
+                    //prompt.ShowDialog();
+                    //this.Close();
+                }
             }
-            else
-                e.Cancel = true;
-
-            if (!sheet.Changed)
+            catch(Exception)
             {
-                e.Cancel = false;
-
-                // Create the next prompt window
-                OpenPrompt prompt = new OpenPrompt(IPAddress);
-
-                // Hide the window, leave this session, and open the Open window
-                this.Hide();
-                LeaveSession();
-                prompt.ShowDialog();
                 this.Close();
             }
         }
@@ -347,7 +359,7 @@ namespace SpreadsheetGUI
             string name = alphabet[col] + (row + 1).ToString();
 
             CellNameBox.Text = name;
-
+            
             CellValueBox.Text = (sheet.GetCellValue(name)).ToString();
 
             if (CellValueBox.Text == "")
@@ -510,7 +522,7 @@ namespace SpreadsheetGUI
 
             // send change to server
             socket.BeginSend(message, (e, p) => { }, 0);
-            socket.BeginReceive(MessageReceived, "CHANGE");
+            //socket.BeginReceive(MessageReceived, "CHANGE");
         }
 
         /// <summary>
@@ -554,7 +566,7 @@ namespace SpreadsheetGUI
             this.Hide();
 
             // send change to server
-            socket.BeginSend(message, (e, p) => { socket.CloseSocket(); }, 0);
+            socket.BeginSend(message, (e, p) => { }, 0);
         }
 
         //-----------------------------------------------------------Receiving
@@ -571,27 +583,27 @@ namespace SpreadsheetGUI
             //if (messagesToReceive == 0)
             //{
                 // Call the appropriate callback methods 
-                if (message.Contains("CHANGE SP OK"))
+                if (message.Contains("CHANGE OK"))
                 {
                     //SetCellContents(spreadsheetPanel1);
 
                     //messagesToReceive = 2;
                     socket.BeginReceive(ChangeReceived, "MESSAGE");
                 }
-                else if (message.Contains("UNDO SP OK") || message.Contains("UPDATE"))
+                else if (message.Contains("UNDO OK") || message.Contains("UPDATE"))
                 {
                     //messagesToReceive = 5;
                     socket.BeginReceive(UpdateReceived, "MESSAGE");
                 }
                 // If the save was successful, show a message
-                else if (message.Contains("SAVE SP OK"))
+                else if (message.Contains("SAVE OK"))
                 {
                     MessageBox.Show("Save successful", "Congratulations");
 
                     socket.BeginReceive(BlankReceived, "MESSAGE");
                 }
                 // If the undo reached an end, inform the user
-                else if (message.Contains("UNDO SP END"))
+                else if (message.Contains("UNDO END"))
                 {
                     MessageBox.Show("No unsaved changes to undo.", "Undo");
 
@@ -623,7 +635,7 @@ namespace SpreadsheetGUI
                 }
                 else
                 {
-                    //socket.BeginReceive(BlankReceived, "MESSAGE");
+                    socket.BeginReceive(MessageReceived, "MESSAGE");
                 }
             //}
             //else
@@ -664,6 +676,7 @@ namespace SpreadsheetGUI
                 socket.BeginReceive(BlankReceived, "CHANGE");
             }
         }
+
         /// <summary>
         /// This callback method will deal with handling change messages
         ///  being sent from the server.
@@ -708,6 +721,7 @@ namespace SpreadsheetGUI
             // Cell name
             else if (message.Contains("Cell:"))
             {
+                MessageBox.Show(message);
                 modifyingCell = message.Substring(5);
                 socket.BeginReceive(UndoReceived, "UNDO");
             }
@@ -717,27 +731,31 @@ namespace SpreadsheetGUI
             }
             else
             {
+                this.Invoke(new Action(() => UndoMain(message)));
+
                  // change the content
-                ISet<string> affectedCells = sheet.SetContentsOfCell(modifyingCell, message);
+                //ISet<string> affectedCells = new HashSet<String>();
+                //this.Invoke(new Action(() => affectedCells = sheet.SetContentsOfCell(modifyingCell, message)));
 
-                foreach (string cell in affectedCells)
-                {
-                    int c, r;
-                    c = alphabet.IndexOf(cell.Substring(0, 1));
-                    r = int.Parse(cell.Substring(1)) - 1;
+                
+                //foreach (string cell in affectedCells)
+                //{
+                //    int c, r;
+                //    c = alphabet.IndexOf(cell.Substring(0, 1));
+                //    r = int.Parse(cell.Substring(1)) - 1;
 
-                    spreadsheetPanel1.SetValue(c, r, sheet.GetCellValue(cell).ToString());
+                //    spreadsheetPanel1.SetValue(c, r, sheet.GetCellValue(cell).ToString());
 
-                }
-                string value = sheet.GetCellValue(modifyingCell).ToString();
+                //}
+                //string value = sheet.GetCellValue(modifyingCell).ToString();
 
-                int cellNum = 0;
-                if (Int32.TryParse(modifyingCell.Substring(1, modifyingCell.Length - 1), out cellNum))
-                    spreadsheetPanel1.SetValue(alphabet.IndexOf(modifyingCell.Substring(0, 1)) + 1, cellNum, value);
+                //int cellNum = 0;
+                //if (Int32.TryParse(modifyingCell.Substring(1, modifyingCell.Length - 1), out cellNum))
+                //    spreadsheetPanel1.SetValue(alphabet.IndexOf(modifyingCell.Substring(0, 1)) + 1, cellNum, value);
 
-                updateSelection(spreadsheetPanel1);
+                //updateSelection(spreadsheetPanel1);
 
-                socket.BeginReceive(MessageReceived, "UNDO");
+                //socket.BeginReceive(MessageReceived, "UNDO");
             }
 
             ////Content
@@ -774,6 +792,36 @@ namespace SpreadsheetGUI
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public void UndoMain(String message)
+        {
+            // change the content
+            ISet<string> affectedCells = new HashSet<String>();
+            this.Invoke(new Action(() => affectedCells = sheet.SetContentsOfCell(modifyingCell, message)));
+
+
+            foreach (string cell in affectedCells)
+            {
+                int c, r;
+                c = alphabet.IndexOf(cell.Substring(0, 1));
+                r = int.Parse(cell.Substring(1)) - 1;
+
+                spreadsheetPanel1.SetValue(c, r, sheet.GetCellValue(cell).ToString());
+
+            }
+            string value = sheet.GetCellValue(modifyingCell).ToString();
+
+            int cellNum = 0;
+            if (Int32.TryParse(modifyingCell.Substring(1, modifyingCell.Length - 1), out cellNum))
+                spreadsheetPanel1.SetValue(alphabet.IndexOf(modifyingCell.Substring(0, 1)) + 1, cellNum, value);
+
+            updateSelection(spreadsheetPanel1);
+
+            socket.BeginReceive(MessageReceived, "UNDO");
+        }
+
+        /// <summary>
         /// This callback method will receive an update from the server,
         ///  and change the specified cell on the spreadsheet with the
         ///  update.
@@ -788,13 +836,14 @@ namespace SpreadsheetGUI
                 SSversion = message.Substring(8);
 
             // If the message contains the name of the cell, save it
-            else if(message.Contains("Cell:"))
+            else if (message.Contains("Cell:"))
+            {
                 modifyingCell = message.Substring(5);
-            
+            }
             // If the message contains the length of the receiving change, save it
             else if (message.Contains("Length:"))
                 lengthCell = message.Substring(7);
-            
+
             // If we've reached here, and the message doesn't contain name,
             //  we know it's the message that's been received
             else if (!message.Contains("Name:"))
@@ -815,9 +864,10 @@ namespace SpreadsheetGUI
 
                 int cellNum = 0;
                 if (Int32.TryParse(modifyingCell.Substring(1, modifyingCell.Length - 1), out cellNum))
-                    spreadsheetPanel1.SetValue(alphabet.IndexOf(modifyingCell.Substring(0, 1)) + 1, cellNum, value);
-
-                updateSelection(spreadsheetPanel1);
+                    spreadsheetPanel1.SetValue(alphabet.IndexOf(modifyingCell.Substring(0, 1)), cellNum - 1, value);
+                else
+                    throw new InvalidNameException();
+                this.Invoke(new Action(() => updateSelection(spreadsheetPanel1)));
                 // Break out of the method so as not to receive more in this method
                 //messagesToReceive--;
                 socket.BeginReceive(MessageReceived, "UPDATE");
@@ -864,7 +914,6 @@ namespace SpreadsheetGUI
         /// <param name="p"></param>
         public void BlankReceived(String message, Exception e, Object p)
         {
-            MessageBox.Show(p.ToString());
             if (p.Equals("CHANGE"))
             {
                 socket.BeginReceive(ChangeReceived, "BLANK");

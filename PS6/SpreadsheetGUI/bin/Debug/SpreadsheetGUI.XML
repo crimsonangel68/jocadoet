@@ -4,9 +4,313 @@
         <name>SpreadsheetGUI</name>
     </assembly>
     <members>
+        <member name="M:SpreadsheetGUI.SpreadsheetApplicationContext.#ctor">
+            <summary>
+            Private constructor for singleton pattern.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.SpreadsheetApplicationContext.getAppContext">
+            <summary>
+            Returns the one SpreadsheetApplicationContext
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SpreadsheetGUI.SpreadsheetApplicationContext.RunForm(System.Windows.Forms.Form)">
+            <summary>
+            Runs the form.
+            </summary>
+            <param name="form"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.Program.Main(System.String[])">
+            <summary>
+            The main entry point for the application.
+            </summary>
+        </member>
+        <member name="T:SpreadsheetGUI.Form1">
+            <summary>
+            A GUI representation of a Spreadsheet.  Allows the user to navigate
+            and manipulate the contents of a spreadsheet.
+            </summary>
+        </member>
+        <member name="F:SpreadsheetGUI.Form1.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.#ctor(System.String,System.String,System.String,System.String,CustomNetworking.StringSocket)">
+            <summary>
+            Opens a new Window when a file with a .ss extension is opened.  
+            The Window will contain the contents of the file opened.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.openToolStripMenuItem_Click(System.Object,System.EventArgs)">
+            <summary>
+            Open a saved spreadsheet file.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.saveToolStripMenuItem_Click(System.Object,System.EventArgs)">
+            <summary>
+            Save a version of the spreadsheet.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.undoToolStripMenuItem_Click(System.Object,System.EventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.leaveToolStripMenuItem_Click(System.Object,System.EventArgs)">
+            <summary>
+            Closes the current Form.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.Help_Click(System.Object,System.EventArgs)">
+            <summary>
+            Displays a message box that explains to a user how to use the GUI.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.Form1_FormClosing(System.Object,System.Windows.Forms.FormClosingEventArgs)">
+            <summary>
+            Closes the spreadsheet.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.CellContentBox_KeyUp(System.Object,System.Windows.Forms.KeyEventArgs)">
+            <summary>
+            Allows the user to use the keyboard to control data entry from the
+            keyboard.  While the CellContentBox is selected, the user must use
+            the enter key to input the data into the spreadsheet, and may use the arrows
+            to navigate the spreadsheet cells.  Also, when control + w is pressed,
+            the option to close the Window will be presented to the user.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.updateSelection(SS.SpreadsheetPanel)">
+            <summary>
+            Updates the selection.
+            </summary>
+            <param name="panel"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.SetCellContents(SS.SpreadsheetPanel)">
+            <summary>
+            A helper method to set the contents of the cell in the spreadsheetPanel.
+            This will actually display on the panel the inputed information.
+            </summary>
+            <param name="panel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.sendMessage(SS.SpreadsheetPanel)">
+            <summary>
+            
+            </summary>
+            <param name="panel"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.updateCell(SS.SpreadsheetPanel,System.Int32,System.Int32)">
+            <summary>
+            A helper method to update the contents of the cell in the spreadsheetPanel.
+            </summary>
+            <param name="panel"></param>
+            <param name="col"></param>
+            <param name="row"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.updatePanel">
+            <summary>
+            A helper method to update the entire spreadsheetPanel when a file is loaded.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.NavigateUpdate(System.Int32,System.Int32)">
+            <summary>
+            A helper method to update the selection on the spreadsheetPanel when the arrow
+            keys are used to navigate the spreadsheet.
+            </summary>
+            <param name="col"></param>
+            <param name="row"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.Change(System.String,System.String,System.String)">
+            <summary>
+            This method will send a change to the server.
+            </summary>
+            <param name="cellName"></param>
+            <param name="version"></param>
+            <param name="content"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.Undo">
+            <summary>
+            This method will send an undo request to the server
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.Save">
+            <summary>
+            This method will send a save request to the server
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.LeaveSession">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.MessageReceived(System.String,System.Exception,System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+            <param name="e"></param>
+            <param name="p"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.ChangeReceived(System.String,System.Exception,System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+            <param name="e"></param>
+            <param name="p"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.VersionReceived(System.String,System.Exception,System.Object)">
+            <summary>
+            This callback method will deal with handling change messages
+             being sent from the server.
+            </summary>
+            <param name="message"></param>
+            <param name="e"></param>
+            <param name="p"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.UndoReceived(System.String,System.Exception,System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+            <param name="e"></param>
+            <param name="p"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.UndoMain(System.String)">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.UpdateReceived(System.String,System.Exception,System.Object)">
+            <summary>
+            This callback method will receive an update from the server,
+             and change the specified cell on the spreadsheet with the
+             update.
+            </summary>
+            <param name="message"></param>
+            <param name="e"></param>
+            <param name="p"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.FailReceived(System.String,System.Exception,System.Object)">
+            <summary>
+            This is the callback method for when a "FAIL" is received.
+            
+            It will display the message to the user containing the error of
+             why they received a fail.
+            </summary>
+            <param name="message"></param>
+            <param name="e"></param>
+            <param name="p"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.Form1.BlankReceived(System.String,System.Exception,System.Object)">
+            <summary>
+            This callback method will handle dealing with save requests
+            </summary>
+            <param name="message"></param>
+            <param name="e"></param>
+            <param name="p"></param>
+        </member>
+        <member name="T:SpreadsheetGUI.Startup">
+            <summary>
+            This partial class will run when the program is executed.
+            
+            It will show a window that allows the user to input an IP address
+             to attempt to connect to.
+             
+            If the connection was unsuccessful, it will inform the user.
+            </summary>
+        </member>
+        <member name="F:SpreadsheetGUI.Startup.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.Startup.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:SpreadsheetGUI.Startup.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.Startup.#ctor">
+            <summary>
+             This is the constructor for the startup method.
+             
+            It will create a new socket to connect to the provided
+             IP address on the specified port #.  It will then pass
+             along the socket to the OPEN prompt, where the user will
+             specify the file name and whether they will create a new
+             file, or join an existing file.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.Startup.ConnectButton_Click(System.Object,System.EventArgs)">
+            <summary>
+            This method will connect the client to the server. The
+             user will then be directed to the next prompt, the open
+             prompt.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.Startup.GoToOpenPrompt(System.String)">
+            <summary>
+            This method is the callback for connecting to the server.
+             It will then direct the user to the next prompt to 
+             open/create a file.
+            </summary>
+        </member>
         <member name="T:SpreadsheetGUI.OpenPrompt">
             <summary>
             Partial class for dealing with an open prompt window.
+            </summary>
+        </member>
+        <member name="F:SpreadsheetGUI.OpenPrompt.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.OpenPrompt.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:SpreadsheetGUI.OpenPrompt.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
             </summary>
         </member>
         <member name="M:SpreadsheetGUI.OpenPrompt.#ctor(System.String)">
@@ -95,75 +399,6 @@
             <param name="e"></param>
             <param name="p"></param>
         </member>
-        <member name="F:SpreadsheetGUI.OpenPrompt.components">
-            <summary>
-            Required designer variable.
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.OpenPrompt.Dispose(System.Boolean)">
-            <summary>
-            Clean up any resources being used.
-            </summary>
-            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        </member>
-        <member name="M:SpreadsheetGUI.OpenPrompt.InitializeComponent">
-            <summary>
-            Required method for Designer support - do not modify
-            the contents of this method with the code editor.
-            </summary>
-        </member>
-        <member name="T:SpreadsheetGUI.Startup">
-            <summary>
-            This partial class will run when the program is executed.
-            
-            It will show a window that allows the user to input an IP address
-             to attempt to connect to.
-             
-            If the connection was unsuccessful, it will inform the user.
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.Startup.#ctor">
-            <summary>
-             This is the constructor for the startup method.
-             
-            It will create a new socket to connect to the provided
-             IP address on the specified port #.  It will then pass
-             along the socket to the OPEN prompt, where the user will
-             specify the file name and whether they will create a new
-             file, or join an existing file.
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.Startup.ConnectButton_Click(System.Object,System.EventArgs)">
-            <summary>
-            This method will connect the client to the server. The
-             user will then be directed to the next prompt, the open
-             prompt.
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.Startup.GoToOpenPrompt(System.String)">
-            <summary>
-            This method is the callback for connecting to the server.
-             It will then direct the user to the next prompt to 
-             open/create a file.
-            </summary>
-        </member>
-        <member name="F:SpreadsheetGUI.Startup.components">
-            <summary>
-            Required designer variable.
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.Startup.Dispose(System.Boolean)">
-            <summary>
-            Clean up any resources being used.
-            </summary>
-            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        </member>
-        <member name="M:SpreadsheetGUI.Startup.InitializeComponent">
-            <summary>
-            Required method for Designer support - do not modify
-            the contents of this method with the code editor.
-            </summary>
-        </member>
         <member name="T:SpreadsheetGUI.Properties.Resources">
             <summary>
               A strongly-typed resource class, for looking up localized strings, etc.
@@ -178,235 +413,6 @@
             <summary>
               Overrides the current thread's CurrentUICulture property for all
               resource lookups using this strongly typed resource class.
-            </summary>
-        </member>
-        <member name="T:SpreadsheetGUI.Form1">
-            <summary>
-            A GUI representation of a Spreadsheet.  Allows the user to navigate and manipulate the 
-            contents of a spreadsheet.
-            </summary>
-        </member>
-        <member name="F:SpreadsheetGUI.Form1.components">
-            <summary>
-            Required designer variable.
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.Dispose(System.Boolean)">
-            <summary>
-            Clean up any resources being used.
-            </summary>
-            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.InitializeComponent">
-            <summary>
-            Required method for Designer support - do not modify
-            the contents of this method with the code editor.
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.#ctor(System.String,System.String,System.String,System.String,CustomNetworking.StringSocket)">
-            <summary>
-            Opens a new Window when a file with a .ss extension is opened.  The Window will contain
-            the contents of the file opened.
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.openToolStripMenuItem_Click(System.Object,System.EventArgs)">
-            <summary>
-            Open a saved spreadsheet file.
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.saveToolStripMenuItem_Click(System.Object,System.EventArgs)">
-            <summary>
-            Save a version of the spreadsheet.
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.undoToolStripMenuItem_Click(System.Object,System.EventArgs)">
-            <summary>
-            
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.leaveToolStripMenuItem_Click(System.Object,System.EventArgs)">
-            <summary>
-            Closes the current Form.
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.Help_Click(System.Object,System.EventArgs)">
-            <summary>
-            Displays a message box that explains to a user how to use the GUI.
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.Form1_FormClosing(System.Object,System.Windows.Forms.FormClosingEventArgs)">
-            <summary>
-            Closes the spreadsheet.
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.CellContentBox_KeyUp(System.Object,System.Windows.Forms.KeyEventArgs)">
-            <summary>
-            Allows the user to use the keyboard to control data entry from the keyboard.  While the CellContentBox
-            is selected, the user must use the enter key to input the data into the spreadsheet, and may use the arrows
-            to navigate the spreadsheet cells.  Also, when control + w is pressed, the option to close the Window will
-            be presented to the user.
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.updateSelection(SS.SpreadsheetPanel)">
-            <summary>
-            Updates the selection.
-            </summary>
-            <param name="panel"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.SetCellContents(SS.SpreadsheetPanel)">
-            <summary>
-            A helper method to set the contents of the cell in the spreadsheetPanel.  This will
-            actually display on the panel the inputed information.
-            </summary>
-            <param name="panel"></param>
-            <returns></returns>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.sendMessage(SS.SpreadsheetPanel)">
-            <summary>
-            
-            </summary>
-            <param name="panel"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.updateCell(SS.SpreadsheetPanel,System.Int32,System.Int32)">
-            <summary>
-            A helper method to update the contents of the cell in the spreadsheetPanel.
-            </summary>
-            <param name="panel"></param>
-            <param name="col"></param>
-            <param name="row"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.updatePanel">
-            <summary>
-            A helper method to update the entire spreadsheetPanel when a file is loaded.
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.NavigateUpdate(System.Int32,System.Int32)">
-            <summary>
-            A helper method to update the selection on the spreadsheetPanel when the arrow
-            keys are used to navigate the spreadsheet.
-            </summary>
-            <param name="col"></param>
-            <param name="row"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.Change(System.String,System.String,System.String)">
-            <summary>
-            This method will send a change to the server.
-            </summary>
-            <param name="cellName"></param>
-            <param name="version"></param>
-            <param name="content"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.Undo">
-            <summary>
-            This method will send an undo request to the server
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.Save">
-            <summary>
-            This method will send a save request to the server
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.LeaveSession">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.MessageReceived(System.String,System.Exception,System.Object)">
-            <summary>
-            
-            </summary>
-            <param name="message"></param>
-            <param name="e"></param>
-            <param name="p"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.ChangeReceived(System.String,System.Exception,System.Object)">
-            <summary>
-            
-            </summary>
-            <param name="message"></param>
-            <param name="e"></param>
-            <param name="p"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.VersionReceived(System.String,System.Exception,System.Object)">
-            <summary>
-            This callback method will deal with handling change messages
-             being sent from the server.
-            </summary>
-            <param name="message"></param>
-            <param name="e"></param>
-            <param name="p"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.UndoReceived(System.String,System.Exception,System.Object)">
-            <summary>
-            
-            </summary>
-            <param name="message"></param>
-            <param name="e"></param>
-            <param name="p"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.UpdateReceived(System.String,System.Exception,System.Object)">
-            <summary>
-            This callback method will receive an update from the server,
-             and change the specified cell on the spreadsheet with the
-             update.
-            </summary>
-            <param name="message"></param>
-            <param name="e"></param>
-            <param name="p"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.FailReceived(System.String,System.Exception,System.Object)">
-            <summary>
-            This is the callback method for when a "FAIL" is received.
-            
-            It will display the message to the user containing the error of
-             why they received a fail.
-            </summary>
-            <param name="message"></param>
-            <param name="e"></param>
-            <param name="p"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.BlankReceived(System.String,System.Exception,System.Object)">
-            <summary>
-            This callback method will handle dealing with save requests
-            </summary>
-            <param name="message"></param>
-            <param name="e"></param>
-            <param name="p"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.SpreadsheetApplicationContext.#ctor">
-            <summary>
-            Private constructor for singleton pattern.
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.SpreadsheetApplicationContext.getAppContext">
-            <summary>
-            Returns the one SpreadsheetApplicationContext
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:SpreadsheetGUI.SpreadsheetApplicationContext.RunForm(System.Windows.Forms.Form)">
-            <summary>
-            Runs the form.
-            </summary>
-            <param name="form"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.Program.Main(System.String[])">
-            <summary>
-            The main entry point for the application.
             </summary>
         </member>
     </members>

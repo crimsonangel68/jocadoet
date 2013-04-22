@@ -464,10 +464,11 @@ namespace SS
         /// <summary>
         /// Returns the value of the cell
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="cellName"></param>
         /// <returns></returns>
-        public override object GetCellValue(string name)
+        public override object GetCellValue(string cellName)
         {
+            String name = cellName.Trim();
             if (name == null)
                 throw new InvalidNameException();
             if (!validName(name))
@@ -512,7 +513,7 @@ namespace SS
         /// </summary>
         public override ISet<string> SetContentsOfCell(string a, string content)
         {
-            string name = Normalize(a);
+            string name = Normalize(a.Trim());
 
             if (content == null)
                 throw new ArgumentNullException();
@@ -573,6 +574,9 @@ namespace SS
                 
             }
 
+            if (temp == null || temp.CellValue.ToString().Equals(""))
+                return 0.0;
+            
             double d;
             if (Double.TryParse(temp.CellValue.ToString(), out d))
             {

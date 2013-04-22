@@ -257,6 +257,7 @@
             // spreadsheetPanel1
             // 
             this.spreadsheetPanel1.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.spreadsheetPanel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.spreadsheetPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.spreadsheetPanel1.Location = new System.Drawing.Point(0, 0);
             this.spreadsheetPanel1.Name = "spreadsheetPanel1";
