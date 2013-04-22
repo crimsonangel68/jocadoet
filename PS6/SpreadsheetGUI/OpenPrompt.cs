@@ -268,7 +268,7 @@ namespace SpreadsheetGUI
 
                 // If the user decides to cancel, disconnect the socket and close the prompts
                 if (result == DialogResult.Cancel)
-                    Close();
+                    this.Invoke(new Action(() => { Close(); }));
             }
 
             socket.BeginReceive(failMethod, "FAIL");
