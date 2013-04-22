@@ -72,7 +72,12 @@ namespace SpreadsheetGUI
             
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Startup());
+
+            SpreadsheetApplicationContext appContext = SpreadsheetApplicationContext.getAppContext();
+            appContext.RunForm(new Startup());
+
+            Application.Run(appContext);
+            //Application.Run(new Startup());
 
             // end of new opening method................................  */
              

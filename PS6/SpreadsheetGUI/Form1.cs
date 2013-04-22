@@ -107,7 +107,10 @@ namespace SpreadsheetGUI
                 OpenPrompt prompt = new OpenPrompt(IPAddress);
 
                 // open the Open window
-                ThreadPool.QueueUserWorkItem(x => { prompt.ShowDialog(); });
+                SpreadsheetApplicationContext app = SpreadsheetApplicationContext.getAppContext();
+                app.RunForm(prompt);
+
+                //ThreadPool.QueueUserWorkItem(x => { Application.Run(prompt); });
             }
             catch (Exception)
             {
@@ -439,6 +442,9 @@ namespace SpreadsheetGUI
             }
         }
 
+        String previousContent;
+        String previousName;
+
         //-------------------------------------------------------------sendMessage
         /// <summary>
         /// 
@@ -446,7 +452,6 @@ namespace SpreadsheetGUI
         /// <param name="panel"></param>
         private void sendMessage(SpreadsheetPanel panel)
         {
-            Object prevContents = null;
             string name = "";
 
             try
@@ -454,8 +459,9 @@ namespace SpreadsheetGUI
                 int col, row;
                 panel.GetSelection(out col, out row);
                 name = alphabet[col] + (row + 1).ToString();
+                previousName = name;
 
-                prevContents = sheet.GetCellContents(name);
+                previousContent = sheet.GetCellContents(name).ToString();
                 string contents = CellContentBox.Text;
 
                 ISet<string> affectedCells = sheet.SetContentsOfCell(name, contents);
@@ -466,7 +472,7 @@ namespace SpreadsheetGUI
             }
             catch (Exception f)
             {
-                sheet.SetContentsOfCell(name, prevContents.ToString());
+                sheet.SetContentsOfCell(previousName, previousContent);
                 MessageBox.Show("Idiot... (sendMessage) \n" + f.Message);
             }
         }
@@ -642,7 +648,10 @@ namespace SpreadsheetGUI
 
                     // Append to the string with the appropriate message
                     if (message.Contains("CHANGE"))
+                    {
+                        sheet.SetContentsOfCell(previousName, previousContent);
                         report += "Change was not sent to server.\n";
+                    }
                     else if (message.Contains("UNDO"))
                         report += "Undo was not sent to server.\n";
 
