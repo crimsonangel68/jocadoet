@@ -515,7 +515,7 @@ namespace SpreadsheetGUI
             // Send the message to the server, following protocol
             String message = "CHANGE \n";
             message += "Name:" + sheet.FileName + " \n";
-            message += "Version:" + version + " \n";
+            message += "Version:" + SSversion + " \n";
             message += "Cell:" + cellName + " \n";
             message += "Length:" + content.Length + " \n";
             message += content + " \n";
@@ -588,12 +588,12 @@ namespace SpreadsheetGUI
                     //SetCellContents(spreadsheetPanel1);
 
                     //messagesToReceive = 2;
-                    socket.BeginReceive(ChangeReceived, "MESSAGE");
+                    socket.BeginReceive(ChangeReceived, "CHANGE");
                 }
                 else if (message.Contains("UNDO OK") || message.Contains("UPDATE"))
                 {
                     //messagesToReceive = 5;
-                    socket.BeginReceive(UpdateReceived, "MESSAGE");
+                    socket.BeginReceive(UpdateReceived, "UPDATE");
                 }
                 // If the save was successful, show a message
                 else if (message.Contains("SAVE OK"))
