@@ -76,3 +76,16 @@ X:\FinalProject\jocadoet\PS6\SS\bin\Debug\SpreadSheetUtilities.xml
 X:\FinalProject\jocadoet\PS6\SS\obj\Debug\SS.csprojResolveAssemblyReference.cache
 X:\FinalProject\jocadoet\PS6\SS\obj\Debug\SS.dll
 X:\FinalProject\jocadoet\PS6\SS\obj\Debug\SS.pdb
+X:\cs3505\FinalProject\jocadoet\PS6\SS\bin\Debug\SS.XML
+X:\cs3505\FinalProject\jocadoet\PS6\SS\bin\Debug\SS.dll
+X:\cs3505\FinalProject\jocadoet\PS6\SS\bin\Debug\SS.pdb
+X:\cs3505\FinalProject\jocadoet\PS6\SS\bin\Debug\SS.dll.CodeAnalysisLog.xml
+X:\cs3505\FinalProject\jocadoet\PS6\SS\bin\Debug\SS.dll.lastcodeanalysissucceeded
+X:\cs3505\FinalProject\jocadoet\PS6\SS\bin\Debug\SpreadsheetPanel.dll
+X:\cs3505\FinalProject\jocadoet\PS6\SS\bin\Debug\SpreadSheetUtilities.dll
+X:\cs3505\FinalProject\jocadoet\PS6\SS\bin\Debug\Formula.xml
+X:\cs3505\FinalProject\jocadoet\PS6\SS\bin\Debug\SpreadsheetPanel.xml
+X:\cs3505\FinalProject\jocadoet\PS6\SS\bin\Debug\SpreadSheetUtilities.xml
+X:\cs3505\FinalProject\jocadoet\PS6\SS\obj\Debug\SS.csprojResolveAssemblyReference.cache
+X:\cs3505\FinalProject\jocadoet\PS6\SS\obj\Debug\SS.dll
+X:\cs3505\FinalProject\jocadoet\PS6\SS\obj\Debug\SS.pdb

@@ -4,21 +4,11 @@
         <name>SpreadsheetPanel</name>
     </assembly>
     <members>
-        <member name="T:SS.Properties.Resources">
+        <member name="T:SS.SelectionChangedHandler">
             <summary>
-              A strongly-typed resource class, for looking up localized strings, etc.
+            The type of delegate used to register for SelectionChanged events
             </summary>
-        </member>
-        <member name="P:SS.Properties.Resources.ResourceManager">
-            <summary>
-              Returns the cached ResourceManager instance used by this class.
-            </summary>
-        </member>
-        <member name="P:SS.Properties.Resources.Culture">
-            <summary>
-              Overrides the current thread's CurrentUICulture property for all
-              resource lookups using this strongly typed resource class.
-            </summary>
+            <param name="sender"></param>
         </member>
         <member name="T:SS.SpreadsheetPanel">
             <summary>
@@ -29,23 +19,6 @@
             such events.
             
             None of the cells are editable.  They are for display purposes only.
-            </summary>
-        </member>
-        <member name="F:SS.SpreadsheetPanel.components">
-            <summary> 
-            Required designer variable.
-            </summary>
-        </member>
-        <member name="M:SS.SpreadsheetPanel.Dispose(System.Boolean)">
-            <summary> 
-            Clean up any resources being used.
-            </summary>
-            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        </member>
-        <member name="M:SS.SpreadsheetPanel.InitializeComponent">
-            <summary> 
-            Required method for Designer support - do not modify 
-            the contents of this method with the code editor.
             </summary>
         </member>
         <member name="M:SS.SpreadsheetPanel.#ctor">
@@ -103,6 +76,23 @@
             </summary>
             <param name="eventargs"></param>
         </member>
+        <member name="F:SS.SpreadsheetPanel.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:SS.SpreadsheetPanel.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:SS.SpreadsheetPanel.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
         <member name="E:SS.SpreadsheetPanel.SelectionChanged">
             <summary>
             The event used to send notifications of a selection change
@@ -142,11 +132,21 @@
             </summary>
             <param name="e"></param>
         </member>
-        <member name="T:SS.SelectionChangedHandler">
+        <member name="T:SS.Properties.Resources">
             <summary>
-            The type of delegate used to register for SelectionChanged events
+              A strongly-typed resource class, for looking up localized strings, etc.
             </summary>
-            <param name="sender"></param>
+        </member>
+        <member name="P:SS.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:SS.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
         </member>
     </members>
 </doc>

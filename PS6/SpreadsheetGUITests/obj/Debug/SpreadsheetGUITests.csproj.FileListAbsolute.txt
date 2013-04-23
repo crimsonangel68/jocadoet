@@ -18,3 +18,8 @@ X:\FinalProject\jocadoet\PS6\SpreadsheetGUITests\bin\Debug\SpreadsheetGUITests.p
 X:\FinalProject\jocadoet\PS6\SpreadsheetGUITests\obj\Debug\SpreadsheetGUITests.csprojResolveAssemblyReference.cache
 X:\FinalProject\jocadoet\PS6\SpreadsheetGUITests\obj\Debug\SpreadsheetGUITests.dll
 X:\FinalProject\jocadoet\PS6\SpreadsheetGUITests\obj\Debug\SpreadsheetGUITests.pdb
+X:\cs3505\FinalProject\jocadoet\PS6\SpreadsheetGUITests\bin\Debug\SpreadsheetGUITests.dll
+X:\cs3505\FinalProject\jocadoet\PS6\SpreadsheetGUITests\bin\Debug\SpreadsheetGUITests.pdb
+X:\cs3505\FinalProject\jocadoet\PS6\SpreadsheetGUITests\obj\Debug\SpreadsheetGUITests.csprojResolveAssemblyReference.cache
+X:\cs3505\FinalProject\jocadoet\PS6\SpreadsheetGUITests\obj\Debug\SpreadsheetGUITests.dll
+X:\cs3505\FinalProject\jocadoet\PS6\SpreadsheetGUITests\obj\Debug\SpreadsheetGUITests.pdb

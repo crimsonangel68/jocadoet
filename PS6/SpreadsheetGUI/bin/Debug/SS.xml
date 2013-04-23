@@ -4,6 +4,42 @@
         <name>SS</name>
     </assembly>
     <members>
+        <member name="T:SS.Cell">
+            <summary>
+            Cell class.  Each cell has a name, content and value.
+            Name is a string.
+            Content is either a string, double or formula.
+            Value is either a string, double, or formula error.
+            </summary>
+        </member>
+        <member name="M:SS.Cell.#ctor(System.String)">
+            <summary>
+            Create a new Cell containing a string.
+            </summary>
+            <param name="s"></param>
+        </member>
+        <member name="M:SS.Cell.#ctor(System.Double)">
+            <summary>
+            Create a new Cell containing a double.
+            </summary>
+            <param name="d"></param>
+        </member>
+        <member name="M:SS.Cell.#ctor(SpreadsheetUtilities.Formula)">
+            <summary>
+            Create a new Cell containing a Formula.
+            </summary>
+            <param name="f"></param>
+        </member>
+        <member name="P:SS.Cell.CellContent">
+            <summary>
+            Contents of the cell
+            </summary>
+        </member>
+        <member name="P:SS.Cell.CellValue">
+            <summary>
+            Value of the cell
+            </summary>
+        </member>
         <member name="T:SS.Spreadsheet">
             <summary>
             A representation of a Spreadsheet.
@@ -437,42 +473,6 @@
         <member name="P:SS.Spreadsheet.Changed">
             <summary>
             Returns the true if the version has been changed and false if it has not since the last save.
-            </summary>
-        </member>
-        <member name="T:SS.Cell">
-            <summary>
-            Cell class.  Each cell has a name, content and value.
-            Name is a string.
-            Content is either a string, double or formula.
-            Value is either a string, double, or formula error.
-            </summary>
-        </member>
-        <member name="M:SS.Cell.#ctor(System.String)">
-            <summary>
-            Create a new Cell containing a string.
-            </summary>
-            <param name="s"></param>
-        </member>
-        <member name="M:SS.Cell.#ctor(System.Double)">
-            <summary>
-            Create a new Cell containing a double.
-            </summary>
-            <param name="d"></param>
-        </member>
-        <member name="M:SS.Cell.#ctor(SpreadsheetUtilities.Formula)">
-            <summary>
-            Create a new Cell containing a Formula.
-            </summary>
-            <param name="f"></param>
-        </member>
-        <member name="P:SS.Cell.CellContent">
-            <summary>
-            Contents of the cell
-            </summary>
-        </member>
-        <member name="P:SS.Cell.CellValue">
-            <summary>
-            Value of the cell
             </summary>
         </member>
         <member name="T:SS.CircularException">

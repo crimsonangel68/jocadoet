@@ -4,26 +4,20 @@
         <name>SpreadsheetGUI</name>
     </assembly>
     <members>
-        <member name="M:SpreadsheetGUI.SpreadsheetApplicationContext.#ctor">
+        <member name="T:SpreadsheetGUI.Properties.Resources">
             <summary>
-            Private constructor for singleton pattern.
+              A strongly-typed resource class, for looking up localized strings, etc.
             </summary>
         </member>
-        <member name="M:SpreadsheetGUI.SpreadsheetApplicationContext.getAppContext">
+        <member name="P:SpreadsheetGUI.Properties.Resources.ResourceManager">
             <summary>
-            Returns the one SpreadsheetApplicationContext
+              Returns the cached ResourceManager instance used by this class.
             </summary>
-            <returns></returns>
         </member>
-        <member name="M:SpreadsheetGUI.SpreadsheetApplicationContext.RunForm(System.Windows.Forms.Form)">
+        <member name="P:SpreadsheetGUI.Properties.Resources.Culture">
             <summary>
-            Runs the form.
-            </summary>
-            <param name="form"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.Program.Main(System.String[])">
-            <summary>
-            The main entry point for the application.
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
             </summary>
         </member>
         <member name="T:SpreadsheetGUI.Form1">
@@ -71,7 +65,7 @@
         </member>
         <member name="M:SpreadsheetGUI.Form1.undoToolStripMenuItem_Click(System.Object,System.EventArgs)">
             <summary>
-            
+            undo the last change made to the spreadsheet
             </summary>
             <param name="sender"></param>
             <param name="e"></param>
@@ -124,7 +118,7 @@
         </member>
         <member name="M:SpreadsheetGUI.Form1.sendMessage(SS.SpreadsheetPanel)">
             <summary>
-            
+            Send a message to the server regarding a changed cell value
             </summary>
             <param name="panel"></param>
         </member>
@@ -191,29 +185,6 @@
             <param name="e"></param>
             <param name="p"></param>
         </member>
-        <member name="M:SpreadsheetGUI.Form1.VersionReceived(System.String,System.Exception,System.Object)">
-            <summary>
-            This callback method will deal with handling change messages
-             being sent from the server.
-            </summary>
-            <param name="message"></param>
-            <param name="e"></param>
-            <param name="p"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.UndoReceived(System.String,System.Exception,System.Object)">
-            <summary>
-            This method receives all the neccessary information for an undo
-            message.
-            </summary>
-            <param name="message"></param>
-            <param name="e"></param>
-            <param name="p"></param>
-        </member>
-        <member name="M:SpreadsheetGUI.Form1.UndoMain(System.String)">
-            <summary>
-            This will hand the main bulk of an undo message
-            </summary>
-        </member>
         <member name="M:SpreadsheetGUI.Form1.UpdateReceived(System.String,System.Exception,System.Object)">
             <summary>
             This callback method will receive an update from the server,
@@ -253,23 +224,6 @@
             If the connection was unsuccessful, it will inform the user.
             </summary>
         </member>
-        <member name="F:SpreadsheetGUI.Startup.components">
-            <summary>
-            Required designer variable.
-            </summary>
-        </member>
-        <member name="M:SpreadsheetGUI.Startup.Dispose(System.Boolean)">
-            <summary>
-            Clean up any resources being used.
-            </summary>
-            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        </member>
-        <member name="M:SpreadsheetGUI.Startup.InitializeComponent">
-            <summary>
-            Required method for Designer support - do not modify
-            the contents of this method with the code editor.
-            </summary>
-        </member>
         <member name="M:SpreadsheetGUI.Startup.#ctor">
             <summary>
              This is the constructor for the startup method.
@@ -293,6 +247,23 @@
             This method is the callback for connecting to the server.
              It will then direct the user to the next prompt to 
              open/create a file.
+            </summary>
+        </member>
+        <member name="F:SpreadsheetGUI.Startup.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:SpreadsheetGUI.Startup.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:SpreadsheetGUI.Startup.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
             </summary>
         </member>
         <member name="T:SpreadsheetGUI.OpenPrompt">
@@ -403,20 +374,26 @@
             <param name="e"></param>
             <param name="p"></param>
         </member>
-        <member name="T:SpreadsheetGUI.Properties.Resources">
+        <member name="M:SpreadsheetGUI.SpreadsheetApplicationContext.#ctor">
             <summary>
-              A strongly-typed resource class, for looking up localized strings, etc.
+            Private constructor for singleton pattern.
             </summary>
         </member>
-        <member name="P:SpreadsheetGUI.Properties.Resources.ResourceManager">
+        <member name="M:SpreadsheetGUI.SpreadsheetApplicationContext.getAppContext">
             <summary>
-              Returns the cached ResourceManager instance used by this class.
+            Returns the one SpreadsheetApplicationContext
             </summary>
+            <returns></returns>
         </member>
-        <member name="P:SpreadsheetGUI.Properties.Resources.Culture">
+        <member name="M:SpreadsheetGUI.SpreadsheetApplicationContext.RunForm(System.Windows.Forms.Form)">
             <summary>
-              Overrides the current thread's CurrentUICulture property for all
-              resource lookups using this strongly typed resource class.
+            Runs the form.
+            </summary>
+            <param name="form"></param>
+        </member>
+        <member name="M:SpreadsheetGUI.Program.Main(System.String[])">
+            <summary>
+            The main entry point for the application.
             </summary>
         </member>
     </members>
