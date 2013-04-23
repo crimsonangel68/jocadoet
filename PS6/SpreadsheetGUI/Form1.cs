@@ -101,8 +101,7 @@ namespace SpreadsheetGUI
                 OpenPrompt prompt = new OpenPrompt(IPAddress);
 
                 // open the Open window
-                SpreadsheetApplicationContext app = SpreadsheetApplicationContext.getAppContext();
-                app.RunForm(prompt);
+                ThreadPool.QueueUserWorkItem(x => { prompt.ShowDialog(); });
             }
             catch (Exception)
             {
@@ -491,7 +490,7 @@ namespace SpreadsheetGUI
             message += "Name:" + sheet.FileName + " \n";
 
             this.Hide();
-            
+
             try
             {
                 // send change to server

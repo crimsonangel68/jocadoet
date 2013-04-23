@@ -31,10 +31,10 @@ X:\FinalProject\jocadoet\PS6\SpreadsheetPanel\obj\x86\Debug\SS.Properties.Resour
 X:\FinalProject\jocadoet\PS6\SpreadsheetPanel\obj\x86\Debug\SpreadsheetPanel.csproj.GenerateResource.Cache
 X:\FinalProject\jocadoet\PS6\SpreadsheetPanel\obj\x86\Debug\SpreadsheetPanel.dll
 X:\FinalProject\jocadoet\PS6\SpreadsheetPanel\obj\x86\Debug\SpreadsheetPanel.pdb
-X:\cs3505\FinalProject\jocadoet\PS6\SpreadsheetPanel\bin\Debug\SpreadsheetPanel.XML
 X:\cs3505\FinalProject\jocadoet\PS6\SpreadsheetPanel\bin\Debug\SpreadsheetPanel.dll
 X:\cs3505\FinalProject\jocadoet\PS6\SpreadsheetPanel\bin\Debug\SpreadsheetPanel.pdb
 X:\cs3505\FinalProject\jocadoet\PS6\SpreadsheetPanel\obj\x86\Debug\SS.Properties.Resources.resources
 X:\cs3505\FinalProject\jocadoet\PS6\SpreadsheetPanel\obj\x86\Debug\SpreadsheetPanel.csproj.GenerateResource.Cache
 X:\cs3505\FinalProject\jocadoet\PS6\SpreadsheetPanel\obj\x86\Debug\SpreadsheetPanel.dll
 X:\cs3505\FinalProject\jocadoet\PS6\SpreadsheetPanel\obj\x86\Debug\SpreadsheetPanel.pdb
+X:\cs3505\FinalProject\jocadoet\PS6\SpreadsheetPanel\bin\Debug\SpreadsheetPanel.XML

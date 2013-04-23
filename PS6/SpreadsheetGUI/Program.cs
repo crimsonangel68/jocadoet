@@ -80,7 +80,8 @@ namespace SpreadsheetGUI
 
             while (Application.OpenForms.Count > 0)
             {
-
+                if (Application.OpenForms.Count == 0)
+                    break;
             }
 
             // end of new opening method................................  */

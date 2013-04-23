@@ -126,7 +126,6 @@ X:\FinalProject\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\SpreadsheetGUI.OpenPro
 X:\FinalProject\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\SpreadsheetGUI.Startup.resources
 X:\FinalProject\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\SpreadsheetGUI.Properties.Resources.resources
 X:\FinalProject\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\SpreadsheetGUI.csproj.GenerateResource.Cache
-X:\cs3505\FinalProject\jocadoet\PS6\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.XML
 X:\cs3505\FinalProject\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\SpreadsheetGUI.exe
 X:\cs3505\FinalProject\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\SpreadsheetGUI.pdb
 X:\cs3505\FinalProject\jocadoet\PS6\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.exe
@@ -148,3 +147,4 @@ X:\cs3505\FinalProject\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\SpreadsheetGUI.
 X:\cs3505\FinalProject\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\SpreadsheetGUI.Startup.resources
 X:\cs3505\FinalProject\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\SpreadsheetGUI.Properties.Resources.resources
 X:\cs3505\FinalProject\jocadoet\PS6\SpreadsheetGUI\obj\x86\Debug\SpreadsheetGUI.csproj.GenerateResource.Cache
+X:\cs3505\FinalProject\jocadoet\PS6\SpreadsheetGUI\bin\Debug\SpreadsheetGUI.XML
